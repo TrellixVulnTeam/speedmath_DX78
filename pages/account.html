@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Speed & Mental Math</title>
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/css/navbar.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/account.css"/>
+    <script src="scripts/themeHandler.js" defer></script>
+    <script src="scripts/account.js" defer></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/socket.io/socket.io.js"></script>
+  </head>
+  <body>
+    <!--   Navbar  -->
+    <div class="topnav">
+      <a href="/">Home</a>
+      <a href="/arithmetic">Speed Math</a>
+      <a href="/topics">Topics</a>
+      <a href="/contributors">Contributors</a>
+      <a class="active" href="/account">Account</a>
+      <a id="themeToggler">
+        <label class="switch">
+          <input type="checkbox" id="darkModeToggle">
+          <span class="slider round"></span>
+        </label>
+      </a>
+    </div>
+    <!-- Navbar ends -->
+    <div id="formContainer">
+      <form id="loginForm" class="contentTheme" action="/">
+        <h1>Log in:</h1>
+        <br>
+        <label for="usernameLogin">Username:</label>
+        <br>
+        <input id="usernameLogin" required autocomplete="off"></input>
+        <br>
+        <br>
+        <label for="passwordLogin">Password:</label>
+        <br>
+        <input id="passwordLogin" type="password" required autocomplete="off"></input>
+        <br>
+        <br>
+        <button id="login" type="submit" class="secondaryContentTheme">Login</button>
+        <button id="btnSwitchToSignUpForm" type="button" class="secondaryContentTheme">Sign Up</button>
+      </form>
+
+      <form id="signUpForm" class="contentTheme" action="/">
+        <h1>Sign Up:</h1>
+        <br>
+        <label for="usernameSignUp">Username:</label>
+        <br>
+        <input id="usernameSignUp" required autocomplete="off"></input>
+        <br>
+        <br>
+        <label for="displayName">Display Name:</label>
+        <br>
+        <input id="displayName" required autocomplete="off"></input>
+        <br>
+        <br>
+        <label for="email">Email (optional):</label>
+        <br>
+        <input type="email" required autocomplete="off"></input>
+        <br>
+        <br>
+        <label for="passwordSignUp">Password:</label>
+        <br>
+        <input id="passwordSignUp" type="password" required autocomplete="off"></input>
+        <br>
+        <br>
+        <label for="confirmPassword">Confirm Password:</label>
+        <br>
+        <input id="confirmPassword" type="password" required autocomplete="off"></input>
+        <br>
+        <br> 
+        <button id="signUp" type="submit" class="secondaryContentTheme">Sign Up</button>
+        <button id="btnSwitchToLoginForm" type="button" class="secondaryContentTheme">Log in instead</button>
+      </form>
+    </div>
+  </body>
+</html>
