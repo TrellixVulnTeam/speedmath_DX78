@@ -118,24 +118,6 @@ progress::-webkit-progress-value {
   width: 50vw;
 }
 
-progress::-moz-progress-bar {
-  background-color: #e6e6e6;
-}
-
-progress::-moz-progress-value {
-  background-color: #50fb6d;
-  overflow: hidden;
-}
-
-progress::-webkit-progress-bar {
-  background-color: #e6e6e6;
-}
-
-progress::-webkit-progress-value {
-  background-color: #50fb6d;
-  overflow: hidden; 
-}
-
 #mastered {
   display: none;
 }

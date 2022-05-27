@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>Speed & Mental Math</title>
+    <title>Account</title>
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" href="/css/navbar.css"/>
     <link rel="stylesheet" type="text/css" href="/css/account.css"/>
@@ -35,12 +35,12 @@
         <br>
         <label for="usernameLogin">Username:</label>
         <br>
-        <input id="usernameLogin" required autocomplete="off"></input>
+        <input id="usernameLogin" required onkeypress="return event.charCode != 32"></input>
         <br>
         <br>
         <label for="passwordLogin">Password:</label>
         <br>
-        <input id="passwordLogin" type="password" required autocomplete="off"></input>
+        <input id="passwordLogin" type="password" required onkeypress="return event.charCode != 32"></input>
         <br>
         <br>
         <button id="login" type="submit" class="secondaryContentTheme">Login</button>
@@ -52,7 +52,7 @@
         <br>
         <label for="usernameSignUp">Username:</label>
         <br>
-        <input id="usernameSignUp" required autocomplete="off"></input>
+        <input id="usernameSignUp" required autocomplete="off" onkeypress="return event.charCode != 32"></input>
         <br>
         <br>
         <label for="displayName">Display Name:</label>
@@ -62,22 +62,23 @@
         <br>
         <label for="email">Email (optional):</label>
         <br>
-        <input type="email" required autocomplete="off"></input>
+        <input type="email" id="email" autocomplete="off"></input>
         <br>
         <br>
         <label for="passwordSignUp">Password:</label>
         <br>
-        <input id="passwordSignUp" type="password" required autocomplete="off"></input>
+        <input id="passwordSignUp" type="password" required autocomplete="new-password" onkeypress="return event.charCode != 32"></input>
         <br>
         <br>
         <label for="confirmPassword">Confirm Password:</label>
         <br>
-        <input id="confirmPassword" type="password" required autocomplete="off"></input>
+        <input id="confirmPassword" type="password" required autocomplete="new-password" onkeypress="return event.charCode != 32"></input>
         <br>
         <br> 
         <button id="signUp" type="submit" class="secondaryContentTheme">Sign Up</button>
         <button id="btnSwitchToLoginForm" type="button" class="secondaryContentTheme">Log in instead</button>
       </form>
     </div>
+    <button id="logDB">Log (for debugging purposes, will be removed after I'm done learning SQL</button>
   </body>
 </html>

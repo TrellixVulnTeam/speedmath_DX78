@@ -12,22 +12,28 @@ let passwordSignUp = document.getElementById("passwordSignUp");
 let confirmPassword = document.getElementById("confirmPassword");
 let btnSignUp = document.getElementById("signUp");
 let btnSwitchToLoginForm = document.getElementById("btnSwitchToLoginForm");
+let email = document.getElementById("email");
 
 loginForm.addEventListener("submit", function(e) {
   e.preventDefault();
 
-  let username = usernameLogin.value.replace(/\s/g, "");
-  let password = passwordLogin.value.replace(/\s/g, "");
-
-  socket.emit("login", username, password);
+  socket.emit("login", usernameLogin.value, passwordLogin.value);
+  loginForm.reset();
 });
 
 signUpForm.addEventListener("submit", function(e) {
   e.preventDefault();
 
-  let username = usernameSignUp.value.replace(/\s/g, "");
-  let password = passwordSignUp.value.replace(/\s/g, "");
-  
+  if (passwordSignUp.value === confirmPassword.value) {
+    socket.emit("signUp", usernameSignUp.value, passwordSignUp.value, displayName.value, email.value);
+    signUpForm.reset();
+  } else {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: 'Please make sure that your password and confirm passwords match?? that sounds weird + i cant grammar rn someone fix this later'
+    });
+  }
 });
 
 btnSwitchToSignUpForm.addEventListener("click", function(e) {
@@ -38,4 +44,8 @@ btnSwitchToSignUpForm.addEventListener("click", function(e) {
 btnSwitchToLoginForm.addEventListener("click", function() {
   signUpForm.style.display = "none";
   loginForm.style.display = "block";
+});
+
+logDB.addEventListener("click", function() {
+  socket.emit("logDB");
 });
