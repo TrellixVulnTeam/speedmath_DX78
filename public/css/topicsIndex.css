@@ -1,23 +1,44 @@
 #topicsContainer {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-}
-
-.topicInfo {
-  margin: 15px;
-  padding: 15px;
-  width: 300px;
-  border: 0px solid;
-  border-radius: 22px; 
-  text-align: center;
+  justify-content: space-around;
 }
 
 .topicHeading {
   font-size: 1.60em;
   font-weight: bold;
   text-align: center;
+}
+
+.topicInfo {
+  margin: 15px;
+  padding: 15px;
+  width: 400px;
+  border: 0px solid;
+  border-radius: 22px; 
+  text-align: center;
+  transition: 0.2s;
+}
+
+.topicInfo:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 40px -10px rgba(0, 0, 0, 0.25);
+}
+
+.playBtn {
+  display: block;
+  text-align: center;
+  margin-top: 15px;
+  text-decoration: none;
+  padding: 10px 5px;
+  border-radius: 22px;
+  font-weight: bold;
+  box-shadow: 0 0 40px -10px rgba(0, 0, 0, 0.25);
+  transition: 0.3s ease-in-out;
+}
+
+.playBtn:hover {
+  transform: scale(1.025)
 }
 
 a {

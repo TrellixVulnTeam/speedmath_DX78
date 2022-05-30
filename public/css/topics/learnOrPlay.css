@@ -1,0 +1,33 @@
+#learnOrPracticeContainer {
+  display: none;
+  width: 70vw;
+  margin: 15vh auto;
+  padding: 20px;
+  border-radius: 22px;
+}
+
+#learnContainer {
+  display: none;
+}
+
+#practiceContainer {
+  display: none;
+}
+
+#learnOrPracticeContainer > button {
+  display: inline;
+  text-align: center;
+  margin-top: 15px;
+  text-decoration: none;
+  padding: 10px 25px;
+  border: 3px solid;
+  border-radius: 22px;
+  font-size: 1.5em;
+  font-weight: bold;
+  transition: 0.3s; 
+  margin: 20px;
+}
+
+#learnOrPracticeContainer > button:hover {
+  transform: scale(1.05)
+}

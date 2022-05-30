@@ -6,6 +6,14 @@
   padding: 5px;
 }
 
+#intro {
+  width: 50vw;
+  margin: 10vh auto;
+  border-radius: 25px;
+  padding: 25px;
+  font-size: 1.25em
+}
+
 #btnStart {
   cursor: pointer;
   padding: 5px; 
@@ -14,10 +22,11 @@
   border: 2px solid;
   border-radius: 8px;
   font-weight: bold;
+  transition: 0.1s ease-in;
 }
 
 button:hover {
-  filter: brightness(120%);
+  transform: scale(1.05);
 }
 
 #game {
@@ -57,6 +66,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
   border: 2px solid;
   border-radius: 8px;
   margin: 15px;
+  transition: 0.1s;
 }
 
 #btnSubmit:hover {
@@ -75,6 +85,10 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 
 #newLevelContainer {
   display: none;
+  width: 80vw;
+  margin: 15vh auto;
+  border-radius: 22px;
+  padding: 10px;
 }
 
 #questionsProgressBar {
@@ -116,6 +130,27 @@ progress::-webkit-progress-value {
 
 #levelsProgressBar {
   width: 50vw;
+  border: 3px solid;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+progress#levelsProgressBar::-moz-progress-bar {
+  background-color: #e6e6e6;
+}
+
+progress#levelsProgressBar::-moz-progress-value {
+  background-color: #50fb6d;
+  overflow: hidden;
+}
+
+progress#levelsProgressBar::-webkit-progress-bar {
+  background-color: #e6e6e6;
+}
+
+progress#levelsProgressBar::-webkit-progress-value {
+  background-color: #50fb6d;
+  overflow: hidden;
 }
 
 #mastered {

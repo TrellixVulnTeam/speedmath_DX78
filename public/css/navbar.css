@@ -5,13 +5,13 @@
 }
 
 :root {
-  --bg-color: #FFF487;
+  --bg-color: #F9E7E4;
 }
 
 body {
   box-sizing: border-box;
   background-color: var(--bg-color);
-  margin: 0px;
+  margin: 0;
 }
 
 .topnav {
@@ -27,7 +27,7 @@ body {
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
-  font-size: 17px;
+  font-size: 18px;
   font-weight: bold;
   letter-spacing: 1px;
   margin: 0 16px;
@@ -38,12 +38,15 @@ body {
 .topnav a:hover {
   border-bottom: 5px #ffffcc solid;
   padding-bottom: 2px;
-  color: #000000;
 }
 
 .topnav a.active {
   color: #69f0ae;
   font-weight: bold;
+}
+
+.topnav a:last-child:hover {
+  border-bottom: 0;
 }
 
 .switch {

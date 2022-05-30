@@ -1,17 +1,3 @@
 h1 {
   text-align: center;
 }
-
-#inputAnswer {
-  margin-top: 1px;
-  margin-left: 900px;
-  margin-right: 10px;
-  border: none;
-  resize: none;
-  outline: none;
-}
-
-#inputAnswer[placeholder] {
-  font-weight: bold;
-  font-size: 15px;
-}

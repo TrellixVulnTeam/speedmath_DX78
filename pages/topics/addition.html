@@ -7,10 +7,12 @@
     <title>Addition</title>
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" href="/css/navbar.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/topics/learnOrPlay.css"/>
     <link rel="stylesheet" type="text/css" href="/css/topics/addition.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <script src="/scripts/themeHandler.js" defer></script>
     <script src="/scripts/topics/addition.js" defer></script>
+    <script src="/scripts/topics/learnOrPlay.js" defer></script>
   </head>
   <body>
     <!--   Navbar  -->
@@ -28,14 +30,23 @@
       </a>
     </div>
     <!-- Navbar ends -->
+
+    <div id="learnOrPracticeContainer" class="contentTheme">
+      pick whether u wanna learn or practice ig idk
+      <br>
+      <button id="btnLearn" class="secondaryContentTheme">Learn</button>
+      <button id="btnPractice" class="secondaryContentTheme">Practice</button>
+    </div>
     
     <div id="learnContainer">
+      ok this is supposed to be a tutorial on how to mentally add quickly
+      <br>
+      KiteFlyer and Ling will write.
     </div>
 
     <div id="practiceContainer">
-      <div id="intro">
-        Welcome!
-        <br>
+      <div id="intro" class="contentTheme">
+        <h3>Welcome!</h3>
         You will be given addition questions in rapid succession.
         <br>
         Getting the answers correct will advance you to higher levels.
@@ -43,7 +54,7 @@
         The questions will become harder as your level increases.
         <br>
         <br>
-        <button id="btnStart" class="contentTheme">Start</button>
+        <button id="btnStart" class="secondaryContentTheme">Start</button>
       </div>
 
       <div id="game"> 
@@ -60,7 +71,7 @@
         <p id="newLevelMessage"></p>
         <span style="font-size:1.1em;font-weight:bold;">Start</span> <progress id="levelsProgressBar" min="1" max="11"></progress> <span style="font-size:1.1em;font-weight:bold;">Mastery</span>
         <br>
-        <button id="btnContinue" class="contentTheme">Continue</button>
+        <button id="btnContinue" class="secondaryContentTheme">Continue</button>
       </div>
 
       <div id="mastered">

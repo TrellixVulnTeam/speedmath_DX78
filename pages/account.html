@@ -31,8 +31,7 @@
     <!-- Navbar ends -->
     <div id="formContainer">
       <form id="loginForm" class="contentTheme" action="/">
-        <h1>Log in:</h1>
-        <br>
+        <h1>Log In</h1>
         <label for="usernameLogin">Username:</label>
         <br>
         <input id="usernameLogin" required onkeypress="return event.charCode != 32"></input>
@@ -43,13 +42,15 @@
         <input id="passwordLogin" type="password" required onkeypress="return event.charCode != 32"></input>
         <br>
         <br>
+        <label for="rememberMe">Remember Me</label>
+        <input id="rememberMe" name="rememberMe" type="checkbox">
+        <br>
         <button id="login" type="submit" class="secondaryContentTheme">Login</button>
-        <button id="btnSwitchToSignUpForm" type="button" class="secondaryContentTheme">Sign Up</button>
+        <button id="btnSwitchToSignUpForm" type="button" class="secondaryContentTheme">Register</button>
       </form>
 
       <form id="signUpForm" class="contentTheme" action="/">
         <h1>Sign Up:</h1>
-        <br>
         <label for="usernameSignUp">Username:</label>
         <br>
         <input id="usernameSignUp" required autocomplete="off" onkeypress="return event.charCode != 32"></input>
@@ -67,18 +68,23 @@
         <br>
         <label for="passwordSignUp">Password:</label>
         <br>
-        <input id="passwordSignUp" type="password" required autocomplete="new-password" onkeypress="return event.charCode != 32"></input>
+        <input id="passwordSignUp" type="password" required autocomplete="new-password" onkeypress="return event.charCode != 32" minlength="8"></input>
         <br>
         <br>
         <label for="confirmPassword">Confirm Password:</label>
         <br>
-        <input id="confirmPassword" type="password" required autocomplete="new-password" onkeypress="return event.charCode != 32"></input>
+        <input id="confirmPassword" type="password" required autocomplete="new-password" onkeypress="return event.charCode != 32" minlength="8"></input>
         <br>
         <br> 
+        <span id="beOver13">By signing up, you agree to be above the age of 13 or have had permission from an adult above the age of 18 to sign up.</span>
+        <br>
         <button id="signUp" type="submit" class="secondaryContentTheme">Sign Up</button>
-        <button id="btnSwitchToLoginForm" type="button" class="secondaryContentTheme">Log in instead</button>
+        <button id="btnSwitchToLoginForm" type="button" class="secondaryContentTheme">Log In Instead</button>
       </form>
     </div>
-    <button id="logDB">Log (for debugging purposes, will be removed after I'm done learning SQL</button>
+    <div id="profileContainer">
+      
+    </div>
+    <!-- <button id="logDB">Log (for debugging purposes, will be removed after I'm done learning SQL</button> -->
   </body>
 </html>

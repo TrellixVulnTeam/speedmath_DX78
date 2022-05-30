@@ -39,6 +39,10 @@ if (localStorage.getItem("additionStats")) {
   userStats = JSON.parse(localStorage.getItem("additionStats"));
 }
 
+if ((localStorage.getItem("masteredAddition") === "true") || (userStats.level === 11)) {
+  displayMasteredScreen();
+}
+
 btnStart.addEventListener("click", function() {
   intro.classList.add('animate__animated', 'animate__zoomOut'); //animation using a library
 
@@ -47,7 +51,10 @@ btnStart.addEventListener("click", function() {
 
 btnContinue.addEventListener("click", function() {
   newLevelContainer.classList.add('animate__animated', 'animate__zoomOut');
-  newLevelContainer.addEventListener("animationend", startGame);
+  newLevelContainer.addEventListener("animationend", function() {
+    //newLevelContainer.classList.remove('animate__animated', 'animate__zoomOut');
+    startGame();
+  });
 });
 
 function startGame() {
@@ -154,7 +161,7 @@ function displayLevelScreen() {
   
   game.style.display = "none";
   levelsProgressBar.value = userStats.level;
-  newLevelMessage.innerHTML = `You are now on Level ${userStats.level}. Press the continue button to continue playing!`;
+  newLevelMessage.innerHTML = `You are now on Level <span style="font-weight:bold;font-size:1.3em;">${userStats.level}</span>. Press the continue button to continue playing!`;
   newLevelContainer.style.display = "block";
 }
 
@@ -173,7 +180,7 @@ if ((localStorage.getItem("masteredAddition") === "true") || (userStats.level ==
 
 //defining question type for each level of the game
 function generateQuestion(level) {
-  switch (level) {
+  /*switch (level) {
     case 1:
       return new AdditionQuestion(1, 1);
     case 2: 
@@ -194,5 +201,7 @@ function generateQuestion(level) {
       return new AdditionQuestion(7, 6);
     case 10:
       return new AdditionQuestion(8, 8);
-  }
+  }*/
+
+  return new AdditionQuestion(1, 1);
 }

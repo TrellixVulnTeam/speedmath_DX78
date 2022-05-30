@@ -1,14 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta property="og:title" content="SpeedMath"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="https://speedmath.ml"/>
+    <meta property="og:description" content="Solve as many math problems as you can within a time limit!"/>
+    <meta property="og:image" content="https://speedmath.ml/assets/favicon.ico"/>
+    <meta name="theme-color" content="#ff928b"/>
     <title>Speed & Mental Math</title>
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" href="/css/navbar.css"/>
     <link rel="stylesheet" type="text/css" href="/css/honk.css"/>
     <script src="scripts/themeHandler.js" defer></script>
+    <script src="scripts/homepage.js" defer></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://kit.fontawesome.com/32630c0ab4.js" crossorigin="anonymous"></script>
+    <script src="/socket.io/socket.io.js"></script>
   </head>
   <body>
     <!--   Navbar  -->
@@ -27,51 +37,105 @@
     </div>
     <!-- Navbar ends -->
     
-    <h1>Speed & Mental Math</h1>
-    <h2>
-      Answer as many math problems
-      <br>
-      as you can within a time limit!
-    </h2>
-    <br>
-    <br>
-    <br>
+    <h1 id="siteTitle">Speed & Mental Math</h1>
+    <div class="infoContainer">
+      <div class="ad">
+          <i class="fa-solid fa-infinity" style="font-size:48px"></i>
+          <h2>Develop those math skills</h2>
+          <p>Constantly solving math problems in quick succession will help you fine tune your arithmetic skills, increasing both speed and accuracy!</p>
+      </div>
+      <div class="ad">
+          <i class="fa-solid fa-brain" style="font-size:48px"></i>
+          <h2>More brain power</h2>
+          <p>Sharpen your mind and increase your logical thinking abilities, by playing our mathematic games that exercises your brain!</p>
+      </div>
+      <div class="ad">
+        <i class="fa-solid fa-gamepad" style="font-size:48px"></i>
+        <h2>Enojoy practicing math</h2>
+        <p>Solve math problems while advancing in levels, earning badges, and unlocking achievements!</p>
+      </div>
+      <div class="ad">
+        <i class="fa-solid fa-dollar-sign" style="font-size:48px"></i>
+        <h2>Unlimited, free problems</h2>
+        <p>Practice your math by solving unlimited problems, all for free!</p>
+      </div>
+    </div>
     <br>
     <div id="changelog" class="contentTheme">
-      <b>CHANGELOG:</b>
+      <h1>CHANGELOG</h1>
+      <br>
+      <u><b>5/29/2022:</b></u>
+      <br>
+      - When signing up, username and email are now checked for uniqueness
+      <br>
+      - Popup alerts when trying to sign up with an already-used username/email
+      <br>
+      - Log-in form is now functional
       <br>
       <br>
+      <u><b>5/28/2022:</b></u>
+      <br>
+      - Sign-up form is now functional
       <br>
       <br>
+      <u><b>5/27/2022:</b></u>
       <br>
-      5/25:
+      - Suggestions form was added to the home page
+      <br>
+      - SweetAlert.js was added for popup alerts around the website
+      <br>
+      - Home page styling was changed to improve accessibility for mobile users
+      <br>
+      - Theme color palettes were updated
+      <br>
+      <br>
+      <u><b>5/26/2022:</b></u>
+      <br>
+      - Database was created
+      <br>
+      - Log-in and Sign-up forms were created on the accounts page
+      <br>
+      <br>
+      <u><b>5/25/2022:</b></u>
       <br>
       - Users now have the ability to see a page to create accounts
-      <br>
       <br>
       - Changelog added on the homepage.
       <br>
       <br>
-      5/24:
+      <u><b>5/24/2022:</b></u>
       <br>
       - The addition portion of the practice game was completed.
-      <br>
       <br>
       - Problems and levels were added, as well as a progress bar and an end screen.
       <br>
       <br>
-      5/23:
+      <u><b>5/23/2022:</b></u>
       <br>
       - Four math practice topic pages were added (addition, subtraction, multiplication, and division)
-      <br>
       <br>
       - The contributor tab was added. Actual serious bios will be added in the near future
       <br>
       <br>
-      5/22:
+      <u><b>5/22/2022:</b></u>
       <br>
       - Website was created.
     </div>
-
+    
+    <div id="suggestionFormContainer" class="contentTheme">
+      <h1>SUGGESTIONS</h1>
+      <form id="suggestionsForm" action="/">
+        Give us a way to contact you (such as your email, Discord username, etc.): 
+        <br>
+        <input id="contact" class="secondaryContentTheme" maxlength="75" required>
+        <br>
+        <br>
+        Enter your suggestion (be detailed):
+        <br>
+        <textarea id="suggestion" class="secondaryContentTheme" maxlength="5000" required></textarea>
+        <br>
+        <button id="btnSuggest" class="secondaryContentTheme" type="submit">Suggest!</button>
+      </form>
+    </div>
   </body>
 </html>
