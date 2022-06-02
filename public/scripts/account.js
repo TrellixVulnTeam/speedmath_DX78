@@ -20,7 +20,7 @@ let email = document.getElementById("email");
 loginForm.addEventListener("submit", function(e) {
   e.preventDefault();
 
-  socket.emit("login", usernameLogin.value, passwordLogin.value, rememberMe.checked);
+  socket.emit("login", usernameLogin.value.toLowerCase(), passwordLogin.value, rememberMe.checked);
   loginForm.reset();
 });
 
@@ -28,7 +28,7 @@ signUpForm.addEventListener("submit", function(e) {
   e.preventDefault();
 
   if (passwordSignUp.value === confirmPassword.value) {
-    socket.emit("signUp", usernameSignUp.value, passwordSignUp.value, displayName.value, email.value || null);
+    socket.emit("signUp", usernameSignUp.value.toLowerCase(), passwordSignUp.value, displayName.value, email.value || null);
     signUpForm.reset();
   } else {
     Swal.fire({
@@ -55,9 +55,9 @@ logDB.addEventListener("click", function() {
 });
 */
 
-function switchToUserInfoContainer() {
-  formContainer.style.display = "none";
-  profileContainer.style.display = "block";
+function switchToFormsContainer() {
+  formContainer.style.display = "flex";
+  profileContainer.style.display = "none";
 }
 
 socket.on("successfullySignedUp", () => {
@@ -110,8 +110,12 @@ socket.on("error", (errorTitle, errorMessage) => {
   }
 });
 
-socket.on("successfulLogin", (token) => {
-  localStorage.setItem("token", token);
+socket.on("successfulLogin", (token, remember) => {
+  if (remember) {
+    localStorage.setItem("token", token);
+  } else {
+    sessionStorage.setItem("token", token);
+  }
 
   if (localStorage.getItem("theme") === "dark") {
     Swal.fire({
@@ -123,7 +127,7 @@ socket.on("successfulLogin", (token) => {
       background: themeSettings.contentBackgroundColor.dark,
       color: themeSettings.contentTextColor.dark
     }).then(() => {
-      switchToUserInfoContainer();
+      location.reload();
     }); 
   } else if (localStorage.getItem("theme") === "light") {
     Swal.fire({
@@ -135,7 +139,107 @@ socket.on("successfulLogin", (token) => {
       background: themeSettings.contentBackgroundColor.light,
       color: themeSettings.contentTextColor.light
     }).then(() => {
-      switchToUserInfoContainer();
+      location.reload();
     }); 
   }
+});
+
+window.onload = function() {
+  let token = localStorage.getItem("token") || sessionStorage.getItem("token");
+  
+  if (token === null) {
+    switchToFormsContainer();
+  } else {
+    socket.emit("getOwnProfileInfo", token);
+  }
+}
+
+socket.on("ownProfileInfo", (info, friendsInfo) => {
+  profileContainer.style.display = "block";
+
+  if (info.profile_picture === "defaultAvatar") {
+    document.getElementById("profilePicture").src = "/assets/defaultAvatar.png";
+  }
+
+  document.getElementById("profileInfoUsername").textContent = ("@" + info.username);
+  document.getElementById("profileInfoDisplayName").textContent = info.display_name;
+
+  if (info.email == null) {
+    document.getElementById("profileInfoEmail").textContent = "You didn't provide an email address.";
+  } else {
+    document.getElementById("profileInfoEmail").textContent = info.email; 
+  }
+
+  if (info.bio == "") {
+    document.getElementById("profileInfoBio").innerHTML = `<a id="changeBio" style="font-size:1.1em;text-decoration:underline;cursor:pointer;">Add bio</a>`;
+  } else {
+    document.getElementById("profileInfoBio").textContent = info.bio;
+    document.getElementById("profileInfoBio").innerHTML += `<br><br><a id="changeBio" style="font-size:1.1em;text-decoration:underline;cursor:pointer;">Update bio</a>`
+  }
+
+  document.getElementById("basicInfoContainer").innerHTML += `<b><a href="/user/${info.username}" style="font-size:1.5em;">View Public Profile</a><b>`
+
+  if (friendsInfo.friends.length == 0) {
+    document.getElementById("friendsContainer").innerHTML += "<h4>You have no friends.</h4>"
+  } else {
+    //nobody using this website has friends, so we don't need to code this part
+  }
+
+  if (friendsInfo.incoming_friend_requests.length == 0) {
+    document.getElementById("incomingFriendRequestsContainer").innerHTML += "<h4>You have no incoming friend requests.</h4>"
+  } else {
+    //nobody using this website has friends, so we don't need to code this part
+  }
+
+  if (friendsInfo.outgoing_friend_requests.length == 0) {
+    document.getElementById("outgoingFriendRequestsContainer").innerHTML += "<h4>You have no outgoing friend requests.</h4>"
+  } else {
+    //nobody using this website has friends, so we don't need to code this part
+  }
+
+  document.getElementById("changeBio").addEventListener("click", async function() {
+    if (localStorage.getItem("theme") === "dark") {
+      let { value: newBio } = await Swal.fire({
+        title: "Enter your new bio",
+        input: "text",
+        inputLabel: "Bio:",
+        showCancelButton: true,
+        inputValidator: (value) => {
+          if (!value) {
+            return "Your new bio can't be empty."
+          }
+        },
+        background: themeSettings.contentBackgroundColor.dark,
+        color: themeSettings.contentTextColor.dark
+      }); 
+
+      if (newBio) {
+        let token = localStorage.getItem("token") || sessionStorage.getItem("token");
+        socket.emit("updateBio", token, newBio);
+      }
+    } else if (localStorage.getItem("theme") === "light") {
+      let { value: newBio } = await Swal.fire({
+        title: "Enter your new bio",
+        input: "text",
+        inputLabel: "Bio:",
+        showCancelButton: true,
+        inputValidator: (value) => {
+          if (!value) {
+            return "Your new bio can't be empty."
+          }
+        },
+        background: themeSettings.contentBackgroundColor.light,
+        color: themeSettings.contentTextColor.light
+      }); 
+
+      if (newBio) {
+        let token = localStorage.getItem("token") || sessionStorage.getItem("token");
+        socket.emit("updateBio", token, newBio);
+      }
+    }
+  });
+});
+
+socket.on("successfullyUpdatedBio", () => {
+  location.reload();
 });

@@ -2,8 +2,16 @@
   text-align: center;
 }
 
+#profileContainer {
+  display: none;
+}
+
+#signUpForm {
+  display: none;
+}
+
 #formContainer {
-  display: flex;
+  display: none;
   flex-wrap: wrap;
   justify-content: center;
   margin: 10px;
@@ -13,6 +21,8 @@ form {
   border-radius: 22px;
   padding: 20px;
   border: 3px solid;
+  width: 80vw;
+  margin: auto;
 }
 
 form > label {
@@ -25,6 +35,8 @@ form > input {
   border-radius: 10px;
   border: 2px solid;
   outline: none;
+  width: 70vw;
+  margin: auto;
 }
 
 button {
@@ -47,6 +59,56 @@ button:hover {
   height: 20px;
 }
 
-#signUpForm {
-  display: none;
+#usernameLogin {
+  text-transform: lowercase;
+}
+
+#usernameSignUp {
+  text-transform: lowercase;
+}
+
+#basicInfoContainer, #friendsInfoContainer {
+  width: 80vw;
+  padding: 20px;
+  margin: auto;
+  border-radius: 22px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border: 4px solid;
+}
+
+#profileInfoDisplayName {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+#pfpContainer {
+  text-align: center;
+}
+
+#profilePicture {
+  overflow: hidden;
+  border: 4px solid rgba(0, 0, 0, 0.8);
+  border-radius: 100%;
+}
+
+#friendsContainer, #incomingFriendRequestsContainer, #outgoingFriendRequestsContainer {
+  border: 2px solid;
+  border-radius: 22px;
+  padding: 10px;
+  margin: 10vh auto;
+}
+
+a {
+  color: inherit;
+}
+
+a:hover {
+  font-weight: bold;
+}
+
+#profileInfoBio {
+  display: block;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
