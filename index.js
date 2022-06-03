@@ -38,7 +38,7 @@ app.get('/account', (req, res) => {
   res.sendFile(__dirname + "/pages/account.html");
 });
 
-console.log("Initializing database...");
+console.log("Initializing database...";
 
 let accountsDb = new sqlite3.Database(__dirname + "/database/accounts.db", (err) => {
   if (err) {
@@ -65,6 +65,16 @@ accountsDb.serialize(() => {
       outgoing_friend_requests TEXT,
       achievements TEXT,
       public_account TEXT
+    )`
+  );
+  
+  accountsDb.run(`
+    CREATE TABLE IF NOT EXISTS topicsPracticeStats(
+      user_id INTEGER PRIMARY KEY,
+      addition_level INTEGER,
+      subtraction_level INTEGER,
+      multiplication_level INTEGER,
+      division_level INTEGER
     )`
   );
 });

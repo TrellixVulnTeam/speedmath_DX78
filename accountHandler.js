@@ -68,12 +68,18 @@ module.exports = function(socket, sqlite3, bcrypt, jwt) {
                         if (err) {
                           console.log(err);
                         } else {
-                          socket.emit("successfullySignedUp");
-                          accountsDb.close((err) => {
+                          accountsDb.run(`INSERT INTO topicsPracticeStats(addition_level, subtraction_level, multiplication_level, division_level) VALUES (?, ?, ?, ?)`, [1, 1, 1, 1], function(err) {
                             if (err) {
                               console.log(err);
                             } else {
-                              console.log("Signed them up and closed the database!");
+                              socket.emit("successfullySignedUp");
+                              accountsDb.close((err) => {
+                                if (err) {
+                                  console.log(err);
+                                } else {
+                                  console.log("Signed them up and closed the database!");
+                                }
+                              });
                             }
                           });
                         }

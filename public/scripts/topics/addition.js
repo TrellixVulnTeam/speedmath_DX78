@@ -9,6 +9,34 @@ class AdditionQuestion {
   }
 }
 
+//defining question type for each level of the game
+function generateQuestion(level) {
+  /*switch (level) {
+    case 1:
+      return new AdditionQuestion(1, 1);
+    case 2: 
+      return new AdditionQuestion(2, 1);
+    case 3:
+      return new AdditionQuestion(2, 2);
+    case 4:
+      return new AdditionQuestion(3, 2);
+    case 5:
+      return new AdditionQuestion(3, 3);
+    case 6:
+      return new AdditionQuestion(4, 3);
+    case 7:
+      return new AdditionQuestion(4, 4);
+    case 8: 
+      return new AdditionQuestion(5, 5);
+    case 9:
+      return new AdditionQuestion(7, 6);
+    case 10:
+      return new AdditionQuestion(8, 8);
+  }*/
+
+  return new AdditionQuestion(1, 1);
+}
+
 let intro = document.getElementById("intro");
 let game = document.getElementById("game");
 let answerField = document.getElementById("answerField");
@@ -176,32 +204,4 @@ function displayMasteredScreen() {
 
 if ((localStorage.getItem("masteredAddition") === "true") || (userStats.level === 11)) {
   displayMasteredScreen();
-}
-
-//defining question type for each level of the game
-function generateQuestion(level) {
-  /*switch (level) {
-    case 1:
-      return new AdditionQuestion(1, 1);
-    case 2: 
-      return new AdditionQuestion(2, 1);
-    case 3:
-      return new AdditionQuestion(2, 2);
-    case 4:
-      return new AdditionQuestion(3, 2);
-    case 5:
-      return new AdditionQuestion(3, 3);
-    case 6:
-      return new AdditionQuestion(4, 3);
-    case 7:
-      return new AdditionQuestion(4, 4);
-    case 8: 
-      return new AdditionQuestion(5, 5);
-    case 9:
-      return new AdditionQuestion(7, 6);
-    case 10:
-      return new AdditionQuestion(8, 8);
-  }*/
-
-  return new AdditionQuestion(1, 1);
 }
