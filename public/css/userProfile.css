@@ -1,0 +1,45 @@
+* {
+  text-align: center;
+}
+
+#usernameNotFound {
+  display: none;
+  width: 70vw;
+  margin: 15vh auto;
+  padding: 20px;
+  border-radius: 22px;
+}
+
+#userInfoContainer {
+  display: none;
+  padding: 20px;
+  width: 90vw;
+  margin: 20px auto;
+}
+
+#basicInfo, #achievementsContainer {
+  width: 80vw;
+  padding: 20px;
+  margin: 20px auto;
+  border-radius: 22px;
+  border: 4px solid;
+}
+
+#pfpContainer {
+  text-align: center;
+}
+
+#profilePicture {
+  overflow: hidden;
+  border: 4px solid rgba(0, 0, 0, 0.8);
+  border-radius: 100%;
+}
+
+#displayName {
+  font-size: 1.8em;
+  font-weight: bold;
+}
+
+#bio {
+  margin-top: 15px;
+}

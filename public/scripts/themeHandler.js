@@ -3,7 +3,7 @@ let darkModeToggle = document.getElementById("darkModeToggle");
 let themeSettings = {
   "bodyBackgroundColor": {
     "dark": "#121212", 
-    "light": "#F9E7E4"
+    "light": "#FFF5DB"
   },
   "textColor": {
     "dark": "#ffffff",
@@ -11,7 +11,7 @@ let themeSettings = {
   },
   "contentBackgroundColor": {
     "dark": "#ffb8ac",
-    "light": "#FCD5CE"
+    "light": "#C1DBCC"
   },
   "contentTextColor": {
     "dark": "#000000",
@@ -19,11 +19,11 @@ let themeSettings = {
   },
   "contentBorderColor": {
     "dark": "#ffffff",
-    "light": "#000000"
+    "light": "#432818"
   },
   "secondaryContentBackgroundColor": {
     "dark": "#d4f6f2",
-    "light": "#FCF4DD"
+    "light": "#f08080"
   },
   "secondaryContentTextColor": {
     "dark": "#000000",
@@ -31,7 +31,7 @@ let themeSettings = {
   },
   "secondaryContentBorderColor": {
     "dark": "#000000",
-    "light": "#000000"
+    "light": "#432818"
   }
 }
 

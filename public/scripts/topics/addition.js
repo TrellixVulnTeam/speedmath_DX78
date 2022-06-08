@@ -39,6 +39,7 @@ function generateQuestion(level) {
 
 let intro = document.getElementById("intro");
 let game = document.getElementById("game");
+let btnStart = document.getElementById("btnStart");
 let answerField = document.getElementById("answerField");
 let btnSubmit = document.getElementById("btnSubmit");
 let questionBox = document.getElementById("question");
@@ -49,7 +50,7 @@ let btnContinue = document.getElementById("btnContinue");
 let newLevelMessage = document.getElementById("newLevelMessage");
 let questionsProgressBar = document.getElementById("questionsProgressBar");
 let mastered = document.getElementById("mastered");
-
+  
 // so that pressing enter = clicking submit button
 answerField.addEventListener("keyup", function(e) {
   if (e.keyCode === 13) {
@@ -63,11 +64,11 @@ let userStats = {
   wrongStreak: 0
 }
 
-if (localStorage.getItem("additionStats")) {
-  userStats = JSON.parse(localStorage.getItem("additionStats"));
+if (userStats.level === 11) {
+  displayMasteredScreen();
 }
 
-if ((localStorage.getItem("masteredAddition") === "true") || (userStats.level === 11)) {
+if (userStats.level === 11) {
   displayMasteredScreen();
 }
 
@@ -78,11 +79,7 @@ btnStart.addEventListener("click", function() {
 });
 
 btnContinue.addEventListener("click", function() {
-  newLevelContainer.classList.add('animate__animated', 'animate__zoomOut');
-  newLevelContainer.addEventListener("animationend", function() {
-    //newLevelContainer.classList.remove('animate__animated', 'animate__zoomOut');
-    startGame();
-  });
+  startGame();
 });
 
 function startGame() {
@@ -119,6 +116,7 @@ function nextQuestion() {
     if (timeLeft > 0) {
       timer.innerHTML = `${Math.floor(timeLeft/60)}m${timeLeft%60}s`;
     } else {
+      clearInterval(countdown);
       btnSubmit.click();
     }
   }, 1000);
@@ -128,14 +126,14 @@ function nextQuestion() {
   function verifyAnswer() {
     clearInterval(countdown);
     btnSubmit.removeEventListener("click", verifyAnswer);
-    
+    //alert("your answer: " + answerField.value + "\n\ncorrect answer: " + question.answer);
     if (answerField.value == question.answer) { //if correct:
       userStats.wrongStreak = 0; //wrong streak resets
       if (userStats.question == 10) { //level goes up if 10 questions of the previous level are done
         userStats.level++; 
         userStats.question = 1;
         displayLevelScreen();
-        localStorage.setItem("additionStats", JSON.stringify(userStats));
+        socket.emit("newLevelTopicPractice", "addition", userStats.level);
         return;
       } else {
         userStats.question++; //if correct but 10 questions of level not done, question number simply goes up
@@ -148,7 +146,7 @@ function nextQuestion() {
           userStats.level--; //go a level down
           userStats.question = 1;
           displayLevelScreen();
-          localStorage.setItem("additionStats", JSON.stringify(userStats));
+          socket.emit("newLevelTopicPractice", "addition", userStats.level);
           return;
         } else {
           userStats.question = 1; //if on level 1 and wrong streak reaches 3, level resets
@@ -162,8 +160,7 @@ function nextQuestion() {
         }
       }
     }
-
-    localStorage.setItem("additionStats", JSON.stringify(userStats));
+    
     answerField.value = "";
     displayLevel();
     nextQuestion();
@@ -198,10 +195,4 @@ function displayMasteredScreen() {
   game.style.display = "none";
   newLevelContainer.style.display = "none";
   mastered.style.display = "block";
-
-  localStorage.setItem("masteredAddition", "true");
-}
-
-if ((localStorage.getItem("masteredAddition") === "true") || (userStats.level === 11)) {
-  displayMasteredScreen();
 }

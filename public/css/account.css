@@ -19,9 +19,9 @@
 
 form {
   border-radius: 22px;
-  padding: 20px;
+  padding: 25px;
   border: 3px solid;
-  width: 80vw;
+  width: 70vw;
   margin: auto;
 }
 
@@ -67,7 +67,7 @@ button:hover {
   text-transform: lowercase;
 }
 
-#basicInfoContainer, #friendsInfoContainer {
+#basicInfoContainer, #achievementsContainer, #friendsInfoContainer {
   width: 80vw;
   padding: 20px;
   margin: auto;
@@ -92,7 +92,14 @@ button:hover {
   border-radius: 100%;
 }
 
-#friendsContainer, #incomingFriendRequestsContainer, #outgoingFriendRequestsContainer {
+#friendsInfoContainer > div {
+  border: 2px solid;
+  border-radius: 22px;
+  padding: 10px;
+  margin: 10vh auto;
+}
+
+#achievementsContainer > div {
   border: 2px solid;
   border-radius: 22px;
   padding: 10px;
@@ -112,3 +119,9 @@ a:hover {
   margin-top: 20px;
   margin-bottom: 20px;
 }
+
+#logOut {
+  float: left;
+  font-size: 0.5em;
+}
+

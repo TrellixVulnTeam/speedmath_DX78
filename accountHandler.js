@@ -8,7 +8,7 @@ module.exports = function(socket, sqlite3, bcrypt, jwt) {
     }); 
 
     //get the value in the password_hashed column from the row where the username is the inputted username (if it exists)
-    accountsDb.all(`SELECT password_hashed FROM users WHERE username = ?`, [username], (err, rows) => {
+    accountsDb.all(`SELECT user_id, password_hashed FROM users WHERE username = ?`, [username], (err, rows) => {
       if (err) {
         console.log(err);
       } else {
@@ -20,7 +20,7 @@ module.exports = function(socket, sqlite3, bcrypt, jwt) {
               console.log(err);
             } else {
               if (result == true) {
-                let user = { name: username };
+                let user = { id: rows[0].user_id };
                 jwt.sign(user, process.env['JWT_PRIVATE_KEY'], function(err, token) {
                   if (err) {
                     console.log(err);

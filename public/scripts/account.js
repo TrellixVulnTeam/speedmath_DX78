@@ -49,12 +49,6 @@ btnSwitchToLoginForm.addEventListener("click", function() {
   loginForm.style.display = "block";
 });
 
-/*
-logDB.addEventListener("click", function() {
-  socket.emit("logDB");
-});
-*/
-
 function switchToFormsContainer() {
   formContainer.style.display = "flex";
   profileContainer.style.display = "none";
@@ -159,6 +153,8 @@ socket.on("ownProfileInfo", (info, friendsInfo) => {
 
   if (info.profile_picture === "defaultAvatar") {
     document.getElementById("profilePicture").src = "/assets/defaultAvatar.png";
+  } else {
+    document.getElementById("profilePicture").src = info.profile_picture;
   }
 
   document.getElementById("profileInfoUsername").textContent = ("@" + info.username);
@@ -201,7 +197,7 @@ socket.on("ownProfileInfo", (info, friendsInfo) => {
     if (localStorage.getItem("theme") === "dark") {
       let { value: newBio } = await Swal.fire({
         title: "Enter your new bio",
-        input: "text",
+        input: "textarea",
         inputLabel: "Bio:",
         showCancelButton: true,
         inputValidator: (value) => {
@@ -220,7 +216,7 @@ socket.on("ownProfileInfo", (info, friendsInfo) => {
     } else if (localStorage.getItem("theme") === "light") {
       let { value: newBio } = await Swal.fire({
         title: "Enter your new bio",
-        input: "text",
+        input: "textarea",
         inputLabel: "Bio:",
         showCancelButton: true,
         inputValidator: (value) => {
@@ -238,8 +234,37 @@ socket.on("ownProfileInfo", (info, friendsInfo) => {
       }
     }
   });
+
+  document.getElementById("profilePicture").addEventListener("click", async function() {
+    let { value: pfp } = await Swal.fire({
+      title: "Upload your new profile picture",
+      input: "file",
+      showCancelButton: true,
+      inputValidator: (pfp) => {
+        if (!pfp) {
+          return `You have to upload a picture!`
+        }
+      },
+      inputAttributes: {
+        'accept': 'image/*'
+      }
+    });
+
+    if (pfp) {
+      let reader = new FileReader();
+      reader.readAsDataURL(pfp);
+      reader.onload = function() {
+        let token = localStorage.getItem("token") || sessionStorage.getItem("token");
+        socket.emit("updatePfp", token, reader.result);
+      }
+    }
+  });
 });
 
 socket.on("successfullyUpdatedBio", () => {
+  location.reload();
+});
+
+socket.on("successfullyUpdatedPfp", () => {
   location.reload();
 });

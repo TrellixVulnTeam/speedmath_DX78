@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title></title>
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/css/navbar.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/userProfile.css"/>
+    <script src="/scripts/themeHandler.js" defer></script>
+    <script src="/scripts/userProfile.js" defer></script>
+    <script src="/socket.io/socket.io.js"></script>
+  </head>
+  <body>
+    <!--   Navbar  -->
+    <div class="topnav">
+      <a class="active" href="/">Home</a>
+      <a href="/arithmetic">Speed Math</a>
+      <a href="/topics">Topics</a>
+      <a href="/contributors">Contributors</a>
+      <a href="/account">Account</a>
+      <a>
+        <label class="switch">
+          <input type="checkbox" id="darkModeToggle">
+          <span class="slider round"></span>
+        </label>
+      </a>
+    </div>
+    <!-- Navbar ends -->
+    <div id="usernameNotFound" class="contentTheme">
+      <h1>Invalid link. The username of the account that ur tryna access is not availble.</h1>
+    </div>
+    
+    <div id="userInfoContainer">
+      <div id="basicInfo" class="contentTheme">
+        <div id="pfpContainer">
+          <img id="profilePicture" height=100 width=100></img>
+        </div>
+        <div id="displayName"></div>
+        <div id="username"></div>
+        <div id="bio"></div>
+        <button id="btnSendFriendRequest" class="secondaryContentTheme">Add Friend 🤓</button>
+      </div>
+
+      <div id="achievementsContainer" class="contentTheme">
+        <h1>Achievements</h1>
+      </div>
+    </div>
+  </body>
+</html>

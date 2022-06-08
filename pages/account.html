@@ -32,12 +32,12 @@
     <div id="formContainer">
       <form id="loginForm" class="contentTheme" action="/">
         <h1>Log In</h1>
-        <label for="usernameLogin">Username:</label>
+        <label for="usernameLogin">Username</label>
         <br>
         <input id="usernameLogin" required onkeypress="return event.charCode != 32"></input>
         <br>
         <br>
-        <label for="passwordLogin">Password:</label>
+        <label for="passwordLogin">Password</label>
         <br>
         <input id="passwordLogin" type="password" required onkeypress="return event.charCode != 32"></input>
         <br>
@@ -50,28 +50,28 @@
       </form>
 
       <form id="signUpForm" class="contentTheme" action="/">
-        <h1>Sign Up:</h1>
-        <label for="usernameSignUp">Username:</label>
+        <h1>Sign Up</h1>
+        <label for="usernameSignUp">Username</label>
         <br>
         <input id="usernameSignUp" required autocomplete="off" onkeypress="return event.charCode != 32"></input>
         <br>
         <br>
-        <label for="displayName">Display Name:</label>
+        <label for="displayName">Display Name</label>
         <br>
         <input id="displayName" required autocomplete="off"></input>
         <br>
         <br>
-        <label for="email">Email (optional):</label>
+        <label for="email">Email (optional)</label>
         <br>
         <input type="email" id="email" autocomplete="off"></input>
         <br>
         <br>
-        <label for="passwordSignUp">Password:</label>
+        <label for="passwordSignUp">Password</label>
         <br>
         <input id="passwordSignUp" type="password" required autocomplete="new-password" onkeypress="return event.charCode != 32" minlength="8"></input>
         <br>
         <br>
-        <label for="confirmPassword">Confirm Password:</label>
+        <label for="confirmPassword">Confirm Password</label>
         <br>
         <input id="confirmPassword" type="password" required autocomplete="new-password" onkeypress="return event.charCode != 32" minlength="8"></input>
         <br>
@@ -103,7 +103,13 @@
         </div>
       </div>
       <div id="achievementsContainer" class="contentTheme">
-        
+        <h1>Achievements</h1>
+        <div id="publicBadges" class="secondaryContentTheme">
+          <h2>Publicly Displayed Achievements (max 5):</h1>
+        </div>
+        <div id="allBadges" class="secondaryContentTheme">
+          <h2>All of your achievements:</h2>
+        </div>
       </div>
       <div id="friendsInfoContainer" class="contentTheme">
         <h1>Connections</h1>
@@ -120,6 +126,5 @@
         </div>
       </div>
     </div>
-    <!-- <button id="logDB">Log (for debugging purposes, will be removed after I'm done learning SQL</button> -->
   </body>
 </html>
