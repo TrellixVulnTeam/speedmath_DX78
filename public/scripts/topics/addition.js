@@ -1,3 +1,5 @@
+var socket = io();
+
 class AdditionQuestion {
   //to create an addition question about adding an a-digit long number and a b-digit long number
   constructor(a, b) {
@@ -11,7 +13,7 @@ class AdditionQuestion {
 
 //defining question type for each level of the game
 function generateQuestion(level) {
-  /*switch (level) {
+  switch (level) {
     case 1:
       return new AdditionQuestion(1, 1);
     case 2: 
@@ -32,9 +34,7 @@ function generateQuestion(level) {
       return new AdditionQuestion(7, 6);
     case 10:
       return new AdditionQuestion(8, 8);
-  }*/
-
-  return new AdditionQuestion(1, 1);
+  }
 }
 
 let intro = document.getElementById("intro");
@@ -50,7 +50,7 @@ let btnContinue = document.getElementById("btnContinue");
 let newLevelMessage = document.getElementById("newLevelMessage");
 let questionsProgressBar = document.getElementById("questionsProgressBar");
 let mastered = document.getElementById("mastered");
-  
+
 // so that pressing enter = clicking submit button
 answerField.addEventListener("keyup", function(e) {
   if (e.keyCode === 13) {
@@ -64,18 +64,33 @@ let userStats = {
   wrongStreak: 0
 }
 
-if (userStats.level === 11) {
-  displayMasteredScreen();
+let token = localStorage.getItem("token") || sessionStorage.getItem("token");
+let loggedIn;
+
+if (token !== null) {
+  loggedIn = true;
+  socket.emit("getTopicPracticeStats", token, "addition");
+} else {
+  loggedIn = false;
+  btnStart.addEventListener("click", function() {
+    intro.classList.add('animate__animated', 'animate__zoomOut'); //animation using a library
+  
+    intro.addEventListener("animationend", startGame);
+  });
 }
 
-if (userStats.level === 11) {
-  displayMasteredScreen();
-}
+socket.on("topicPracticeLevel", level => {
+  userStats.level = level;
+  
+  if (userStats.level === 11) {
+    displayMasteredScreen();
+  }
 
-btnStart.addEventListener("click", function() {
-  intro.classList.add('animate__animated', 'animate__zoomOut'); //animation using a library
-
-  intro.addEventListener("animationend", startGame);
+  btnStart.addEventListener("click", function() {
+    intro.classList.add('animate__animated', 'animate__zoomOut'); //animation using a library
+  
+    intro.addEventListener("animationend", startGame);
+  });
 });
 
 btnContinue.addEventListener("click", function() {
@@ -126,14 +141,15 @@ function nextQuestion() {
   function verifyAnswer() {
     clearInterval(countdown);
     btnSubmit.removeEventListener("click", verifyAnswer);
-    //alert("your answer: " + answerField.value + "\n\ncorrect answer: " + question.answer);
     if (answerField.value == question.answer) { //if correct:
       userStats.wrongStreak = 0; //wrong streak resets
       if (userStats.question == 10) { //level goes up if 10 questions of the previous level are done
         userStats.level++; 
         userStats.question = 1;
         displayLevelScreen();
-        socket.emit("newLevelTopicPractice", "addition", userStats.level);
+        if (loggedIn) {
+          socket.emit("updateTopicPracticeStats", token, "addition", userStats.level);
+        }
         return;
       } else {
         userStats.question++; //if correct but 10 questions of level not done, question number simply goes up
@@ -146,7 +162,9 @@ function nextQuestion() {
           userStats.level--; //go a level down
           userStats.question = 1;
           displayLevelScreen();
-          socket.emit("newLevelTopicPractice", "addition", userStats.level);
+          if (loggedIn) {
+            socket.emit("updateTopicPracticeStats", token, "addition", userStats.level);
+          }
           return;
         } else {
           userStats.question = 1; //if on level 1 and wrong streak reaches 3, level resets

@@ -67,7 +67,7 @@ button:hover {
   text-transform: lowercase;
 }
 
-#basicInfoContainer, #achievementsContainer, #friendsInfoContainer {
+#profileContainer > div {
   width: 80vw;
   padding: 20px;
   margin: auto;
@@ -90,6 +90,11 @@ button:hover {
   overflow: hidden;
   border: 4px solid rgba(0, 0, 0, 0.8);
   border-radius: 100%;
+}
+
+#profilePicture:hover {
+  cursor: pointer;
+  filter: brightness(70%);
 }
 
 #friendsInfoContainer > div {

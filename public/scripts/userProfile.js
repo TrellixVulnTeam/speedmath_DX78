@@ -3,7 +3,7 @@ var socket = io();
 window.onload = function() {
   let url = window.location.href;
   // get whatever's after the last / to get the username, and send it to the server to get the public info associated with that username
-  socket.emit("getPublicUserInfo", url.substring(url.lastIndexOf('/') + 1));
+  socket.emit("getPublicUserInfo", url.substring(url.lastIndexOf('/') + 1).toLowerCase());
 }
 
 socket.on("profileUsernameNotFound", () => {

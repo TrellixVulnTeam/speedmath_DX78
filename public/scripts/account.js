@@ -173,7 +173,12 @@ socket.on("ownProfileInfo", (info, friendsInfo) => {
     document.getElementById("profileInfoBio").innerHTML += `<br><br><a id="changeBio" style="font-size:1.1em;text-decoration:underline;cursor:pointer;">Update bio</a>`
   }
 
-  document.getElementById("basicInfoContainer").innerHTML += `<b><a href="/user/${info.username}" style="font-size:1.5em;">View Public Profile</a><b>`
+  document.getElementById("basicInfoContainer").innerHTML += `<b><a href="/user/${info.username}" style="font-size:1.5em;">View Public Profile</a><b>`;
+  if (info.public_account == "true") {
+    document.getElementById("basicInfoContainer").innerHTML += `<br>Your account is <b>public</b>`;
+  } else {
+    document.getElementById("basicInfoContainer").innerHTML += `<br>Your account is <b>private</b>`;
+  }
 
   if (friendsInfo.friends.length == 0) {
     document.getElementById("friendsContainer").innerHTML += "<h4>You have no friends.</h4>"
@@ -236,26 +241,57 @@ socket.on("ownProfileInfo", (info, friendsInfo) => {
   });
 
   document.getElementById("profilePicture").addEventListener("click", async function() {
-    let { value: pfp } = await Swal.fire({
-      title: "Upload your new profile picture",
-      input: "file",
-      showCancelButton: true,
-      inputValidator: (pfp) => {
-        if (!pfp) {
-          return `You have to upload a picture!`
+    if (localStorage.getItem("theme") === "dark") {
+      let { value: pfp } = await Swal.fire({
+        title: "Upload your new profile picture",
+        input: "file",
+        showCancelButton: true,
+        inputLabel: "By uploading an image, you are agreeing that you have the rights to that image. No NSFW profile pictures allowed (exceptions are made for Ling and KiteFlyer).",
+        inputValidator: (pfp) => {
+          if (!pfp) {
+            return `You have to upload a picture!`
+          }
+        },
+        inputAttributes: {
+          'accept': 'image/*'
+        },
+        background: themeSettings.contentBackgroundColor.dark,
+        color: themeSettings.contentTextColor.dark
+      });
+  
+      if (pfp) {
+        let reader = new FileReader();
+        reader.readAsDataURL(pfp);
+        reader.onload = function() {
+          let token = localStorage.getItem("token") || sessionStorage.getItem("token");
+          socket.emit("updatePfp", token, reader.result);
         }
-      },
-      inputAttributes: {
-        'accept': 'image/*'
       }
-    });
-
-    if (pfp) {
-      let reader = new FileReader();
-      reader.readAsDataURL(pfp);
-      reader.onload = function() {
-        let token = localStorage.getItem("token") || sessionStorage.getItem("token");
-        socket.emit("updatePfp", token, reader.result);
+    } else if (localStorage.getItem("theme") === "light") {
+      let { value: pfp } = await Swal.fire({
+        title: "Upload your new profile picture",
+        input: "file",
+        showCancelButton: true,
+        inputLabel: "By uploading an image, you are agreeing that you have the rights to that image. No NSFW profile pictures allowed (exceptions are made for Ling and KiteFlyer).",
+        inputValidator: (pfp) => {
+          if (!pfp) {
+            return `You have to upload a picture!`
+          }
+        },
+        inputAttributes: {
+          'accept': 'image/*'
+        },
+        background: themeSettings.contentBackgroundColor.light,
+        color: themeSettings.contentTextColor.light
+      });
+  
+      if (pfp) {
+        let reader = new FileReader();
+        reader.readAsDataURL(pfp);
+        reader.onload = function() {
+          let token = localStorage.getItem("token") || sessionStorage.getItem("token");
+          socket.emit("updatePfp", token, reader.result);
+        }
       }
     }
   });

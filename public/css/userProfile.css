@@ -2,6 +2,15 @@
   text-align: center;
 }
 
+
+.addFriendBtn{
+    border: 0;
+}
+.addFriendBtn: hover {
+    opacity:1;
+}
+
+
 #usernameNotFound {
   display: none;
   width: 70vw;

@@ -39,6 +39,10 @@ app.get('/user/:username', (req, res) => {
   res.sendFile(__dirname + "/pages/user.html");
 });
 
+app.get('/nsfw', (req, res) => {
+  res.redirect("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+});
+
 console.log("Initializing database...");
 
 let accountsDb = new sqlite3.Database(__dirname + "/database/accounts.db", (err) => {
@@ -102,52 +106,57 @@ accountsDb.close((err) => {
 io.on('connection', (socket) => {
   require('./accountHandler.js')(socket, sqlite3, bcrypt, jwt);
   require('./profileHandler.js')(socket, sqlite3, jwt);
-  
-  socket.on("suggestion", async (contact, suggestion) => {
-    if (suggestion.length > 900) {
-      var part = 1;
+  require('./suggestionHandler.js')(socket);
 
-      while (suggestion.length > 900) {
-        await hookEmbedSend(
-          "SpeedMath Suggestion",
-          `**Contact:**\n ${contact}\n\n\n**Suggestion:**\n ${suggestion.substring(0, 900)} **(Part ${part})**`,
-          "New Suggestion",
-          "#e33e32"
-        );
-        suggestion = suggestion.substring(900, suggestion.length);
-        part++;
+  socket.on("getTopicPracticeStats", (token, topic) => {
+    jwt.verify(token, process.env['JWT_PRIVATE_KEY'], function (err, user) {
+      if (err) {
+        console.log(err);
+        socket.emit("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the home page. We'll look into it as soon as possible.");
+      } else {
+        let accountsDb = new sqlite3.Database(__dirname + "/database/accounts.db", (err) => {
+          if (err) {
+            console.log(err);
+          }
+        });
+        
+        accountsDb.get(`SELECT * FROM topicsPracticeStats WHERE user_id = ?`, [user.id], function(err, row) {
+          if (err) {
+            console.log(err);
+          } else {
+            socket.emit("topicPracticeLevel", row[topic+'_level']);
+          }
+        });
+
+        accountsDb.close();
       }
-    
-      hookEmbedSend(
-        "SpeedMath Suggestion",
-        `**Contact:**\n ${contact}\n\n\n**Suggestion:**\n ${suggestion} **(Part ${part})**`,
-        "New Suggestion",
-        "#e33e32"
-      );
-    } else {
-      hookEmbedSend(
-        "SpeedMath Suggestion",
-        `**Contact:**\n ${contact}\n\n\n**Suggestion:**\n ${suggestion}`,
-        "New Suggestion",
-        "#e33e32"
-      );
-    }
+    });
+  });
+
+  socket.on("updateTopicPracticeStats", (token, topic, level) => {
+    jwt.verify(token, process.env['JWT_PRIVATE_KEY'], function(err, user) {
+      if (err) {
+        console.log(err);
+        socket.emit("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the home page. We'll look into it as soon as possible.");
+      } else {
+        let accountsDb = new sqlite3.Database(__dirname + "/database/accounts.db", (err) => {
+          if (err) {
+            console.log(err);
+          }
+        });
+        
+        accountsDb.run(`UPDATE topicsPracticeStats SET ${topic}_level = ? WHERE user_id = ?`, [level, user.id], function(err) {
+          if (err) {
+            console.log(err);
+          } else {
+            accountsDb.close(); 
+          }
+        });
+      }
+    });
   });
 });
 
 server.listen(process.env['PORT'], () => {
   console.log("I AM WORKING!");
 });
-
-function hookEmbedSend(username, content, title, color) {
-  const webhook = require("webhook-discord");
-  const Hook = new webhook.Webhook(process.env['WEBHOOK_LINK']);
-  
-  return new Promise(resolve => {
-    Hook.custom(username, content, title, color);
-
-    setTimeout(() => {
-      resolve();
-    }, 2000);
-  });
-}
