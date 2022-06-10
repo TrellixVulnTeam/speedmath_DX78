@@ -17,6 +17,17 @@ let btnSignUp = document.getElementById("signUp");
 let btnSwitchToLoginForm = document.getElementById("btnSwitchToLoginForm");
 let email = document.getElementById("email");
 
+//check if user is logged in when the page loads, if they are, show them the account settings div, if not, show them the login/signup div
+window.onload = function() {
+  let token = localStorage.getItem("token") || sessionStorage.getItem("token");
+  
+  if (token === null) {
+    switchToFormsContainer();
+  } else {
+    socket.emit("getOwnProfileInfo", token);
+  }
+}
+
 loginForm.addEventListener("submit", function(e) {
   e.preventDefault();
 
@@ -137,16 +148,6 @@ socket.on("successfulLogin", (token, remember) => {
     }); 
   }
 });
-
-window.onload = function() {
-  let token = localStorage.getItem("token") || sessionStorage.getItem("token");
-  
-  if (token === null) {
-    switchToFormsContainer();
-  } else {
-    socket.emit("getOwnProfileInfo", token);
-  }
-}
 
 socket.on("ownProfileInfo", (info, friendsInfo) => {
   profileContainer.style.display = "block";
@@ -295,6 +296,103 @@ socket.on("ownProfileInfo", (info, friendsInfo) => {
       }
     }
   });
+
+  document.getElementById("changeDisplayName").addEventListener("click", async function() {
+    if (localStorage.getItem("theme") === "dark") {
+      let { value: newDisplayName } = await Swal.fire({
+        title: "Enter your new display name",
+        input: "text",
+        inputLabel: "Display Name:",
+        showCancelButton: true,
+        inputValidator: (value) => {
+          if (!value) {
+            return "Your new display name can't be blank."
+          }
+        },
+        background: themeSettings.contentBackgroundColor.dark,
+        color: themeSettings.contentTextColor.dark
+      });
+  
+      if (newDisplayName) {
+        let token = localStorage.getItem("token") || sessionStorage.getItem("token");
+        socket.emit("updateDisplayName", token, newDisplayName);
+      }
+    } else if (localStorage.getItem("theme") === "light") {
+      let { value: newDisplayName } = await Swal.fire({
+        title: "Enter your new display name",
+        input: "text",
+        inputLabel: "Display Name:",
+        showCancelButton: true,
+        inputValidator: (value) => {
+          if (!value) {
+            return "Your new display name can't be blank."
+          }
+        },
+        background: themeSettings.contentBackgroundColor.light,
+        color: themeSettings.contentTextColor.light
+      });
+  
+      if (newDisplayName) {
+        let token = localStorage.getItem("token") || sessionStorage.getItem("token");
+        socket.emit("updateDisplayName", token, newDisplayName);
+      }
+    }
+  });
+
+  document.getElementById("changeEmail").addEventListener("click", async function() {
+    if (localStorage.getItem("theme") === "dark") {
+      let { value: newEmail } = await Swal.fire({
+        title: "Enter your new e-mail address",
+        input: "email",
+        inputLabel: "Email:",
+        showCancelButton: true,
+        inputValidator: (value) => {
+          if (!value) {
+            return "Your new email address can't be blank"
+          }
+        },
+        background: themeSettings.contentBackgroundColor.dark,
+        color: themeSettings.contentTextColor.dark
+      });
+
+      if (newEmail) {
+        let token = localStorage.getItem("token") || sessionStorage.getItem("token");
+        socket.emit("updateEmail", token, newEmail);
+      }
+    } else if (localStorage.getItem("theme") === "light") {
+      let { value: newEmail } = await Swal.fire({
+        title: "Enter your new e-mail address",
+        input: "email",
+        inputLabel: "Email:",
+        showCancelButton: true,
+        inputValidator: (value) => {
+          if (!value) {
+            return "Your new email address can't be blank"
+          }
+        },
+        background: themeSettings.contentBackgroundColor.light,
+        color: themeSettings.contentTextColor.light
+      });
+
+      if (newEmail) {
+        let token = localStorage.getItem("token") || sessionStorage.getItem("token");
+        socket.emit("updateEmail", token, newEmail);
+      }
+    }
+  });
+
+  document.getElementById("toggleAccountVisibility").addEventListener("click", function() {
+    let token = localStorage.getItem("token") || sessionStorage.getItem("token");
+    let newAccountVisibility;
+    
+    if (info.public_account == "true") {
+      newAccountVisibility = "false";
+    } else {
+      newAccountVisibility = "true";
+    }
+
+    socket.emit("updateAccountVisibility", token, newAccountVisibility);
+  });
 });
 
 socket.on("successfullyUpdatedBio", () => {
@@ -302,5 +400,17 @@ socket.on("successfullyUpdatedBio", () => {
 });
 
 socket.on("successfullyUpdatedPfp", () => {
+  location.reload();
+});
+
+socket.on("successfullyUpdatedDisplayName", () => {
+  location.reload();
+})
+
+socket.on("successfullyUpdatedEmail", () => {
+  location.reload();
+});
+
+socket.on("successfullyUpdatedAccountVisibility", () => {
   location.reload();
 });

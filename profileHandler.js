@@ -108,4 +108,76 @@ module.exports = function(socket, sqlite3, jwt) {
       }
     });
   });
+
+  socket.on("updateDisplayName", (token, newDisplayName) => {
+    jwt.verify(token, process.env['JWT_PRIVATE_KEY'], function(err, user) {
+      if (err) {
+        console.log(err);
+        socket.emit("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the home page. We'll look into it as soon as possible.");
+      } else {
+        let accountsDb = new sqlite3.Database(__dirname + "/database/accounts.db", (err) => {
+          if (err) {
+            console.log(err);
+          }
+        }); 
+
+        accountsDb.run(`UPDATE users SET display_name = ? WHERE user_id = ?`, [newDisplayName, user.id], function(err) {
+          if (err) {
+            console.log(err);
+          } else {
+            accountsDb.close();
+            socket.emit("successfullyUpdatedDisplayName");
+          }
+        });
+      }
+    });
+  });
+
+  socket.on("updateEmail", (token, newEmail) => {
+    jwt.verify(token, process.env['JWT_PRIVATE_KEY'], function(err, user) {
+      if (err) {
+        console.log(err);
+        socket.emit("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the home page. We'll look into it as soon as possible.");
+      } else {
+        let accountsDb = new sqlite3.Database(__dirname + "/database/accounts.db", (err) => {
+          if (err) {
+            console.log(err);
+          }
+        }); 
+
+        accountsDb.run(`UPDATE users SET email = ? WHERE user_id = ?`, [newEmail, user.id], function(err) {
+          if (err) {
+            console.log(err);
+          } else {
+            accountsDb.close();
+            socket.emit("successfullyUpdatedEmail");
+          }
+        });
+      }
+    });
+  });
+
+  socket.on("updateAccountVisibility", (token, newAccountVisibility) => {
+    jwt.verify(token, process.env['JWT_PRIVATE_KEY'], function(err, user) {
+      if (err) {
+        console.log(err);
+        socket.emit("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the home page. We'll look into it as soon as possible.");
+      } else {
+        let accountsDb = new sqlite3.Database(__dirname + "/database/accounts.db", (err) => {
+          if (err) {
+            console.log(err);
+          }
+        }); 
+
+        accountsDb.run(`UPDATE users SET public_account = ? WHERE user_id = ?`, [newAccountVisibility, user.id], function(err) {
+          if (err) {
+            console.log(err);
+          } else {
+            accountsDb.close();
+            socket.emit("successfullyUpdatedAccountVisibility");
+          }
+        });
+      }
+    });
+  });
 }

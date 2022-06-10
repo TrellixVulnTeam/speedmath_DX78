@@ -68,7 +68,7 @@ accountsDb.serialize(() => {
       friends TEXT,
       incoming_friend_requests TEXT,
       outgoing_friend_requests TEXT,
-      public_achievements TEXT,
+      publicly_displayed_achievements TEXT,
       achievements TEXT,
       public_account TEXT
     )`
@@ -84,7 +84,7 @@ accountsDb.serialize(() => {
     )`
   );
   
-  /*accountsDb.all(`SELECT * FROM users`, [], (err, rows) => {
+  /*accountsDb.all(`SELECT user_id, username, display_name, email, bio, friends, incoming_friend_requests, outgoing_friend_requests, publicly_displayed_achievements, achievements, public_account FROM users`, [], (err, rows) => {
     if (err) {
       console.log(err);
     } else {
@@ -148,10 +148,37 @@ io.on('connection', (socket) => {
         accountsDb.run(`UPDATE topicsPracticeStats SET ${topic}_level = ? WHERE user_id = ?`, [level, user.id], function(err) {
           if (err) {
             console.log(err);
-          } else {
-            accountsDb.close(); 
           }
         });
+
+        if (level === 11) { //if they reached level 11
+          //first get their achievements
+          accountsDb.get(`SELECT achievements FROM users WHERE user_id = ?`, [user.id], function(err, data) {
+            if (err) {
+              console.log(err);
+            } else {
+              if (data.achievements == '') { //if they don't have any achievements...
+                //make their first achievement "mastered-"{topic}
+                accountsDb.run(`UPDATE users SET achievements = ? WHERE user_id = ?`, ["mastered-"+topic ,user.id], function(err) {
+                  if (err) {
+                    console.log(err);
+                  }
+                });
+              } else { //if they already have other achievements...
+                let achievements = data.achievements.split(","); //get an array of their achievements
+                achievements.push("mastered-" + topic); //add "mastered " + topic to this array
+                //set their achievements entry in the users table to the new achievements array joined into a comma separated list
+                accountsDb.run('UPDATE users SET achievements = ? WHERE user_id = ?', [achievements.join(','), user.id], function(err) {
+                  if (err) {
+                    console.log(err);
+                  }
+                });
+              }
+            }
+          });
+        }
+
+        accountsDb.close(); 
       }
     });
   });
