@@ -111,6 +111,27 @@ button:hover {
   margin: 10vh auto;
 }
 
+ /* For mobile: */
+@media only screen and (max-width: 500px) {
+  .achievement {
+    width: 60vw;
+    margin: 5vh auto;
+  }
+}
+
+/* For laptop/PC/wide screens */
+@media only screen and (min-width: 500px) {
+  .achievement {
+    width: 20vw;
+    margin: 5vh 5vw;
+  } 
+}
+
+
+.achievement:hover {
+  transform: scale(1.05);
+}
+
 a {
   color: inherit;
 }
@@ -129,4 +150,3 @@ a:hover {
   float: left;
   font-size: 0.5em;
 }
-

@@ -199,6 +199,19 @@ socket.on("ownProfileInfo", (info, friendsInfo) => {
     //nobody using this website has friends, so we don't need to code this part
   }
 
+  // Achievement Badges:
+  
+  let achievements = info.achievements.split(","); //get an array of achievements that the user has
+
+  achievements.forEach(achievement => {
+    let img = document.createElement("img");
+    img.classList.add("achievement"); //style this class in /css/accounts.css
+    img.src = `/assets/achievements/${achievement}.png`;
+    document.getElementById("allBadges").appendChild(img);
+  });
+
+  //Buttons to change account settings:
+
   document.getElementById("changeBio").addEventListener("click", async function() {
     if (localStorage.getItem("theme") === "dark") {
       let { value: newBio } = await Swal.fire({
