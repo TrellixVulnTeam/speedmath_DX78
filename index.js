@@ -16,11 +16,11 @@ app.get('/', (req, res) => {
 });
 
 app.get('/arithmetic', (req, res) => {
-  res.sendFile(__dirname + "/pages/speedmath.html")
+  res.sendFile(__dirname + "/pages/speedmath.html");
 });
 
 app.get('/topics', (req, res) => {
-  res.sendFile(__dirname + "/pages/topics/topicsIndex.html")
+  res.sendFile(__dirname + "/pages/topics/topicsIndex.html");
 });
 
 app.get('/topics/:topic', (req, res) => {

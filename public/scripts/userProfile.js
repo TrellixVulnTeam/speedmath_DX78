@@ -30,4 +30,15 @@ socket.on("userProfilePageInfo", info => {
   } else {
     document.getElementById("bio").textContent = info.bio;
   }
+
+  let publicly_displayed_achievements = info.publicly_displayed_achievements.split(",");
+
+  publicly_displayed_achievements.forEach(publiclyDisplayedAchievement => {
+    if (publiclyDisplayedAchievement !== '') {
+      let img = document.createElement("img");
+      img.classList.add("achievement");
+      img.src = `/assets/achievements/${publiclyDisplayedAchievement}.png`;
+      document.getElementById("achievementsContainer").appendChild(img);
+    }
+  });
 });

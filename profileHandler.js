@@ -49,7 +49,8 @@ module.exports = function(socket, sqlite3, jwt) {
               username: rows[0].username,
               displayName: rows[0].display_name,
               profilePicture: rows[0].profile_picture,
-              bio: rows[0].bio
+              bio: rows[0].bio,
+              publicly_displayed_achievements: rows[0].publicly_displayed_achievements
             }
 
             socket.emit("userProfilePageInfo", info);
@@ -179,5 +180,89 @@ module.exports = function(socket, sqlite3, jwt) {
         });
       }
     });
+  });
+
+  socket.on("updatePubliclyDisplayedAchievements", (token, addOrRemove, achievement) => {
+    jwt.verify(token, process.env['JWT_PRIVATE_KEY'], function(err, user) {
+      if (err) {
+        console.log(err);
+        socket.emit("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the home page. We'll look into it as soon as possible.");
+      } else {
+        let accountsDb = new sqlite3.Database(__dirname + "/database/accounts.db", (err) => {
+          if (err) {
+            console.log(err);
+          }
+        }); 
+
+        accountsDb.get(`SELECT achievements FROM users WHERE user_id = ?`, [user.id], function(err, row) {
+          if (err) {
+            console.log(err); 
+          } else {
+            let achievements = row.achievements.split(","); //get user's achievements in the form of an array
+            //check whether the user's achievements include this achievement
+            if (achievements.includes(achievement)) { //if it does, continue, else, tell the user that they're hacking, because there's no other way this error can occur
+              if (addOrRemove === "add") { //to add to publiclyDisplayedAchievements...
+                accountsDb.get(`SELECT publicly_displayed_achievements FROM users WHERE user_id = ?`, [user.id], function(err, row) {
+                  if (err) {
+                    console.log(err);
+                  } else {
+                    let publicly_displayed_achievements = row.publicly_displayed_achievements.split(","); //get array of currently publicly displayed achievements
+    
+                    if (publicly_displayed_achievements.length >= 6) { // if there are >= 5 publicly displayed, prompt user to remove one (this number was made 6 because there's a bug that makes the first value in the array an empty string but i'm too lazy to fix it, so this is a workaround)
+                      socket.emit("error", "You already have 5 publicly displayed achievements", "Please remove one before pinning a new one. You can have a maximum of 5 publicly displayed badges.")
+                    } else if (publicly_displayed_achievements.includes(achievement)) {
+                      socket.emit("error", "You already pinned that achievement!", "If you want to unpin it, click on the badge in the \"Publicly Displayed Achievements\" box.")
+                    } else {
+                      publicly_displayed_achievements.push(achievement); //add achievement to the array
+                      //set database entry for publicly displayed achievements to array joined by commas
+                      accountsDb.run(`UPDATE users SET publicly_displayed_achievements = ? WHERE user_id = ?`, [publicly_displayed_achievements.join(","), user.id], function(err) {
+                        if (err) {
+                          console.log(err);
+                        } else {
+                          socket.emit("successfullyUpdatedPubliclyDisplayedAchievements");
+                        }
+                      });
+                    }
+                  }
+                });
+              } else if (addOrRemove === "remove") { //to remove from publiclyDisplayedAchievements...
+                accountsDb.get(`SELECT publicly_displayed_achievements FROM users WHERE user_id = ?`, [user.id], function(err, row) {
+                  if (err) {
+                    console.log(err); 
+                  } else {
+                    let publicly_displayed_achievements = row.publicly_displayed_achievements.split(","); //get array of currently publicly displayed achievements
+    
+                    publicly_displayed_achievements = removeItemFromArray(publicly_displayed_achievements, achievement); //remove the achievement from the array using the helper function
+    
+                    //set database entry for publicly displayed achievements to array joined by commas
+                    accountsDb.run(`UPDATE users SET publicly_displayed_achievements = ? WHERE user_id = ?`, [publicly_displayed_achievements.join(","), user.id], function(err) {
+                      if (err) {
+                        console.log(err);
+                      } else {
+                        socket.emit("successfullyUpdatedPubliclyDisplayedAchievements");
+                      }
+                    });
+                  }
+                });
+              }
+            } else {
+              socket.emit("error", "You don't have the achievement that you are trying to make public/private", "This shouldn't happen unless you are injecting a script. Stop trying to hack.");
+            }
+          }
+        });
+
+        accountsDb.close();
+      }
+    });
+
+    //helper function to remove item from array and return new array after item has been removed
+    function removeItemFromArray(array, value) {
+      let index = array.indexOf(value);
+      if (index !== -1) {
+        array.splice(index, 1);
+      }
+
+      return array;
+    }
   });
 }

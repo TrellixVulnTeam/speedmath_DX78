@@ -208,6 +208,29 @@ socket.on("ownProfileInfo", (info, friendsInfo) => {
     img.classList.add("achievement"); //style this class in /css/accounts.css
     img.src = `/assets/achievements/${achievement}.png`;
     document.getElementById("allBadges").appendChild(img);
+
+    img.addEventListener("click", function() {
+      let token = localStorage.getItem("token") || sessionStorage.getItem("token");
+      socket.emit("updatePubliclyDisplayedAchievements", token, "add", achievement);
+    });
+  });
+
+  // Public Achievement Badges:
+
+  let publicly_displayed_achievements = info.publicly_displayed_achievements.split(",");
+
+  publicly_displayed_achievements.forEach(publiclyDisplayedAchievement => {
+    if (publiclyDisplayedAchievement !== '') {
+      let img = document.createElement("img");
+      img.classList.add("achievement");
+      img.src = `/assets/achievements/${publiclyDisplayedAchievement}.png`;
+      document.getElementById("publicBadges").appendChild(img);
+  
+      img.addEventListener("click", function() {
+        let token = localStorage.getItem("token") || sessionStorage.getItem("token");
+        socket.emit("updatePubliclyDisplayedAchievements", token, "remove", publiclyDisplayedAchievement);
+      });
+    }
   });
 
   //Buttons to change account settings:
@@ -425,5 +448,9 @@ socket.on("successfullyUpdatedEmail", () => {
 });
 
 socket.on("successfullyUpdatedAccountVisibility", () => {
+  location.reload();
+});
+
+socket.on("successfullyUpdatedPubliclyDisplayedAchievements", () => {
   location.reload();
 });
