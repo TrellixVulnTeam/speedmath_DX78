@@ -84,7 +84,7 @@ accountsDb.serialize(() => {
     )`
   );
   
-  /*accountsDb.all(`SELECT user_id, username, display_name, email, bio, friends, incoming_friend_requests, outgoing_friend_requests, publicly_displayed_achievements, achievements, public_account FROM users`, [], (err, rows) => {
+  accountsDb.all(`SELECT user_id, username, display_name, email, bio, friends, incoming_friend_requests, outgoing_friend_requests, publicly_displayed_achievements, achievements, public_account FROM users`, [], (err, rows) => {
     if (err) {
       console.log(err);
     } else {
@@ -92,7 +92,7 @@ accountsDb.serialize(() => {
         console.log(row);
       });
     }
-  });*/
+  });
 });
 
 accountsDb.close((err) => {
@@ -104,9 +104,9 @@ accountsDb.close((err) => {
 });
 
 io.on('connection', (socket) => {
-  require('./accountHandler.js')(socket, sqlite3, bcrypt, jwt);
-  require('./profileHandler.js')(socket, sqlite3, jwt);
-  require('./suggestionHandler.js')(socket);
+  require('./accountHandler.js')(socket, sqlite3, bcrypt, jwt); //logging in, signing up
+  require('./profileHandler.js')(socket, sqlite3, jwt); //public profile pages, getting own profile info, updating profile info, adding friends, getting incoming/outgoing friend requests
+  require('./suggestionHandler.js')(socket); //suggestions 
 
   socket.on("getTopicPracticeStats", (token, topic) => {
     jwt.verify(token, process.env['JWT_PRIVATE_KEY'], function (err, user) {

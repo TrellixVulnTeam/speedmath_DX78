@@ -82,10 +82,6 @@ button:hover {
   font-weight: bold;
 }
 
-#pfpContainer {
-  text-align: center;
-}
-
 #profilePicture {
   overflow: hidden;
   border: 4px solid rgba(0, 0, 0, 0.8);
@@ -98,10 +94,9 @@ button:hover {
 }
 
 #friendsInfoContainer > div {
-  border: 2px solid;
   border-radius: 22px;
   padding: 10px;
-  margin: 10vh auto;
+  margin: 5px auto;
 }
 
 #achievementsContainer > div {
@@ -151,4 +146,34 @@ a:hover {
 #logOut {
   float: left;
   font-size: 0.5em;
+}
+
+.friendDiv {
+  border: 2px solid;
+  border-radius: 22px;
+  width: 20vw;
+  display: inline-block;
+  padding: 20px;
+  margin: 10px;
+}
+
+.friendPfp {
+  overflow: hidden;
+  border: 4px solid rgba(0, 0, 0, 0.8);
+  border-radius: 100%;
+  height: 100px;
+  width: 100px;
+}
+
+.friendPfp:hover {
+ filter: brightness(110%);
+}
+
+.friendDisplayName {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.friendUsername {
+  
 }

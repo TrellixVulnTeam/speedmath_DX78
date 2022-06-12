@@ -149,7 +149,7 @@ socket.on("successfulLogin", (token, remember) => {
   }
 });
 
-socket.on("ownProfileInfo", (info, friendsInfo) => {
+socket.on("ownProfileInfo", (info) => {
   profileContainer.style.display = "block";
 
   if (info.profile_picture === "defaultAvatar") {
@@ -181,19 +181,19 @@ socket.on("ownProfileInfo", (info, friendsInfo) => {
     document.getElementById("basicInfoContainer").innerHTML += `<br>Your account is <b>private</b>`;
   }
 
-  if (friendsInfo.friends.length == 0) {
+  if (JSON.parse(info.friends).length == 0) {
     document.getElementById("friendsContainer").innerHTML += "<h4>You have no friends.</h4>"
   } else {
     //nobody using this website has friends, so we don't need to code this part
   }
 
-  if (friendsInfo.incoming_friend_requests.length == 0) {
+  if (JSON.parse(info.incoming_friend_requests).length == 0) {
     document.getElementById("incomingFriendRequestsContainer").innerHTML += "<h4>You have no incoming friend requests.</h4>"
   } else {
     //nobody using this website has friends, so we don't need to code this part
   }
 
-  if (friendsInfo.outgoing_friend_requests.length == 0) {
+  if (JSON.parse(info.outgoing_friend_requests).length == 0) {
     document.getElementById("outgoingFriendRequestsContainer").innerHTML += "<h4>You have no outgoing friend requests.</h4>"
   } else {
     //nobody using this website has friends, so we don't need to code this part
@@ -431,6 +431,132 @@ socket.on("ownProfileInfo", (info, friendsInfo) => {
   });
 });
 
+socket.on("newIncomingFriendRequest", (incomingRequest) => {
+  let friendDiv = document.createElement("div"); //create container div
+  friendDiv.classList.add("secondaryContentTheme", "friendDiv");
+  
+  let pfp = document.createElement("img"); //create element for incoming friend request person's pfp
+  pfp.classList.add("friendPfp");
+  if (incomingRequest.profile_picture === "defaultAvatar") {
+    pfp.src = "/assets/defaultAvatar.png";
+  } else {
+    pfp.src = incomingRequest.profile_picture; 
+  }
+
+  let displayName = document.createElement("div"); // div for incoming friend request person's display name
+  displayName.classList.add("friendDisplayName");
+  displayName.innerHTML = incomingRequest.display_name;
+
+  let usernameContainer = document.createElement("div"); // div for container for incoming friend request person's username
+  usernameContainer.classList.add("friendUsername"); 
+  let username = document.createElement("a"); //container will contain a <a> element that will link to their profile page
+  username.textContent = "@" + incomingRequest.username;
+  username.href = "/user/" + incomingRequest.username;
+  usernameContainer.appendChild(username);
+
+  let acceptButton = document.createElement("button");
+  acceptButton.classList.add("btnAcceptFriendRequest", "contentTheme");
+  acceptButton.innerHTML = "Accept";
+  acceptButton.addEventListener("click", function() {
+    let token = localStorage.getItem("token") || sessionStorage.getItem("token");
+    socket.emit("acceptFriendRequest", token, incomingRequest.user_id);
+  });
+  
+
+  friendDiv.appendChild(pfp);
+  friendDiv.appendChild(displayName);
+  friendDiv.appendChild(usernameContainer);
+  friendDiv.appendChild(acceptButton);
+
+  document.getElementById("incomingFriendRequestsContainer").appendChild(friendDiv);
+
+  changeTheme();
+});
+
+socket.on("newOutgoingFriendRequest", (outgoingRequest) => {
+  let friendDiv = document.createElement("div"); //create container div
+  friendDiv.classList.add("secondaryContentTheme", "friendDiv");
+  
+  let pfp = document.createElement("img"); //create element for outgoing friend request person's pfp
+  pfp.classList.add("friendPfp");
+  if (outgoingRequest.profile_picture === "defaultAvatar") {
+    pfp.src = "/assets/defaultAvatar.png";
+  } else {
+    pfp.src = outgoingRequest.profile_picture; 
+  }
+
+  let displayName = document.createElement("div"); // div for outgoing friend request person's display name
+  displayName.classList.add("friendDisplayName");
+  displayName.innerHTML = outgoingRequest.display_name;
+
+  let usernameContainer = document.createElement("div"); // div for container for outgoing friend request person's username
+  usernameContainer.classList.add("friendUsername"); 
+  let username = document.createElement("a"); //container will contain a <a> element that will link to their profile page
+  username.textContent = "@" + outgoingRequest.username;
+  username.href = "/user/" + outgoingRequest.username;
+  usernameContainer.appendChild(username);
+
+  let cancelRequestButton = document.createElement("button");
+  cancelRequestButton.classList.add("btnCancelFriendRequest", "contentTheme");
+  cancelRequestButton.innerHTML = "Cancel";
+  cancelRequestButton.addEventListener("click", function() {
+    let token = localStorage.getItem("token") || sessionStorage.getItem("token");
+    socket.emit("cancelFriendRequest", token, outgoingRequest.user_id);
+  });
+  
+
+  friendDiv.appendChild(pfp);
+  friendDiv.appendChild(displayName);
+  friendDiv.appendChild(usernameContainer);
+  friendDiv.appendChild(cancelRequestButton);
+
+  document.getElementById("outgoingFriendRequestsContainer").appendChild(friendDiv);
+
+  changeTheme();
+});
+
+socket.on("newFriend", (friendInfo) => {
+  let friendDiv = document.createElement("div"); //create container div
+  friendDiv.classList.add("secondaryContentTheme", "friendDiv");
+  
+  let pfp = document.createElement("img"); //create element for friend's pfp
+  pfp.classList.add("friendPfp");
+  if (friendInfo.profile_picture === "defaultAvatar") {
+    pfp.src = "/assets/defaultAvatar.png";
+  } else {
+    pfp.src = friendInfo.profile_picture; 
+  }
+
+  let displayName = document.createElement("div"); // div for friend's display name
+  displayName.classList.add("friendDisplayName");
+  displayName.innerHTML = friendInfo.display_name;
+
+  let usernameContainer = document.createElement("div"); // div for container for friend's username
+  usernameContainer.classList.add("friendUsername"); 
+  let username = document.createElement("a"); //container will contain a <a> element that will link to friend's profile page
+  username.textContent = "@" + friendInfo.username;
+  username.href = "/user/" + friendInfo.username;
+  usernameContainer.appendChild(username);
+
+  let unfriendButton = document.createElement("button");
+  unfriendButton.classList.add("btnCancelFriendRequest", "contentTheme");
+  unfriendButton.innerHTML = "Unfriend";
+  unfriendButton.addEventListener("click", function() {
+    let token = localStorage.getItem("token") || sessionStorage.getItem("token");
+    socket.emit("unfriend", token, friendInfo.user_id);
+  });
+  
+
+  friendDiv.appendChild(pfp);
+  friendDiv.appendChild(displayName);
+  friendDiv.appendChild(usernameContainer);
+  friendDiv.appendChild(unfriendButton);
+
+  document.getElementById("friendsContainer").appendChild(friendDiv);
+
+  changeTheme();
+});
+
 socket.on("successfullyUpdatedBio", () => {
   location.reload();
 });
@@ -454,3 +580,11 @@ socket.on("successfullyUpdatedAccountVisibility", () => {
 socket.on("successfullyUpdatedPubliclyDisplayedAchievements", () => {
   location.reload();
 });
+
+socket.on("successfullyAcceptedFriendRequest", () => {
+  location.reload();
+});
+
+socket.on("successfullyCancelledFriendRequest", () => {
+  location.reload();
+})

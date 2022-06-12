@@ -15,17 +15,67 @@ module.exports = function(socket, sqlite3, jwt) {
           if (err) {
             console.log(err);
           } else {
-            let friendsInfo = {
-              friends: [],
-              incoming_friend_requests: [],
-              outgoing_friend_requests: []
-            }
+            accountsDb.serialize(() => {
+              //get username, display name, and pfp of the user ids in row.friends, which is stored as a JSON.stringified array string in the database
+              JSON.parse(row.friends).forEach(friendId => {
+                accountsDb.get(`SELECT username, display_name, profile_picture FROM users WHERE user_id = ?`, [friendId], function(err, friendInfoRow) {
+                  if (err) {
+                    console.log(err);
+                  } else {
+                    let friend = {
+                      user_id: friendId,
+                      display_name: friendInfoRow.display_name,
+                      username: friendInfoRow.username,
+                      profile_picture: friendInfoRow.profile_picture
+                    }
+    
+                    socket.emit("newFriend", friend); //to add friend to container on client side
+                  }
+                });
+              });
+              
+              //get username, display name, and pfp of the user ids in row.incoming_friend_requests, which is stored as a JSON.stringified array string in the database
+              JSON.parse(row.incoming_friend_requests).forEach(incomingFriendRequestId => {
+                accountsDb.get(`SELECT username, display_name, profile_picture FROM users WHERE user_id = ?`, [incomingFriendRequestId], function(err, friendInfoRow) {
+                  if (err) {
+                    console.log(err);
+                  } else {
+                    let incomingRequest = {
+                      user_id: incomingFriendRequestId,
+                      display_name: friendInfoRow.display_name,
+                      username: friendInfoRow.username,
+                      profile_picture: friendInfoRow.profile_picture
+                    }
+    
+                    socket.emit("newIncomingFriendRequest", incomingRequest); //to add incoming friend request div to container on client side
+                  }
+                });
+              });
+
+              //get username, display name, and pfp of the user ids in row.outgoing_friend_requests, which is stored as a JSON.stringified array string in the database
+              JSON.parse(row.outgoing_friend_requests).forEach(outgoingFriendRequestId => {
+                accountsDb.get(`SELECT username, display_name, profile_picture FROM users WHERE user_id = ?`, [outgoingFriendRequestId], function(err, friendInfoRow) {
+                  if (err) {
+                    console.log(err);
+                  } else {
+                    let outgoingRequest = {
+                      user_id: outgoingFriendRequestId,
+                      display_name: friendInfoRow.display_name,
+                      username: friendInfoRow.username,
+                      profile_picture: friendInfoRow.profile_picture
+                    }
+    
+                    socket.emit("newOutgoingFriendRequest", outgoingRequest); //to add outgoing friend request div to container on client side
+                  }
+                });
+              });
+
+              accountsDb.close();
+            });
             
-            socket.emit("ownProfileInfo", row, friendsInfo);
+            socket.emit("ownProfileInfo", row);
           }
         });
-
-        accountsDb.close();
       }
     });
   });
@@ -60,6 +110,10 @@ module.exports = function(socket, sqlite3, jwt) {
         }
       }
     });
+  });
+
+  socket.on("getUserInfoWhileLoggedIn", (token, username) => {
+    
   });
 
   socket.on("updateBio", (token, newBio) => {
