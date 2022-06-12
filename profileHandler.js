@@ -308,15 +308,80 @@ module.exports = function(socket, sqlite3, jwt) {
         accountsDb.close();
       }
     });
-
-    //helper function to remove item from array and return new array after item has been removed
-    function removeItemFromArray(array, value) {
-      let index = array.indexOf(value);
-      if (index !== -1) {
-        array.splice(index, 1);
-      }
-
-      return array;
-    }
   });
+
+  socket.on("acceptFriendRequest", (token, friendId) => {
+    jwt.verify(token, process.env['JWT_PRIVATE_KEY'], function(err, user) {
+      if (err) {
+        console.log(err);
+        socket.emit("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the home page. We'll look into it as soon as possible.");
+      } else {
+        let accountsDb = new sqlite3.Database(__dirname + "/database/accounts.db", (err) => {
+          if (err) {
+            console.log(err);
+          }
+        });
+        
+        //get list of friends of user who's accepting the friend request
+        accountsDb.get(`SELECT friends FROM users WHERE user_id = ?`, [user.id], function(err, row) {
+          let friends = JSON.parse(row.friends); //get array of user's friends
+          friends.push(friendId); //add new friend's id to array of user's friends
+          //save the new array by JSON.stringify()ing it and putting it in the database
+          accountsDb.run(`UPDATE users SET friends = ? WHERE user_id = ?`, [JSON.stringify(friends), user.id], function(err) {
+            if (err) {
+              console.log(err);
+            } else {
+              //get list of incoming friend requests of user who's accepting the friend request
+              accountsDb.get(`SELECT incoming_friend_requests FROM users WHERE user_id = ?`, [user.id], function(err, row) {
+                let incoming_friend_requests = JSON.parse(row.incoming_friend_requests); //get array of user's incoming friend requests
+                incoming_friend_requests = removeItemFromArray(incoming_friend_requests, friendId); //remove id of newly-added friend from user's list of incoming friend requests using a helper function
+                //save the new array by JSON.stringify()ing it and putting it in the database
+                accountsDb.run(`UPDATE users SET incoming_friend_requests = ? WHERE user_id = ?`, [JSON.stringify(incoming_friend_requests), user.id], function(err) {
+                  if (err) {
+                    console.log(err);
+                  } else {
+                    //get friend list of outgoing friend requests of user who was sending the friend request and got accepted
+                    accountsDb.get(`SELECT outgoing_friend_requests FROM users WHERE user_id = ?`, [friendId], function(err, row) {
+                      let outgoing_friend_requests = JSON.parse(row.outgoing_friend_requests); //get array of friend's outgoing friend requests
+                      outgoing_friend_requests = removeItemFromArray(outgoing_friend_requests, user.id) //remove user's id from friend's list of outgoing friend requests using helper function
+                      //save the new array by JSON.stringify()ing it and putting it in the database
+                      accountsDb.run(`UPDATE users SET outgoing_friend_requests = ? WHERE user_id = ?`, [JSON.stringify(outgoing_friend_requests), friendId], function(err) {
+                        if (err) {
+                          console.log(err);
+                        } else {
+                          //get friend list of user's newly added friend
+                          accountsDb.get(`SELECT friends FROM users WHERE user_id = ?`, [friendId], function(err, row) {
+                            let friends = JSON.parse(row.friends); //get array of friend's friends
+                            friends.push(user.id); //add user's id to their friend's friend list
+                            //save the new array by JSON.stringify()ing it and putting it in the database
+                            accountsDb.run(`UPDATE users SET friends = ? WHERE user_id = ?`, [JSON.stringify(friends), friendId], function(err) {
+                              if (err) {
+                                console.log(err);
+                              } else {
+                                socket.emit("successfullyAcceptedFriendRequest");
+                              }
+                            });
+                          });
+                        }
+                      });
+                    });
+                  }
+                });
+              });
+            }
+          })
+        });
+      }
+    });
+  });
+
+  //helper function to remove item from array and return new array after item has been removed
+  function removeItemFromArray(array, value) {
+    let index = array.indexOf(value);
+    if (index !== -1) {
+      array.splice(index, 1);
+    }
+
+    return array;
+  }
 }
