@@ -72,7 +72,7 @@ socket.on("userProfilePageInfo", info => {
         });
       }
     } else {
-      socket.emit("sendFriendRequest", token, )
+      socket.emit("sendFriendRequest", token, info.user_id);
     }
   });
 });

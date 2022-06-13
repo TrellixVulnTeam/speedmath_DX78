@@ -283,7 +283,7 @@ socket.on("ownProfileInfo", (info) => {
         title: "Upload your new profile picture",
         input: "file",
         showCancelButton: true,
-        inputLabel: "By uploading an image, you are agreeing that you have the rights to that image. No NSFW profile pictures allowed (exceptions are made for Ling and KiteFlyer).",
+        inputLabel: "By uploading an image, you are agreeing that you have the rights to publicly display that image. No NSFW profile pictures allowed (exceptions are made for Ling and KiteFlyer).",
         inputValidator: (pfp) => {
           if (!pfp) {
             return `You have to upload a picture!`
@@ -309,7 +309,7 @@ socket.on("ownProfileInfo", (info) => {
         title: "Upload your new profile picture",
         input: "file",
         showCancelButton: true,
-        inputLabel: "By uploading an image, you are agreeing that you have the rights to that image. No NSFW profile pictures allowed (exceptions are made for Ling and KiteFlyer).",
+        inputLabel: "By uploading an image, you are agreeing that you have the rights to publicly display that image. No NSFW profile pictures allowed (exceptions are made for Ling and KiteFlyer).",
         inputValidator: (pfp) => {
           if (!pfp) {
             return `You have to upload a picture!`
@@ -454,19 +454,27 @@ socket.on("newIncomingFriendRequest", (incomingRequest) => {
   username.href = "/user/" + incomingRequest.username;
   usernameContainer.appendChild(username);
 
-  let acceptButton = document.createElement("button");
+  let acceptButton = document.createElement("button"); // button to accept the incoiming friend request
   acceptButton.classList.add("btnAcceptFriendRequest", "contentTheme");
   acceptButton.innerHTML = "Accept";
   acceptButton.addEventListener("click", function() {
     let token = localStorage.getItem("token") || sessionStorage.getItem("token");
     socket.emit("acceptFriendRequest", token, incomingRequest.user_id);
   });
-  
+
+  let declineButton = document.createElement("button");
+  declineButton.classList.add("btnDeclineFriendRequest", "contentTheme");
+  declineButton.innerHTML = "Decline";
+  declineButton.addEventListener("click", function() {
+    let token = localStorage.getItem("token") || sessionStorage.getItem("token");
+    socket.emit("declineFriendRequest", token, incomingRequest.user_id);
+  });
 
   friendDiv.appendChild(pfp);
   friendDiv.appendChild(displayName);
   friendDiv.appendChild(usernameContainer);
   friendDiv.appendChild(acceptButton);
+  friendDiv.appendChild(declineButton);
 
   document.getElementById("incomingFriendRequestsContainer").appendChild(friendDiv);
 
@@ -501,7 +509,7 @@ socket.on("newOutgoingFriendRequest", (outgoingRequest) => {
   cancelRequestButton.innerHTML = "Cancel";
   cancelRequestButton.addEventListener("click", function() {
     let token = localStorage.getItem("token") || sessionStorage.getItem("token");
-    socket.emit("cancelFriendRequest", token, outgoingRequest.user_id);
+    socket.emit("cancelOutgoingFriendRequest", token, outgoingRequest.user_id);
   });
   
 
@@ -585,6 +593,14 @@ socket.on("successfullyAcceptedFriendRequest", () => {
   location.reload();
 });
 
+socket.on("successfullyDeclinedFriendRequest", () => {
+  location.reload();
+});
+
 socket.on("successfullyCancelledFriendRequest", () => {
   location.reload();
 })
+
+socket.on("successfullyUnfriendedFriend", () => {
+  location.reload();
+});

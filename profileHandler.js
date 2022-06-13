@@ -106,6 +106,9 @@ module.exports = function(socket, sqlite3, jwt) {
             socket.emit("userProfilePageInfo", info);
           } else {
             //what's different if it's not a public account?
+            let info = {
+              
+            }
           }
         }
       }
@@ -370,6 +373,207 @@ module.exports = function(socket, sqlite3, jwt) {
               });
             }
           })
+        });
+
+        accountsDb.close();
+      }
+    });
+  });
+
+  socket.on("declineFriendRequest", (token, friendId) => {
+    jwt.verify(token, process.env['JWT_PRIVATE_KEY'], function(err, user) {
+      if (err) {
+        console.log(err);
+        socket.emit("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the home page. We'll look into it as soon as possible.");
+      } else {
+        let accountsDb = new sqlite3.Database(__dirname + "/database/accounts.db", (err) => {
+          if (err) {
+            console.log(err);
+          }
+        });
+
+        //get incoming friend requests list of user
+        accountsDb.get(`SELECT incoming_friend_requests FROM users WHERE user_id = ?`, [user.id], function(err, row) {
+          if (err) {
+            console.log(err);
+          } else {
+            let incoming_friend_requests = JSON.parse(row.incoming_friend_requests); //get array of user's incoming friend requests
+            incoming_friend_requests = removeItemFromArray(incoming_friend_requests, friendId); //remove id of newly-added friend from user's list of incoming friend requests using a helper function
+            //save the new array by JSON.stringify()ing it and putting it in the database
+            accountsDb.run(`UPDATE users SET incoming_friend_requests = ? WHERE user_id = ?`, [JSON.stringify(incoming_friend_requests), user.id], function(err) {
+              if (err) {
+                console.log(err);
+              } else {
+                // get outgoing friend requests list of friend that got declined </3
+                accountsDb.get(`SELECT outgoing_friend_requests FROM users WHERE user_id = ?`, [friendId], function(err, row) {
+                  let outgoing_friend_requests = JSON.parse(row.outgoing_friend_requests); //get array of rejected friend's outgoing friend requests
+                  console.log(outgoing_friend_requests);
+                  outgoing_friend_requests = removeItemFromArray(outgoing_friend_requests, user.id) //remove user's id from rejected friend's list of outgoing friend requests using helper function
+                  console.log(outgoing_friend_requests);
+                  //save the new array by JSON.stringify()ing it and putting it in the database
+                  accountsDb.run(`UPDATE users SET outgoing_friend_requests = ? WHERE user_id = ?`, [JSON.stringify(outgoing_friend_requests), friendId], function(err) {
+                    if (err) {
+                      console.log(err);
+                    } else {
+                      socket.emit("successfullyDeclinedFriendRequest");
+                    }
+                  });
+                });
+              }
+            });
+          }
+        });
+
+        accountsDb.close();
+      }
+    });
+  });
+
+  socket.on("cancelOutgoingFriendRequest", (token, friendId) => {
+    jwt.verify(token, process.env['JWT_PRIVATE_KEY'], function(err, user) {
+      if (err) {
+        console.log(err);
+        socket.emit("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the home page. We'll look into it as soon as possible.");
+      } else {
+        let accountsDb = new sqlite3.Database(__dirname + "/database/accounts.db", (err) => {
+          if (err) {
+            console.log(err);
+          }
+        });
+        
+        //get outgoing friend requests list of user
+        accountsDb.get(`SELECT outgoing_friend_requests FROM users WHERE user_id = ?`, [user.id], function(err, row) {
+          if (err) {
+            console.log(err);
+          } else {
+            let outgoing_friend_requests = JSON.parse(row.outgoing_friend_requests); //get array of outgoing friend requests of user
+            outgoing_friend_requests = removeItemFromArray(outgoing_friend_requests, friendId); //remove friend's id from user's outgoing friend requests list using a helper function
+            //save the new array by JSON.stringify()ing it and putting it in the database
+            accountsDb.run(`UPDATE users SET outgoing_friend_requests = ? WHERE user_id = ?`, [JSON.stringify(outgoing_friend_requests), user.id], function(err) {
+              if (err) {
+                console.log(err);
+              } else {
+                //get incoming friend requests list of friend
+                accountsDb.get(`SELECT incoming_friend_requests FROM users WHERE user_id = ?`, [friendId], function(err, row) {
+                  if (err) {
+                    console.log(err);
+                  } else {
+                    let incoming_friend_requests = JSON.parse(row.incoming_friend_requests); //get array of incoming friend requests of friend
+                    incoming_friend_requests = removeItemFromArray(incoming_friend_requests, user.id); //remove user's id from friend's incoming friend requests list using a helper function
+                    //save the new array by JSON.stringify()ing it and putting it in the database
+                    accountsDb.run(`UPDATE users SET incoming_friend_requests = ? WHERE user_id = ?`, [JSON.stringify(incoming_friend_requests), friendId], function(err) {
+                      if (err) {
+                        console.log(err); 
+                      } else {
+                        socket.emit("successfullyCancelledFriendRequest");
+                        accountsDb.close();
+                      }
+                    });
+                  }
+                });
+              }
+            });
+          }
+        });
+      }
+    });
+  });
+
+  socket.on("unfriend", (token, friendId) => {
+    jwt.verify(token, process.env['JWT_PRIVATE_KEY'], function(err, user) {
+      if (err) {
+        console.log(err);
+        socket.emit("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the home page. We'll look into it as soon as possible.");
+      } else {
+        let accountsDb = new sqlite3.Database(__dirname + "/database/accounts.db", (err) => {
+          if (err) {
+            console.log(err);
+          }
+        });
+
+        //get list of user's friends
+        accountsDb.get(`SELECT friends FROM users WHERE user_id = ?`, [user.id], function(err, row) {
+          if (err) {
+            console.log(err);
+          } else {
+            let friends = JSON.parse(row.friends); //get array of user's friends
+            friends = removeItemFromArray(friends, friendId); //remove friend that is to be unfriended's id from array of user's friends' ids using a helper function
+            //save the new array by JSON.stringify()ing it and putting it in the database
+            accountsDb.run(`UPDATE users SET friends = ? WHERE user_id = ?`, [JSON.stringify(friends), user.id], function(err) {
+              if (err) {
+                console.log(err);
+              } else {
+                //get list of unfriended friend's friends
+                accountsDb.get(`SELECT friends FROM users WHERE user_id = ?`, [friendId], function(err, row) {
+                  if (err) {
+                    console.log(err);
+                  } else {
+                    let friends = JSON.parse(row.friends); //get array of friend's friends
+                    friends = removeItemFromArray(friends, user.id); //remove user's id from friend list of friend that is to be unfriended
+                    //save the new array by JSON.stringify()ing it and putting it in the database
+                    accountsDb.run(`UPDATE users SET friends = ? WHERE user_id = ?`, [JSON.stringify(friends), friendId], function(err) {
+                      if (err) {
+                        console.log(err);
+                      } else {
+                        socket.emit("successfullyUnfriendedFriend");
+                        accountsDb.close();
+                      }
+                    });
+                  }
+                });
+              }
+            })
+          }
+        });
+      }
+    });
+  });
+
+  socket.on("sendFriendRequest", (token, friendId) => {
+    jwt.verify(token, process.env['JWT_PRIVATE_KEY'], function(err, user) {
+      if (err) {
+        console.log(err);
+        socket.emit("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the home page. We'll look into it as soon as possible.");
+      } else {
+        let accountsDb = new sqlite3.Database(__dirname + "/database/accounts.db", (err) => {
+          if (err) {
+            console.log(err);
+          }
+        });
+
+        //get list of outgoing friend requests of user
+        accountsDb.get(`SELECT outgoing_friend_requests FROM users WHERE user_id = ?`, [user.id], function(err, row) {
+          if (err) {
+            console.log(err);
+          } else {
+            let outgoing_friend_requests = JSON.parse(row.outgoing_friend_requests); //get array of outgoing friend requests of user
+            outgoing_friend_requests.push(friendId); // add friend's id to list of user's outgoing friend requests
+            //save the new array by JSON.stringify()ing it and putting it in the database
+            accountsDb.run(`UPDATE users SET outgoing_friend_requests = ? WHERE user_id = ?`, [JSON.stringify(outgoing_friend_requests), user.id], function(err) {
+              if (err) {
+                console.log(err);
+              } else {
+                //get list of incoming friend requests of friend
+                accountsDb.get(`SELECT incoming_friend_requests FROM users WHERE user_id = ?`, [friendId], function(err, row) {
+                  if (err) {
+                    console.log(err);
+                  } else {
+                    let incoming_friend_requests = JSON.parse(row.incoming_friend_requests); //get array of incoming friend requests of friend
+                    incoming_friend_requests.push(user.id); //add user's id to friend's list of incoming friend requests
+                    //save the new array by JSON.stringify()ing it and putting it in the database
+                    accountsDb.run(`UPDATE users SET incoming_friend_requests = ? WHERE user_id = ?`, [JSON.stringify(incoming_friend_requests), friendId], function(err) {
+                      if (err) {
+                        console.log(err);
+                      } else {
+                        socket.emit("successfullySentFriendRequest");
+                        accountsDb.close();
+                      }
+                    });
+                  }
+                });
+              }
+            })
+          }
         });
       }
     });

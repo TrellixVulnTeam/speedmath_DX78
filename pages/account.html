@@ -4,12 +4,19 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta property="og:title" content="Account"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="https://speedmath.ml/account"/>
+    <meta property="og:description" content="Log In, Sign Up, or manage your SpeedMath account."/>
+    <meta property="og:image" content="https://speedmath.ml/assets/favicon.ico"/>
+    <meta name="theme-color" content="#ff928b"/>
     <title>Account</title>
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" href="/css/navbar.css"/>
     <link rel="stylesheet" type="text/css" href="/css/account.css"/>
     <script src="scripts/themeHandler.js" defer></script>
     <script src="scripts/account.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/fyu/fyu.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/socket.io/socket.io.js"></script>
   </head>
@@ -76,7 +83,7 @@
         <input id="confirmPassword" type="password" required autocomplete="new-password" onkeypress="return event.charCode != 32" minlength="8"></input>
         <br>
         <br> 
-        <span id="beOver13">By signing up, you agree to be above the age of 13 or have had permission from an adult above the age of 18 to sign up.</span>
+        <span id="beOver13">By signing up, you agree to our <a href="/tos" target="_blank" rel="noopener noreferrer">Terms of Service</a></span>
         <br>
         <button id="signUp" type="submit" class="secondaryContentTheme">Sign Up</button>
         <button id="btnSwitchToLoginForm" type="button" class="secondaryContentTheme">Log In Instead</button>
