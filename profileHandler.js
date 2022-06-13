@@ -87,7 +87,7 @@ module.exports = function(socket, sqlite3, jwt) {
       }
     });
 
-    accountsDb.all(`SELECT username, display_name, profile_picture, bio, publicly_displayed_achievements, public_account FROM users WHERE username = ?`, [username], function(err, rows) {
+    accountsDb.all(`SELECT user_id, username, display_name, profile_picture, bio, publicly_displayed_achievements, public_account FROM users WHERE username = ?`, [username], function(err, rows) {
       if (err) {
         console.log(err);
       } else {
@@ -96,6 +96,7 @@ module.exports = function(socket, sqlite3, jwt) {
         } else {
           if (rows[0].public_account == "true") {
             let info = {
+              user_id: rows[0].user_id,
               username: rows[0].username,
               displayName: rows[0].display_name,
               profilePicture: rows[0].profile_picture,
@@ -534,6 +535,8 @@ module.exports = function(socket, sqlite3, jwt) {
       if (err) {
         console.log(err);
         socket.emit("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the home page. We'll look into it as soon as possible.");
+      } else if (user.id === friendId) { //check if user is trying to friend themselves
+        socket.emit("youAreTryingToFriendYourself"); 
       } else {
         let accountsDb = new sqlite3.Database(__dirname + "/database/accounts.db", (err) => {
           if (err) {

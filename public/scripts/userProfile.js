@@ -76,3 +76,48 @@ socket.on("userProfilePageInfo", info => {
     }
   });
 });
+
+socket.on("successfullySentFriendRequest", () => {
+  btnSendFriendRequest.textContent = "Friend Request Sent!";
+  btnSendFriendRequest.disabled = true;
+    
+  if (localStorage.getItem("theme") === "dark") {
+    Swal.fire({
+      icon: 'success',
+      title: 'Friend Request sent!',
+      iconColor: themeSettings.contentTextColor.dark,
+      background: themeSettings.contentBackgroundColor.dark,
+      color: themeSettings.contentTextColor.dark
+    });
+  } else if (localStorage.getItem("theme") === "light") {
+    Swal.fire({
+      icon: 'success',
+      title: 'Friend Request sent!',
+      iconColor: themeSettings.contentTextColor.light,
+      background: themeSettings.contentBackgroundColor.light,
+      color: themeSettings.contentTextColor.light
+    });
+  }
+});
+
+socket.on("youAreTryingToFriendYourself", () => {
+  if (localStorage.getItem("theme") === "dark") {
+    Swal.fire({
+      icon: 'error',
+      title: 'You cannot friend yourself.',
+      text: "This is your own public profile. You aren't allowed to friend yourself.",
+      iconColor: themeSettings.contentTextColor.dark,
+      background: themeSettings.contentBackgroundColor.dark,
+      color: themeSettings.contentTextColor.dark
+    });
+  } else if (localStorage.getItem("theme") === "light") {
+    Swal.fire({
+      icon: 'error',
+      title: 'You cannot friend yourself.',
+      text: "This is your own public profile. You aren't allowed to friend yourself.",
+      iconColor: themeSettings.contentTextColor.light,
+      background: themeSettings.contentBackgroundColor.light,
+      color: themeSettings.contentTextColor.light
+    });
+  }
+});
