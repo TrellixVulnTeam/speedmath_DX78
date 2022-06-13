@@ -573,12 +573,52 @@ socket.on("successfullyUpdatedPfp", () => {
   location.reload();
 });
 
-socket.on("successfullyUpdatedDisplayName", () => {
-  location.reload();
+socket.on("successfullyUpdatedDisplayName", (newDisplayName) => {
+  document.getElementById("profileInfoDisplayName").textContent = newDisplayName;
+  
+  if (localStorage.getItem("theme") === "dark") {
+    Swal.fire({
+      icon: 'success',
+      title: 'Display Name updated!',
+      iconColor: themeSettings.contentTextColor.dark,
+      background: themeSettings.contentBackgroundColor.dark,
+      color: themeSettings.contentTextColor.dark,
+      didClose: () => scrollToTop()
+    });
+  } else if (localStorage.getItem("theme") === "light") {
+    Swal.fire({
+      icon: 'success',
+      title: 'Display Name updated!',
+      iconColor: themeSettings.contentTextColor.light,
+      background: themeSettings.contentBackgroundColor.light,
+      color: themeSettings.contentTextColor.light,
+      didClose: () => scrollToTop()
+    });
+  }
 })
 
-socket.on("successfullyUpdatedEmail", () => {
-  location.reload();
+socket.on("successfullyUpdatedEmail", (newEmail) => {
+  document.getElementById("profileInfoEmail").textContent = newEmail;
+ 
+  if (localStorage.getItem("theme") === "dark") {
+    Swal.fire({
+      icon: 'success',
+      title: 'Email updated!',
+      iconColor: themeSettings.contentTextColor.dark,
+      background: themeSettings.contentBackgroundColor.dark,
+      color: themeSettings.contentTextColor.dark,
+      didClose: () => scrollToTop()
+    });
+  } else if (localStorage.getItem("theme") === "light") {
+    Swal.fire({
+      icon: 'success',
+      title: 'Email updated!',
+      iconColor: themeSettings.contentTextColor.light,
+      background: themeSettings.contentBackgroundColor.light,
+      color: themeSettings.contentTextColor.light,
+      didClose: () => scrollToTop()
+    });
+  }
 });
 
 socket.on("successfullyUpdatedAccountVisibility", () => {
@@ -604,3 +644,11 @@ socket.on("successfullyCancelledFriendRequest", () => {
 socket.on("successfullyUnfriendedFriend", () => {
   location.reload();
 });
+
+function scrollToTop() {
+  window.scroll({
+   top: 0, 
+   left: 0, 
+   behavior: 'smooth' 
+  });
+}

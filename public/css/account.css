@@ -107,19 +107,27 @@ button:hover {
 }
 
  /* For mobile: */
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 550px) {
   .achievement {
     width: 60vw;
     margin: 5vh auto;
   }
+
+  .friendDiv {
+    width: 60vw;
+  }
 }
 
 /* For laptop/PC/wide screens */
-@media only screen and (min-width: 500px) {
+@media only screen and (min-width: 550px) {
   .achievement {
     width: 20vw;
     margin: 5vh 5vw;
   } 
+
+  .friendDiv {
+    width: 20vw;
+  }
 }
 
 
@@ -151,7 +159,6 @@ a:hover {
 .friendDiv {
   border: 2px solid;
   border-radius: 22px;
-  width: 20vw;
   display: inline-block;
   padding: 20px;
   margin: 10px;
@@ -172,8 +179,4 @@ a:hover {
 .friendDisplayName {
   font-size: 1.5em;
   font-weight: bold;
-}
-
-.friendUsername {
-  
 }

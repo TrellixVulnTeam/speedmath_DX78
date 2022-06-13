@@ -185,7 +185,7 @@ module.exports = function(socket, sqlite3, jwt) {
             console.log(err);
           } else {
             accountsDb.close();
-            socket.emit("successfullyUpdatedDisplayName");
+            socket.emit("successfullyUpdatedDisplayName", newDisplayName);
           }
         });
       }
@@ -209,7 +209,7 @@ module.exports = function(socket, sqlite3, jwt) {
             console.log(err);
           } else {
             accountsDb.close();
-            socket.emit("successfullyUpdatedEmail");
+            socket.emit("successfullyUpdatedEmail", newEmail);
           }
         });
       }
