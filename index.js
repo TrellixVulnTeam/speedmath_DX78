@@ -119,21 +119,27 @@ io.on('connection', (socket) => {
         console.log(err);
         socket.emit("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the home page. We'll look into it as soon as possible.");
       } else {
-        let accountsDb = new sqlite3.Database(__dirname + "/database/accounts.db", (err) => {
-          if (err) {
-            console.log(err);
-          }
-        });
-        
-        accountsDb.get(`SELECT * FROM topicsPracticeStats WHERE user_id = ?`, [user.id], function(err, row) {
-          if (err) {
-            console.log(err);
-          } else {
-            socket.emit("topicPracticeLevel", row[topic+'_level']);
-          }
-        });
+        let topicColumn = getTopicColumn(topic);
 
-        accountsDb.close();
+        if (topicColumn != null) {
+          let accountsDb = new sqlite3.Database(__dirname + "/database/accounts.db", (err) => {
+            if (err) {
+              console.log(err);
+            }
+          });
+          
+          accountsDb.get(`SELECT ${topicColumn} FROM topicsPracticeStats WHERE user_id = ?`, [user.id], function(err, row) {
+            if (err) {
+              console.log(err);
+            } else {
+              socket.emit("topicPracticeLevel", row[topicColumn]);
+            }
+          });
+  
+          accountsDb.close();
+        } else {
+          socket.emit("error", "Stop trying to hack.", "You shouldn't be getting this error unless you're trying to hack using a SQL injection attack.");
+        }
       }
     });
   });
@@ -144,46 +150,44 @@ io.on('connection', (socket) => {
         console.log(err);
         socket.emit("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the home page. We'll look into it as soon as possible.");
       } else {
-        let accountsDb = new sqlite3.Database(__dirname + "/database/accounts.db", (err) => {
-          if (err) {
-            console.log(err);
-          }
-        });
-        
-        accountsDb.run(`UPDATE topicsPracticeStats SET ${topic}_level = ? WHERE user_id = ?`, [level, user.id], function(err) {
-          if (err) {
-            console.log(err);
-          }
-        });
+        let topicColumn = getTopicColumn(topic);
 
-        if (level === 11) { //if they reached level 11
-          //first get their achievements
-          accountsDb.get(`SELECT achievements FROM users WHERE user_id = ?`, [user.id], function(err, data) {
+        if (topicColumn != null) {
+          let accountsDb = new sqlite3.Database(__dirname + "/database/accounts.db", (err) => {
             if (err) {
               console.log(err);
-            } else {
-              if (data.achievements == '') { //if they don't have any achievements...
-                //make their first achievement "mastered-"{topic}
-                accountsDb.run(`UPDATE users SET achievements = ? WHERE user_id = ?`, ["mastered-"+topic ,user.id], function(err) {
-                  if (err) {
-                    console.log(err);
-                  }
-                });
-              } else { //if they already have other achievements...
-                let achievements = data.achievements.split(","); //get an array of their achievements
+            }
+          });
+          
+          accountsDb.run(`UPDATE topicsPracticeStats SET ${topicColumn} = ? WHERE user_id = ?`, [level, user.id], function(err) {
+            if (err) {
+              console.log(err);
+            }
+          });
+  
+          if (level === 11) { //if they reached level 11
+            //first get their achievements
+            accountsDb.get(`SELECT achievements FROM users WHERE user_id = ?`, [user.id], function(err, data) {
+              if (err) {
+                console.log(err);
+              } 
+              else {
+                let achievements = JSON.parse(data.achievements); //get an array of their achievements
                 achievements.push("mastered-" + topic); //add "mastered " + topic to this array
-                //set their achievements entry in the users table to the new achievements array joined into a comma separated list
-                accountsDb.run('UPDATE users SET achievements = ? WHERE user_id = ?', [achievements.join(','), user.id], function(err) {
+                //JSON.stringify() the achievements array and save it in the database
+                accountsDb.run('UPDATE users SET achievements = ? WHERE user_id = ?', [JSON.stringify(achievements), user.id], function(err) {
                   if (err) {
                     console.log(err);
                   }
                 });
               }
-            }
-          });
+            });
+          }
+  
+          accountsDb.close(); 
+        } else {
+          socket.emit("error", "Stop trying to hack.", "You shouldn't be getting this error unless you're trying to hack using a SQL injection attack.");
         }
-
-        accountsDb.close(); 
       }
     });
   });
@@ -192,3 +196,22 @@ io.on('connection', (socket) => {
 server.listen(process.env['PORT'], () => {
   console.log("I AM WORKING!");
 });
+
+/* helper functions */
+
+//get column in the topicPracticeStats table that corresponds to a practice topic's level
+function getTopicColumn(topic) {
+  //format is topic: column name
+  let dictionary = {
+    "addition": "addition_level",
+    "subtraction": "subtraction_level",
+    "multiplication": "multiplication_level",
+    "division": "division_level"
+  }
+
+  if (topic in dictionary) {
+    return dictionary[topic];
+  } else {
+    return null;
+  }
+}

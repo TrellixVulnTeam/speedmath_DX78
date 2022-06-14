@@ -13,7 +13,7 @@ module.exports = function(socket, sqlite3, bcrypt, jwt) {
         console.log(err);
       } else {
         if (rows.length === 0) {
-          socket.emit("error", "nobody with that username exists", "ling will write some more stuff here");
+          socket.emit("error", "An account with that username does not exist.", "If you want that username, please create an account by clicking the \"Register\" button.");
         } else {
           bcrypt.compare(password, rows[0].password_hashed, function(err, result) {
             if (err) {
@@ -64,7 +64,7 @@ module.exports = function(socket, sqlite3, bcrypt, jwt) {
                     if (bcryptError) {
                       console.log(bcryptError)
                     } else {
-                      accountsDb.run(`INSERT INTO users(username, password_hashed, display_name, email, profile_picture, bio, friends, incoming_friend_requests, outgoing_friend_requests, achievements, publicly_displayed_achievements, public_account) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [username, hashedPassword, displayName, email, "defaultAvatar", "No bio yet.", "[]", "[]", "[]", "", "true"], function(err) {
+                      accountsDb.run(`INSERT INTO users(username, password_hashed, display_name, email, profile_picture, bio, friends, incoming_friend_requests, outgoing_friend_requests, achievements, publicly_displayed_achievements, public_account) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [username, hashedPassword, displayName, email, "defaultAvatar", "No bio yet.", "[]", "[]", "[]", "[]", "[]", "true"], function(err) {
                         if (err) {
                           console.log(err);
                         } else {

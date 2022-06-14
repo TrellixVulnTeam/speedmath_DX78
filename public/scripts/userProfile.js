@@ -26,24 +26,17 @@ socket.on("userProfilePageInfo", info => {
 
   document.getElementById("username").textContent = ("@" + info.username);
   document.getElementById("displayName").textContent = info.displayName;
-
-  if (info.bio == "") {
-    document.getElementById("bio").textContent = "No bio yet.";
-  } else {
-    document.getElementById("bio").textContent = info.bio;
-  }
+  document.getElementById("bio").textContent = info.bio;
 
   // Display achievements:
   
-  let publicly_displayed_achievements = info.publicly_displayed_achievements.split(",");
+  let publicly_displayed_achievements = JSON.parse(info.publicly_displayed_achievements);
 
   publicly_displayed_achievements.forEach(publiclyDisplayedAchievement => {
-    if (publiclyDisplayedAchievement !== '') {
-      let img = document.createElement("img");
-      img.classList.add("achievement");
-      img.src = `/assets/achievements/${publiclyDisplayedAchievement}.png`;
-      document.getElementById("achievementsContainer").appendChild(img);
-    }
+    let img = document.createElement("img");
+    img.classList.add("achievement");
+    img.src = `/assets/achievements/${publiclyDisplayedAchievement}.png`;
+    document.getElementById("achievementsContainer").appendChild(img);
   });
 
   //Send friend request button code:

@@ -151,6 +151,7 @@ socket.on("successfulLogin", (token, remember) => {
 
 socket.on("ownProfileInfo", (info) => {
   profileContainer.style.display = "block";
+  sessionStorage.setItem("publicAccount", info.public_account);
 
   if (info.profile_picture === "defaultAvatar") {
     document.getElementById("profilePicture").src = "/assets/defaultAvatar.png";
@@ -166,43 +167,37 @@ socket.on("ownProfileInfo", (info) => {
   } else {
     document.getElementById("profileInfoEmail").textContent = info.email; 
   }
-
-  if (info.bio == "") {
-    document.getElementById("profileInfoBio").innerHTML = `<a id="changeBio" style="font-size:1.1em;text-decoration:underline;cursor:pointer;">Add bio</a>`;
-  } else {
-    document.getElementById("profileInfoBio").textContent = info.bio;
-    document.getElementById("profileInfoBio").innerHTML += `<br><br><a id="changeBio" style="font-size:1.1em;text-decoration:underline;cursor:pointer;">Update bio</a>`
-  }
+  
+  document.getElementById("profileInfoBio").textContent = info.bio;
 
   document.getElementById("basicInfoContainer").innerHTML += `<b><a href="/user/${info.username}" style="font-size:1.5em;">View Public Profile</a><b>`;
+
+  let publicOrPrivate = document.createElement("span");
+  publicOrPrivate.id = "profileInfoPublicOrPrivate";
+  
   if (info.public_account == "true") {
-    document.getElementById("basicInfoContainer").innerHTML += `<br>Your account is <b>public</b>`;
+    publicOrPrivate.innerHTML = `<br>Your account is <b>public</b>`;
   } else {
-    document.getElementById("basicInfoContainer").innerHTML += `<br>Your account is <b>private</b>`;
+    publicOrPrivate.innerHTML = `<br>Your account is <b>private</b>`;
   }
+
+  document.getElementById("basicInfoContainer").appendChild(publicOrPrivate);  
 
   if (JSON.parse(info.friends).length == 0) {
     document.getElementById("friendsContainer").innerHTML += "<h4>You have no friends.</h4>"
-  } else {
-    //nobody using this website has friends, so we don't need to code this part
   }
 
   if (JSON.parse(info.incoming_friend_requests).length == 0) {
     document.getElementById("incomingFriendRequestsContainer").innerHTML += "<h4>You have no incoming friend requests.</h4>"
-  } else {
-    //nobody using this website has friends, so we don't need to code this part
   }
 
   if (JSON.parse(info.outgoing_friend_requests).length == 0) {
     document.getElementById("outgoingFriendRequestsContainer").innerHTML += "<h4>You have no outgoing friend requests.</h4>"
-  } else {
-    //nobody using this website has friends, so we don't need to code this part
   }
 
   // Achievement Badges:
+  let achievements = JSON.parse(info.achievements); //get an array of achievements that the user has
   
-  let achievements = info.achievements.split(","); //get an array of achievements that the user has
-
   achievements.forEach(achievement => {
     let img = document.createElement("img");
     img.classList.add("achievement"); //style this class in /css/accounts.css
@@ -217,20 +212,18 @@ socket.on("ownProfileInfo", (info) => {
 
   // Public Achievement Badges:
 
-  let publicly_displayed_achievements = info.publicly_displayed_achievements.split(",");
+  let publicly_displayed_achievements = JSON.parse(info.publicly_displayed_achievements);
 
   publicly_displayed_achievements.forEach(publiclyDisplayedAchievement => {
-    if (publiclyDisplayedAchievement !== '') {
-      let img = document.createElement("img");
-      img.classList.add("achievement");
-      img.src = `/assets/achievements/${publiclyDisplayedAchievement}.png`;
-      document.getElementById("publicBadges").appendChild(img);
-  
-      img.addEventListener("click", function() {
-        let token = localStorage.getItem("token") || sessionStorage.getItem("token");
-        socket.emit("updatePubliclyDisplayedAchievements", token, "remove", publiclyDisplayedAchievement);
-      });
-    }
+    let img = document.createElement("img");
+    img.classList.add("achievement");
+    img.src = `/assets/achievements/${publiclyDisplayedAchievement}.png`;
+    document.getElementById("publicBadges").appendChild(img);
+
+    img.addEventListener("click", function() {
+      let token = localStorage.getItem("token") || sessionStorage.getItem("token");
+      socket.emit("updatePubliclyDisplayedAchievements", token, "remove", publiclyDisplayedAchievement);
+    });
   });
 
   //Buttons to change account settings:
@@ -421,7 +414,7 @@ socket.on("ownProfileInfo", (info) => {
     let token = localStorage.getItem("token") || sessionStorage.getItem("token");
     let newAccountVisibility;
     
-    if (info.public_account == "true") {
+    if (sessionStorage.getItem("publicAccount") == "true") {
       newAccountVisibility = "false";
     } else {
       newAccountVisibility = "true";
@@ -508,8 +501,41 @@ socket.on("newOutgoingFriendRequest", (outgoingRequest) => {
   cancelRequestButton.classList.add("btnCancelFriendRequest", "contentTheme");
   cancelRequestButton.innerHTML = "Cancel";
   cancelRequestButton.addEventListener("click", function() {
-    let token = localStorage.getItem("token") || sessionStorage.getItem("token");
-    socket.emit("cancelOutgoingFriendRequest", token, outgoingRequest.user_id);
+    if (localStorage.getItem("theme") === "dark") {
+      Swal.fire({
+        title: "Are you sure you want to cancel your outgoing friend request?",
+        icon: "warning",
+        iconColor: themeSettings.contentTextColor.dark,
+        background: themeSettings.contentBackgroundColor.dark,
+        color: themeSettings.contentTextColor.dark,
+        showCancelButton: true,
+        showConfirmButton: true,
+        cancelButtonText: "Go Back",
+        confirmButtonText: "Yes"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          let token = localStorage.getItem("token") || sessionStorage.getItem("token");
+          socket.emit("cancelOutgoingFriendRequest", token, outgoingRequest.user_id);
+        }
+      });
+    } else if (localStorage.getItem("theme") === "light") {
+      Swal.fire({
+        title: "Are you sure you want to cancel your outgoing friend request?",
+        icon: "warning",
+        iconColor: themeSettings.contentTextColor.light,
+        background: themeSettings.contentBackgroundColor.light,
+        color: themeSettings.contentTextColor.light,
+        showCancelButton: true,
+        showConfirmButton: true,
+        cancelButtonText: "Go Back",
+        confirmButtonText: "Yes"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          let token = localStorage.getItem("token") || sessionStorage.getItem("token");
+          socket.emit("cancelOutgoingFriendRequest", token, outgoingRequest.user_id);
+        }
+      });
+    }
   });
   
 
@@ -565,12 +591,52 @@ socket.on("newFriend", (friendInfo) => {
   changeTheme();
 });
 
-socket.on("successfullyUpdatedBio", () => {
-  location.reload();
+socket.on("successfullyUpdatedBio", (newBio) => {
+  document.getElementById("profileInfoBio").textContent = newBio;
+
+  if (localStorage.getItem("theme") === "dark") {
+    Swal.fire({
+      icon: 'success',
+      title: 'Bio updated!',
+      iconColor: themeSettings.contentTextColor.dark,
+      background: themeSettings.contentBackgroundColor.dark,
+      color: themeSettings.contentTextColor.dark,
+      didClose: () => scrollToTop()
+    });
+  } else if (localStorage.getItem("theme") === "light") {
+    Swal.fire({
+      icon: 'success',
+      title: 'Bio updated!',
+      iconColor: themeSettings.contentTextColor.light,
+      background: themeSettings.contentBackgroundColor.light,
+      color: themeSettings.contentTextColor.light,
+      didClose: () => scrollToTop()
+    });
+  }
 });
 
-socket.on("successfullyUpdatedPfp", () => {
-  location.reload();
+socket.on("successfullyUpdatedPfp", (newPfp) => {
+  document.getElementById("profilePicture").src = newPfp;
+
+  if (localStorage.getItem("theme") === "dark") {
+    Swal.fire({
+      icon: 'success',
+      title: 'Profile Picture updated!',
+      iconColor: themeSettings.contentTextColor.dark,
+      background: themeSettings.contentBackgroundColor.dark,
+      color: themeSettings.contentTextColor.dark,
+      didClose: () => scrollToTop()
+    });
+  } else if (localStorage.getItem("theme") === "light") {
+    Swal.fire({
+      icon: 'success',
+      title: 'Profile Picture updated!',
+      iconColor: themeSettings.contentTextColor.light,
+      background: themeSettings.contentBackgroundColor.light,
+      color: themeSettings.contentTextColor.light,
+      didClose: () => scrollToTop()
+    });
+  }
 });
 
 socket.on("successfullyUpdatedDisplayName", (newDisplayName) => {
@@ -595,7 +661,7 @@ socket.on("successfullyUpdatedDisplayName", (newDisplayName) => {
       didClose: () => scrollToTop()
     });
   }
-})
+});
 
 socket.on("successfullyUpdatedEmail", (newEmail) => {
   document.getElementById("profileInfoEmail").textContent = newEmail;
@@ -621,8 +687,34 @@ socket.on("successfullyUpdatedEmail", (newEmail) => {
   }
 });
 
-socket.on("successfullyUpdatedAccountVisibility", () => {
-  location.reload();
+socket.on("successfullyUpdatedAccountVisibility", (newAccountVisibility) => {
+  sessionStorage.setItem("publicAccount", newAccountVisibility);
+  
+  if (newAccountVisibility == "true") {
+    document.getElementById("profileInfoPublicOrPrivate").innerHTML = `<br>Your account is <b>public</b>`;
+  } else if (newAccountVisibility == "false") {
+    document.getElementById("profileInfoPublicOrPrivate").innerHTML = `<br>Your account is <b>private</b>`;
+  }
+
+  if (localStorage.getItem("theme") === "dark") {
+    Swal.fire({
+      icon: 'success',
+      title: 'Account Visibility Updated!',
+      iconColor: themeSettings.contentTextColor.dark,
+      background: themeSettings.contentBackgroundColor.dark,
+      color: themeSettings.contentTextColor.dark,
+      didClose: () => scrollToTop()
+    });
+  } else if (localStorage.getItem("theme") === "light") {
+    Swal.fire({
+      icon: 'success',
+      title: 'Account Visibility Updated!',
+      iconColor: themeSettings.contentTextColor.light,
+      background: themeSettings.contentBackgroundColor.light,
+      color: themeSettings.contentTextColor.light,
+      didClose: () => scrollToTop()
+    });
+  }
 });
 
 socket.on("successfullyUpdatedPubliclyDisplayedAchievements", () => {
