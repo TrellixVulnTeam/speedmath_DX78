@@ -14,6 +14,8 @@ socket.on("profileUsernameNotFound", () => {
 });
 
 socket.on("userProfilePageInfo", info => {
+  //alert(JSON.stringify(info.topicsPracticeStats));
+  
   document.title = info.displayName;
   
   document.getElementById("userInfoContainer").style.display = "block";
@@ -39,8 +41,24 @@ socket.on("userProfilePageInfo", info => {
     document.getElementById("achievementsContainer").appendChild(img);
   });
 
-  //Send friend request button code:
+  // Display topics practice stats
+  if (info.topicsPracticeStats) {
+    let topicsPracticeStats = info.topicsPracticeStats;
+    delete topicsPracticeStats.user_id;
+    document.getElementById("topicsPracticeStatsContainer").style.display = "block";
+    let table = document.getElementById("topicsPracticeStatsTable");
 
+    Object.keys(topicsPracticeStats).forEach(topic => { //for each topic...
+      let newRow = table.insertRow(); //insert a new row into the table
+      let topicCell = newRow.insertCell(0); //cell to hold topic name
+      let topicLevelCell = newRow.insertCell(1); //cell to hold level user is on for that topic
+
+      topicCell.textContent = getTopicFromDatabaseColumnName(topic); //use helper function to get topic name from database column name
+      topicLevelCell.textContent = topicsPracticeStats[topic];
+    });
+  }
+
+  //Send friend request button code:
   btnSendFriendRequest.addEventListener("click", function() {
     let token = localStorage.getItem("token") || sessionStorage.getItem("token");
 
@@ -114,3 +132,12 @@ socket.on("youAreTryingToFriendYourself", () => {
     });
   }
 });
+
+//function to convert something like the string "addition_level" to "Addition"
+function getTopicFromDatabaseColumnName(databaseColumnName) {
+  databaseColumnName = databaseColumnName.substring(0, databaseColumnName.length - 6); //use substring to cut out the last 6 chars of the topic to get the topic by itself, because it's initally in the form topic_level (because that's what the database column name is)
+  databaseColumnName.replaceAll("_", " "); //replace all other underscores with spaces after the "_level" at the end has been removed
+  databaseColumnName = databaseColumnName[0].toUpperCase() + databaseColumnName.substring(1); //capitalize the first letter
+
+  return databaseColumnName;
+}

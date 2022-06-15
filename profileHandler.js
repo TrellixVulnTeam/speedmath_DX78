@@ -87,28 +87,46 @@ module.exports = function(socket, sqlite3, jwt) {
       }
     });
 
-    accountsDb.all(`SELECT user_id, username, display_name, profile_picture, bio, publicly_displayed_achievements, public_account FROM users WHERE username = ?`, [username], function(err, rows) {
+    accountsDb.all(`SELECT user_id, username, display_name, profile_picture, bio, publicly_displayed_achievements, public_account, topic_practice_stats_privacy FROM users WHERE username = ?`, [username], function(err, rows) {
       if (err) {
         console.log(err);
       } else {
         if (rows.length === 0) { //if there are no entries (rows) in the database that have the username
           socket.emit("profileUsernameNotFound");
-        } else {
-          if (rows[0].public_account == "true") {
-            let info = {
-              user_id: rows[0].user_id,
-              username: rows[0].username,
-              displayName: rows[0].display_name,
-              profilePicture: rows[0].profile_picture,
-              bio: rows[0].bio,
-              publicly_displayed_achievements: rows[0].publicly_displayed_achievements
-            }
+          accountsDb.close();
+        } else { //if the username is valid...
+          if (rows[0].public_account == "true") { //check if public account, only display profile info if it's a public account
+            if (rows[0].topic_practice_stats_privacy === "public") { //if the user's topic practice stats privacy setting is set to public, 
+              accountsDb.get(`SELECT * FROM topicsPracticeStats WHERE user_id = ?`, [rows[0].user_id], function(err, topicsPracticeStats) {
+                if (err) {
+                  console.log(err);
+                } else {
+                  let info = {
+                    user_id: rows[0].user_id,
+                    username: rows[0].username,
+                    displayName: rows[0].display_name,
+                    profilePicture: rows[0].profile_picture,
+                    bio: rows[0].bio,
+                    publicly_displayed_achievements: rows[0].publicly_displayed_achievements,
+                    topicsPracticeStats: topicsPracticeStats
+                  }
 
-            socket.emit("userProfilePageInfo", info);
-          } else {
-            //what's different if it's not a public account?
-            let info = {
-              
+                  socket.emit("userProfilePageInfo", info);
+                  accountsDb.close();
+                }
+              });
+            } else { //if the user's topic practice stats privacy setting is not set to public, don't send topic practice stats to client side, only send their username, display name, pfp, bio, and publicly displayed achievements
+              let info = {
+                user_id: rows[0].user_id,
+                username: rows[0].username,
+                displayName: rows[0].display_name,
+                profilePicture: rows[0].profile_picture,
+                bio: rows[0].bio,
+                publicly_displayed_achievements: rows[0].publicly_displayed_achievements
+              }
+    
+              socket.emit("userProfilePageInfo", info);
+              accountsDb.close(); 
             }
           }
         }
@@ -117,7 +135,13 @@ module.exports = function(socket, sqlite3, jwt) {
   });
 
   socket.on("getUserInfoWhileLoggedIn", (token, username) => {
-    
+    jwt.verify(token, process.env['JWT_PRIVATE_KEY'], function(err, user) {
+      let accountsDb = new sqlite3.Database(__dirname + "/database/accounts.db", (err) => {
+        if (err) {
+          console.log(err);
+        }
+      }); 
+    });
   });
 
   socket.on("updateBio", (token, newBio) => {

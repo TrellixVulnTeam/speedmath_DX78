@@ -74,7 +74,8 @@ accountsDb.serialize(() => {
       outgoing_friend_requests TEXT,
       publicly_displayed_achievements TEXT,
       achievements TEXT,
-      public_account TEXT
+      public_account TEXT,
+      topic_practice_stats_privacy TEXT
     )`
   );
   
@@ -88,7 +89,7 @@ accountsDb.serialize(() => {
     )`
   );
   
-  /*accountsDb.all(`SELECT user_id, username, display_name, email, bio, friends, incoming_friend_requests, outgoing_friend_requests, publicly_displayed_achievements, achievements, public_account FROM users`, [], (err, rows) => {
+  accountsDb.all(`SELECT user_id, username, display_name, email, bio, friends, incoming_friend_requests, outgoing_friend_requests, publicly_displayed_achievements, achievements, public_account, topic_practice_stats_privacy FROM users`, [], (err, rows) => {
   //accountsDb.all(`SELECT * FROM topicsPracticeStats`, [], (err, rows) => {
     if (err) {
       console.log(err);
@@ -97,7 +98,7 @@ accountsDb.serialize(() => {
         console.log(row);
       });
     }
-  });*/
+  });
 });
 
 accountsDb.close((err) => {

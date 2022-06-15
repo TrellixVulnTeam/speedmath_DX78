@@ -26,12 +26,34 @@
   margin: 20px auto;
 }
 
-#basicInfo, #achievementsContainer {
+#basicInfo, #achievementsContainer, #topicsPracticeStatsContainer {
   width: 80vw;
   padding: 20px;
   margin: 20px auto;
   border-radius: 22px;
   border: 4px solid;
+}
+
+#topicsPracticeStatsContainer {
+  display: none; 
+}
+
+#topicsPracticeStatsTable {
+  width: 90%;
+  margin: auto;
+}
+
+table, th, td {
+  border: 1px solid;
+  border-collapse: collapse;
+}
+
+table {
+  font-size: 1.2em;
+}
+
+th {
+  font-size: 1.2em;
 }
 
 #pfpContainer {
