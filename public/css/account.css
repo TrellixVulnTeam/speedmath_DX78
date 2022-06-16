@@ -180,3 +180,21 @@ a:hover {
   font-size: 1.5em;
   font-weight: bold;
 }
+
+#topicsPracticeStatsTable {
+  width: 90%;
+  margin: auto;
+}
+
+table, th, td {
+  border: 1px solid;
+  border-collapse: collapse;
+}
+
+table {
+  font-size: 1.2em;
+}
+
+th {
+  font-size: 1.2em;
+}

@@ -45,7 +45,10 @@ signUpForm.addEventListener("submit", function(e) {
     Swal.fire({
       icon: 'error',
       title: 'Error',
-      text: 'Your password does not match your confirmed password. Please correctly re-input the confirmed password.'
+      text: 'Your password does not match your confirmed password. Please correctly re-input the confirmed password.',
+      iconColor: themeSettings.contentTextColor[localStorage.getItem("theme")],
+      background: themeSettings.contentBackgroundColor[localStorage.getItem("theme")],
+      color: themeSettings.contentTextColor[localStorage.getItem("theme")]
     });
   }
 });
@@ -66,53 +69,28 @@ function switchToFormsContainer() {
 }
 
 socket.on("successfullySignedUp", () => {
-  if (localStorage.getItem("theme") === "dark") {
-    Swal.fire({
-      icon: "success",
-      title: "Successfully Signed Up!",
-      text: "Log in to begin playing! 👍",
-      confirmButtonText: "Log in",
-      iconColor: themeSettings.contentTextColor.dark,
-      background: themeSettings.contentBackgroundColor.dark,
-      color: themeSettings.contentTextColor.dark
-    }).then(() => {
-      btnSwitchToLoginForm.click();
-    }); 
-  } else if (localStorage.getItem("theme") === "light") {
-    Swal.fire({
-      icon: "success",
-      title: "Successfully Signed Up!",
-      text: "Log in to begin playing! 👍",
-      confirmButtonText: "Log in",
-      iconColor: themeSettings.contentTextColor.light,
-      background: themeSettings.contentBackgroundColor.light,
-      color: themeSettings.contentTextColor.light
-    }).then(() => {
-      btnSwitchToLoginForm.click();
-    }); 
-  }
+  Swal.fire({
+    icon: "success",
+    title: "Successfully Signed Up!",
+    text: "Log in to begin playing! 👍",
+    confirmButtonText: "Log in",
+    iconColor: themeSettings.contentTextColor[localStorage.getItem("theme")],
+    background: themeSettings.contentBackgroundColor[localStorage.getItem("theme")],
+    color: themeSettings.contentTextColor[localStorage.getItem("theme")],
+  }).then(() => {
+    btnSwitchToLoginForm.click();
+  }); 
 });
 
 socket.on("error", (errorTitle, errorMessage) => {
-  if (localStorage.getItem("theme") === "dark") {
-    Swal.fire({
-      title: errorTitle,
-      text: errorMessage,
-      icon: "error",
-      iconColor: themeSettings.contentTextColor.dark,
-      background: themeSettings.contentBackgroundColor.dark,
-      color: themeSettings.contentTextColor.dark
-    });
-  } else if (localStorage.getItem("theme") === "light") {
-    Swal.fire({
-      title: errorTitle,
-      text: errorMessage,
-      icon: "error",
-      iconColor: themeSettings.contentTextColor.light,
-      background: themeSettings.contentBackgroundColor.light,
-      color: themeSettings.contentTextColor.light
-    });
-  }
+  Swal.fire({
+    title: errorTitle,
+    text: errorMessage,
+    icon: "error",
+    iconColor: themeSettings.contentTextColor[localStorage.getItem("theme")],
+    background: themeSettings.contentBackgroundColor[localStorage.getItem("theme")],
+    color: themeSettings.contentTextColor[localStorage.getItem("theme")]
+  });
 });
 
 socket.on("successfulLogin", (token, remember) => {
@@ -122,34 +100,20 @@ socket.on("successfulLogin", (token, remember) => {
     sessionStorage.setItem("token", token);
   }
 
-  if (localStorage.getItem("theme") === "dark") {
-    Swal.fire({
-      icon: "success",
-      title: "Successfully Logged In!",
-      text: "Enjoy our website!",
-      confirmButtonText: "Continue",
-      iconColor: themeSettings.contentTextColor.dark,
-      background: themeSettings.contentBackgroundColor.dark,
-      color: themeSettings.contentTextColor.dark
-    }).then(() => {
-      location.reload();
-    }); 
-  } else if (localStorage.getItem("theme") === "light") {
-    Swal.fire({
-      icon: "success",
-      title: "Successfully Logged In!",
-      text: "Enjoy our website!",
-      confirmButtonText: "Continue",
-      iconColor: themeSettings.contentTextColor.light,
-      background: themeSettings.contentBackgroundColor.light,
-      color: themeSettings.contentTextColor.light
-    }).then(() => {
-      location.reload();
-    }); 
-  }
+  Swal.fire({
+    icon: "success",
+    title: "Successfully Logged In!",
+    text: "Enjoy our website!",
+    confirmButtonText: "Continue",
+    iconColor: themeSettings.contentTextColor[localStorage.getItem("theme")],
+    background: themeSettings.contentBackgroundColor[localStorage.getItem("theme")],
+    color: themeSettings.contentTextColor[localStorage.getItem("theme")]
+  }).then(() => {
+    location.reload();
+  }); 
 });
 
-socket.on("ownProfileInfo", (info) => {
+socket.on("ownProfileInfo", (info, topicsPracticeStats) => {
   profileContainer.style.display = "block";
   sessionStorage.setItem("publicAccount", info.public_account);
 
@@ -226,187 +190,110 @@ socket.on("ownProfileInfo", (info) => {
     });
   });
 
+  // Topics Practice Stats:
+
+  delete topicsPracticeStats.user_id;
+  let table = document.getElementById("topicsPracticeStatsTable");
+
+  Object.keys(topicsPracticeStats).forEach(topic => { //for each topic...
+    let newRow = table.insertRow(); //insert a new row into the table
+    let topicCell = newRow.insertCell(0); //cell to hold topic name
+    let topicLevelCell = newRow.insertCell(1); //cell to hold level user is on for that topic
+
+    topicCell.textContent = getTopicFromDatabaseColumnName(topic); //use helper function to get topic name from database column name
+    topicLevelCell.textContent = topicsPracticeStats[topic];
+  });
+
   //Buttons to change account settings:
 
   document.getElementById("changeBio").addEventListener("click", async function() {
-    if (localStorage.getItem("theme") === "dark") {
-      let { value: newBio } = await Swal.fire({
-        title: "Enter your new bio",
-        input: "textarea",
-        inputLabel: "Bio:",
-        showCancelButton: true,
-        inputValidator: (value) => {
-          if (!value) {
-            return "Your new bio can't be empty."
-          }
-        },
-        background: themeSettings.contentBackgroundColor.dark,
-        color: themeSettings.contentTextColor.dark
-      }); 
+    let { value: newBio } = await Swal.fire({
+      title: "Enter your new bio",
+      input: "textarea",
+      inputLabel: "Bio:",
+      showCancelButton: true,
+      inputValidator: (value) => {
+        if (!value) {
+          return "Your new bio can't be empty."
+        }
+      },
+      background: themeSettings.contentBackgroundColor[localStorage.getItem("theme")],
+      color: themeSettings.contentTextColor[localStorage.getItem("theme")]
+    }); 
 
-      if (newBio) {
-        let token = localStorage.getItem("token") || sessionStorage.getItem("token");
-        socket.emit("updateBio", token, newBio);
-      }
-    } else if (localStorage.getItem("theme") === "light") {
-      let { value: newBio } = await Swal.fire({
-        title: "Enter your new bio",
-        input: "textarea",
-        inputLabel: "Bio:",
-        showCancelButton: true,
-        inputValidator: (value) => {
-          if (!value) {
-            return "Your new bio can't be empty."
-          }
-        },
-        background: themeSettings.contentBackgroundColor.light,
-        color: themeSettings.contentTextColor.light
-      }); 
-
-      if (newBio) {
-        let token = localStorage.getItem("token") || sessionStorage.getItem("token");
-        socket.emit("updateBio", token, newBio);
-      }
+    if (newBio) {
+      let token = localStorage.getItem("token") || sessionStorage.getItem("token");
+      socket.emit("updateBio", token, newBio);
     }
   });
 
   document.getElementById("profilePicture").addEventListener("click", async function() {
-    if (localStorage.getItem("theme") === "dark") {
-      let { value: pfp } = await Swal.fire({
-        title: "Upload your new profile picture",
-        input: "file",
-        showCancelButton: true,
-        inputLabel: "By uploading an image, you are agreeing that you have the rights to publicly display that image. No NSFW profile pictures allowed (exceptions are made for Ling and KiteFlyer).",
-        inputValidator: (pfp) => {
-          if (!pfp) {
-            return `You have to upload a picture!`
-          }
-        },
-        inputAttributes: {
-          'accept': 'image/*'
-        },
-        background: themeSettings.contentBackgroundColor.dark,
-        color: themeSettings.contentTextColor.dark
-      });
-  
-      if (pfp) {
-        let reader = new FileReader();
-        reader.readAsDataURL(pfp);
-        reader.onload = function() {
-          let token = localStorage.getItem("token") || sessionStorage.getItem("token");
-          socket.emit("updatePfp", token, reader.result);
+    let { value: pfp } = await Swal.fire({
+      title: "Upload your new profile picture",
+      input: "file",
+      showCancelButton: true,
+      inputLabel: "By uploading an image, you are agreeing that you have the rights to publicly display that image. No NSFW profile pictures allowed (exceptions are made for Ling and KiteFlyer).",
+      inputValidator: (pfp) => {
+        if (!pfp) {
+          return `You have to upload a picture!`
         }
-      }
-    } else if (localStorage.getItem("theme") === "light") {
-      let { value: pfp } = await Swal.fire({
-        title: "Upload your new profile picture",
-        input: "file",
-        showCancelButton: true,
-        inputLabel: "By uploading an image, you are agreeing that you have the rights to publicly display that image. No NSFW profile pictures allowed (exceptions are made for Ling and KiteFlyer).",
-        inputValidator: (pfp) => {
-          if (!pfp) {
-            return `You have to upload a picture!`
-          }
-        },
-        inputAttributes: {
-          'accept': 'image/*'
-        },
-        background: themeSettings.contentBackgroundColor.light,
-        color: themeSettings.contentTextColor.light
-      });
-  
-      if (pfp) {
-        let reader = new FileReader();
-        reader.readAsDataURL(pfp);
-        reader.onload = function() {
-          let token = localStorage.getItem("token") || sessionStorage.getItem("token");
-          socket.emit("updatePfp", token, reader.result);
-        }
+      },
+      inputAttributes: {
+        'accept': 'image/*'
+      },
+      background: themeSettings.contentBackgroundColor[localStorage.getItem("theme")],
+      color: themeSettings.contentTextColor[localStorage.getItem("theme")]
+    });
+
+    if (pfp) {
+      let reader = new FileReader();
+      reader.readAsDataURL(pfp);
+      reader.onload = function() {
+        let token = localStorage.getItem("token") || sessionStorage.getItem("token");
+        socket.emit("updatePfp", token, reader.result);
       }
     }
   });
 
   document.getElementById("changeDisplayName").addEventListener("click", async function() {
-    if (localStorage.getItem("theme") === "dark") {
-      let { value: newDisplayName } = await Swal.fire({
-        title: "Enter your new display name",
-        input: "text",
-        inputLabel: "Display Name:",
-        showCancelButton: true,
-        inputValidator: (value) => {
-          if (!value) {
-            return "Your new display name can't be blank."
-          }
-        },
-        background: themeSettings.contentBackgroundColor.dark,
-        color: themeSettings.contentTextColor.dark
-      });
-  
-      if (newDisplayName) {
-        let token = localStorage.getItem("token") || sessionStorage.getItem("token");
-        socket.emit("updateDisplayName", token, newDisplayName);
-      }
-    } else if (localStorage.getItem("theme") === "light") {
-      let { value: newDisplayName } = await Swal.fire({
-        title: "Enter your new display name",
-        input: "text",
-        inputLabel: "Display Name:",
-        showCancelButton: true,
-        inputValidator: (value) => {
-          if (!value) {
-            return "Your new display name can't be blank."
-          }
-        },
-        background: themeSettings.contentBackgroundColor.light,
-        color: themeSettings.contentTextColor.light
-      });
-  
-      if (newDisplayName) {
-        let token = localStorage.getItem("token") || sessionStorage.getItem("token");
-        socket.emit("updateDisplayName", token, newDisplayName);
-      }
+    let { value: newDisplayName } = await Swal.fire({
+      title: "Enter your new display name",
+      input: "text",
+      inputLabel: "Display Name:",
+      showCancelButton: true,
+      inputValidator: (value) => {
+        if (!value) {
+          return "Your new display name can't be blank."
+        }
+      },
+      background: themeSettings.contentBackgroundColor[localStorage.getItem("theme")],
+      color: themeSettings.contentTextColor[localStorage.getItem("theme")]
+    });
+
+    if (newDisplayName) {
+      let token = localStorage.getItem("token") || sessionStorage.getItem("token");
+      socket.emit("updateDisplayName", token, newDisplayName);
     }
   });
 
   document.getElementById("changeEmail").addEventListener("click", async function() {
-    if (localStorage.getItem("theme") === "dark") {
-      let { value: newEmail } = await Swal.fire({
-        title: "Enter your new e-mail address",
-        input: "email",
-        inputLabel: "Email:",
-        showCancelButton: true,
-        inputValidator: (value) => {
-          if (!value) {
-            return "Your new email address can't be blank"
-          }
-        },
-        background: themeSettings.contentBackgroundColor.dark,
-        color: themeSettings.contentTextColor.dark
-      });
-
-      if (newEmail) {
-        let token = localStorage.getItem("token") || sessionStorage.getItem("token");
-        socket.emit("updateEmail", token, newEmail);
-      }
-    } else if (localStorage.getItem("theme") === "light") {
-      let { value: newEmail } = await Swal.fire({
-        title: "Enter your new e-mail address",
-        input: "email",
-        inputLabel: "Email:",
-        showCancelButton: true,
-        inputValidator: (value) => {
-          if (!value) {
-            return "Your new email address can't be blank"
-          }
-        },
-        background: themeSettings.contentBackgroundColor.light,
-        color: themeSettings.contentTextColor.light
-      });
-
-      if (newEmail) {
-        let token = localStorage.getItem("token") || sessionStorage.getItem("token");
-        socket.emit("updateEmail", token, newEmail);
-      }
+    let { value: newEmail } = await Swal.fire({
+      title: "Enter your new e-mail address",
+      input: "email",
+      inputLabel: "Email:",
+      showCancelButton: true,
+      inputValidator: (value) => {
+        if (!value) {
+          return "Your new email address can't be blank"
+        }
+      },
+      background: themeSettings.contentBackgroundColor[localStorage.getItem("theme")],
+      color: themeSettings.contentTextColor[localStorage.getItem("theme")]
+    });
+  
+    if (newEmail) {
+      let token = localStorage.getItem("token") || sessionStorage.getItem("token");
+      socket.emit("updateEmail", token, newEmail);
     }
   });
 
@@ -421,6 +308,32 @@ socket.on("ownProfileInfo", (info) => {
     }
 
     socket.emit("updateAccountVisibility", token, newAccountVisibility);
+  });
+
+  document.getElementById("changeTopicsPracticeStatsPrivacy").addEventListener("click", async function() {
+    let token = localStorage.getItem("token") || sessionStorage.getItem("token");
+
+    let { value: privacySetting } = await Swal.fire({
+      title: "Select setting:",
+      input: "radio",
+      inputOptions: {
+        "public": "Public",
+        "friends": "Friends-only",
+        "private": "Private"
+      },
+      inputValidator: (value) => {
+        if (!value) {
+          return "Please select a privacy setting!"
+        }
+      },
+      showCancelButton: true,
+      background: themeSettings.contentBackgroundColor[localStorage.getItem("theme")],
+      color: themeSettings.contentTextColor[localStorage.getItem("theme")]
+    });
+
+    if (privacySetting) {
+      socket.emit("updateTopicsPracticeStatsPrivacy", token, privacySetting);
+    }
   });
 });
 
@@ -501,41 +414,22 @@ socket.on("newOutgoingFriendRequest", (outgoingRequest) => {
   cancelRequestButton.classList.add("btnCancelFriendRequest", "contentTheme");
   cancelRequestButton.innerHTML = "Cancel";
   cancelRequestButton.addEventListener("click", function() {
-    if (localStorage.getItem("theme") === "dark") {
-      Swal.fire({
-        title: "Are you sure you want to cancel your outgoing friend request?",
-        icon: "warning",
-        iconColor: themeSettings.contentTextColor.dark,
-        background: themeSettings.contentBackgroundColor.dark,
-        color: themeSettings.contentTextColor.dark,
-        showCancelButton: true,
-        showConfirmButton: true,
-        cancelButtonText: "Go Back",
-        confirmButtonText: "Yes"
-      }).then((result) => {
-        if (result.isConfirmed) {
-          let token = localStorage.getItem("token") || sessionStorage.getItem("token");
-          socket.emit("cancelOutgoingFriendRequest", token, outgoingRequest.user_id);
-        }
-      });
-    } else if (localStorage.getItem("theme") === "light") {
-      Swal.fire({
-        title: "Are you sure you want to cancel your outgoing friend request?",
-        icon: "warning",
-        iconColor: themeSettings.contentTextColor.light,
-        background: themeSettings.contentBackgroundColor.light,
-        color: themeSettings.contentTextColor.light,
-        showCancelButton: true,
-        showConfirmButton: true,
-        cancelButtonText: "Go Back",
-        confirmButtonText: "Yes"
-      }).then((result) => {
-        if (result.isConfirmed) {
-          let token = localStorage.getItem("token") || sessionStorage.getItem("token");
-          socket.emit("cancelOutgoingFriendRequest", token, outgoingRequest.user_id);
-        }
-      });
-    }
+    Swal.fire({
+      title: "Are you sure you want to cancel your outgoing friend request?",
+      icon: "warning",
+      iconColor: themeSettings.contentTextColor[localStorage.getItem("theme")],
+      background: themeSettings.contentBackgroundColor[localStorage.getItem("theme")],
+      color: themeSettings.contentTextColor[localStorage.getItem("theme")],
+      showCancelButton: true,
+      showConfirmButton: true,
+      cancelButtonText: "Go Back",
+      confirmButtonText: "Yes"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        let token = localStorage.getItem("token") || sessionStorage.getItem("token");
+        socket.emit("cancelOutgoingFriendRequest", token, outgoingRequest.user_id);
+      }
+    });
   });
   
 
@@ -594,97 +488,53 @@ socket.on("newFriend", (friendInfo) => {
 socket.on("successfullyUpdatedBio", (newBio) => {
   document.getElementById("profileInfoBio").textContent = newBio;
 
-  if (localStorage.getItem("theme") === "dark") {
-    Swal.fire({
-      icon: 'success',
-      title: 'Bio updated!',
-      iconColor: themeSettings.contentTextColor.dark,
-      background: themeSettings.contentBackgroundColor.dark,
-      color: themeSettings.contentTextColor.dark,
-      didClose: () => scrollToTop()
-    });
-  } else if (localStorage.getItem("theme") === "light") {
-    Swal.fire({
-      icon: 'success',
-      title: 'Bio updated!',
-      iconColor: themeSettings.contentTextColor.light,
-      background: themeSettings.contentBackgroundColor.light,
-      color: themeSettings.contentTextColor.light,
-      didClose: () => scrollToTop()
-    });
-  }
+  Swal.fire({
+    icon: 'success',
+    title: 'Bio updated!',
+    iconColor: themeSettings.contentTextColor[localStorage.getItem("theme")],
+    background: themeSettings.contentBackgroundColor[localStorage.getItem("theme")],
+    color: themeSettings.contentTextColor[localStorage.getItem("theme")],
+    didClose: () => scrollToTop()
+  });
 });
 
 socket.on("successfullyUpdatedPfp", (newPfp) => {
   document.getElementById("profilePicture").src = newPfp;
 
-  if (localStorage.getItem("theme") === "dark") {
-    Swal.fire({
-      icon: 'success',
-      title: 'Profile Picture updated!',
-      iconColor: themeSettings.contentTextColor.dark,
-      background: themeSettings.contentBackgroundColor.dark,
-      color: themeSettings.contentTextColor.dark,
-      didClose: () => scrollToTop()
-    });
-  } else if (localStorage.getItem("theme") === "light") {
-    Swal.fire({
-      icon: 'success',
-      title: 'Profile Picture updated!',
-      iconColor: themeSettings.contentTextColor.light,
-      background: themeSettings.contentBackgroundColor.light,
-      color: themeSettings.contentTextColor.light,
-      didClose: () => scrollToTop()
-    });
-  }
+  Swal.fire({
+    icon: 'success',
+    title: 'Profile Picture updated!',
+    iconColor: themeSettings.contentTextColor[localStorage.getItem("theme")],
+    background: themeSettings.contentBackgroundColor[localStorage.getItem("theme")],
+    color: themeSettings.contentTextColor[localStorage.getItem("theme")],
+    didClose: () => scrollToTop()
+  });
 });
 
 socket.on("successfullyUpdatedDisplayName", (newDisplayName) => {
   document.getElementById("profileInfoDisplayName").textContent = newDisplayName;
   
-  if (localStorage.getItem("theme") === "dark") {
-    Swal.fire({
-      icon: 'success',
-      title: 'Display Name updated!',
-      iconColor: themeSettings.contentTextColor.dark,
-      background: themeSettings.contentBackgroundColor.dark,
-      color: themeSettings.contentTextColor.dark,
-      didClose: () => scrollToTop()
-    });
-  } else if (localStorage.getItem("theme") === "light") {
-    Swal.fire({
-      icon: 'success',
-      title: 'Display Name updated!',
-      iconColor: themeSettings.contentTextColor.light,
-      background: themeSettings.contentBackgroundColor.light,
-      color: themeSettings.contentTextColor.light,
-      didClose: () => scrollToTop()
-    });
-  }
+  Swal.fire({
+    icon: 'success',
+    title: 'Display Name updated!',
+    iconColor: themeSettings.contentTextColor[localStorage.getItem("theme")],
+    background: themeSettings.contentBackgroundColor[localStorage.getItem("theme")],
+    color: themeSettings.contentTextColor[localStorage.getItem("theme")],
+    didClose: () => scrollToTop()
+  });
 });
 
 socket.on("successfullyUpdatedEmail", (newEmail) => {
   document.getElementById("profileInfoEmail").textContent = newEmail;
  
-  if (localStorage.getItem("theme") === "dark") {
-    Swal.fire({
-      icon: 'success',
-      title: 'Email updated!',
-      iconColor: themeSettings.contentTextColor.dark,
-      background: themeSettings.contentBackgroundColor.dark,
-      color: themeSettings.contentTextColor.dark,
-      didClose: () => scrollToTop()
-    });
-  } else if (localStorage.getItem("theme") === "light") {
-    Swal.fire({
-      icon: 'success',
-      title: 'Email updated!',
-      iconColor: themeSettings.contentTextColor.light,
-      background: themeSettings.contentBackgroundColor.light,
-      color: themeSettings.contentTextColor.light,
-      didClose: () => scrollToTop()
-    });
-  }
+  Swal.fire({
+    icon: 'success',
+    title: 'Email updated!',
+    iconColor: themeSettings.contentTextColor[localStorage.getItem("theme")],
+    background: themeSettings.contentBackgroundColor[localStorage.getItem("theme")],
+    color: themeSettings.contentTextColor[localStorage.getItem("theme")],
+    didClose: () => scrollToTop()
+  });
 });
 
 socket.on("successfullyUpdatedAccountVisibility", (newAccountVisibility) => {
@@ -696,25 +546,25 @@ socket.on("successfullyUpdatedAccountVisibility", (newAccountVisibility) => {
     document.getElementById("profileInfoPublicOrPrivate").innerHTML = `<br>Your account is <b>private</b>`;
   }
 
-  if (localStorage.getItem("theme") === "dark") {
-    Swal.fire({
-      icon: 'success',
-      title: 'Account Visibility Updated!',
-      iconColor: themeSettings.contentTextColor.dark,
-      background: themeSettings.contentBackgroundColor.dark,
-      color: themeSettings.contentTextColor.dark,
-      didClose: () => scrollToTop()
-    });
-  } else if (localStorage.getItem("theme") === "light") {
-    Swal.fire({
-      icon: 'success',
-      title: 'Account Visibility Updated!',
-      iconColor: themeSettings.contentTextColor.light,
-      background: themeSettings.contentBackgroundColor.light,
-      color: themeSettings.contentTextColor.light,
-      didClose: () => scrollToTop()
-    });
-  }
+  Swal.fire({
+    icon: 'success',
+    title: 'Account Visibility Updated!',
+    iconColor: themeSettings.contentTextColor[localStorage.getItem("theme")],
+    background: themeSettings.contentBackgroundColor[localStorage.getItem("theme")],
+    color: themeSettings.contentTextColor[localStorage.getItem("theme")],
+    didClose: () => scrollToTop()
+  });
+});
+
+socket.on("successfullyUpdatedTopicsPracticeStatsPrivacy", () => {
+  Swal.fire({
+    icon: 'success',
+    title: 'Topics Practice Stats Privacy Updated!',
+    iconColor: themeSettings.contentTextColor[localStorage.getItem("theme")],
+    background: themeSettings.contentBackgroundColor[localStorage.getItem("theme")],
+    color: themeSettings.contentTextColor[localStorage.getItem("theme")],
+    didClose: () => scrollToTop()
+  });
 });
 
 socket.on("successfullyUpdatedPubliclyDisplayedAchievements", () => {
@@ -743,4 +593,13 @@ function scrollToTop() {
    left: 0, 
    behavior: 'smooth' 
   });
+}
+
+//function to convert something like the string "addition_level" to "Addition"
+function getTopicFromDatabaseColumnName(databaseColumnName) {
+  databaseColumnName = databaseColumnName.substring(0, databaseColumnName.length - 6); //use substring to cut out the last 6 chars of the topic to get the topic by itself, because it's initally in the form topic_level (because that's what the database column name is)
+  databaseColumnName.replaceAll("_", " "); //replace all other underscores with spaces after the "_level" at the end has been removed
+  databaseColumnName = databaseColumnName[0].toUpperCase() + databaseColumnName.substring(1); //capitalize the first letter
+
+  return databaseColumnName;
 }

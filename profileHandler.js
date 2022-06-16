@@ -11,11 +11,19 @@ module.exports = function(socket, sqlite3, jwt) {
           }
         }); 
 
-        accountsDb.get(`SELECT username, display_name, email, profile_picture, bio, friends, incoming_friend_requests, outgoing_friend_requests, achievements, publicly_displayed_achievements, public_account FROM users WHERE user_id = ?`, [user.id], function(err, row) {
+        accountsDb.get(`SELECT username, display_name, email, profile_picture, bio, friends, incoming_friend_requests, outgoing_friend_requests, achievements, publicly_displayed_achievements, public_account, topic_practice_stats_privacy FROM users WHERE user_id = ?`, [user.id], function(err, row) {
           if (err) {
             console.log(err);
           } else {
             accountsDb.serialize(() => {
+              accountsDb.get(`SELECT * FROM topicsPracticeStats WHERE user_id = ?`, [user.id], function(err, topicsPracticeStats) {
+                if (err) {
+                  console.log(err);
+                } else {
+                  socket.emit("ownProfileInfo", row, topicsPracticeStats);
+                }
+              });
+              
               //get username, display name, and pfp of the user ids in row.friends, which is stored as a JSON.stringified array string in the database
               JSON.parse(row.friends).forEach(friendId => {
                 accountsDb.get(`SELECT username, display_name, profile_picture FROM users WHERE user_id = ?`, [friendId], function(err, friendInfoRow) {
@@ -69,11 +77,9 @@ module.exports = function(socket, sqlite3, jwt) {
                   }
                 });
               });
-
-              accountsDb.close();
             });
-            
-            socket.emit("ownProfileInfo", row);
+
+            accountsDb.close();
           }
         });
       }
@@ -134,6 +140,7 @@ module.exports = function(socket, sqlite3, jwt) {
     });
   });
 
+  //unfinished
   socket.on("getUserInfoWhileLoggedIn", (token, username) => {
     jwt.verify(token, process.env['JWT_PRIVATE_KEY'], function(err, user) {
       let accountsDb = new sqlite3.Database(__dirname + "/database/accounts.db", (err) => {
@@ -141,6 +148,98 @@ module.exports = function(socket, sqlite3, jwt) {
           console.log(err);
         }
       }); 
+
+      accountsDb.all(`SELECT user_id, username, display_name, profile_picture, bio, publicly_displayed_achievements, public_account, topic_practice_stats_privacy, friends, incoming_friend_requests, outgoing_friend_requests FROM users WHERE username = ?`, [username], function(err, rows) {
+        if (err) {
+          console.log(err);
+        } else {
+          if (rows.length === 0) { //if there are no entries (rows) in the database that have the username
+            socket.emit("profileUsernameNotFound");
+            accountsDb.close();
+          } else {
+            accountsDb.get(`SELECT * FROM topicsPracticeStats WHERE user_id = ?`, [rows[0].user_id], function(err, topicsPracticeStats) {
+              if (err) {
+                console.log(err);
+              } else {
+                let isFriendsWithUser = rows[0].friends.includes(user.id); //whether the person requesting this user's profile is friends with them
+                let sentFriendRequestToUser = rows[0].incoming_friend_requests.includes(user.id); //whether the person already sent a friend request to this user
+                let gettingFriendRequestFromUser = rows[0].outgoing_friend_requests.includes(user.id); //whether the person is already getting a friend request from this user
+                if (rows[0].public_account == "true") { //if the user's account is public:
+                  if (rows[0].topic_practice_stats_privacy === "public" || rows[0].topic_practice_stats_privacy === "friends") { //if user's topics stats privacy is set to public or friends,
+                    let info = {
+                      user_id: rows[0].user_id,
+                      username: rows[0].username,
+                      displayName: rows[0].display_name,
+                      profilePicture: rows[0].profile_picture,
+                      bio: rows[0].bio,
+                      publicly_displayed_achievements: rows[0].publicly_displayed_achievements,
+                      topicsPracticeStats: topicsPracticeStats,
+                      isFriend: isFriendsWithUser,
+                      sentFriendRequest: sentFriendRequestToUser,
+                      gettingFriendRequest: gettingFriendRequestFromUser
+                    }
+    
+                    socket.emit("userProfilePageInfo", info);
+                    accountsDb.close();
+                  } else {
+                    let info = {
+                      user_id: rows[0].user_id,
+                      username: rows[0].username,
+                      displayName: rows[0].display_name,
+                      profilePicture: rows[0].profile_picture,
+                      bio: rows[0].bio,
+                      publicly_displayed_achievements: rows[0].publicly_displayed_achievements,
+                      isFriend: isFriendsWithUser,
+                      sentFriendRequest: sentFriendRequestToUser,
+                      gettingFriendRequest: gettingFriendRequestFromUser
+                    }
+          
+                    socket.emit("userProfilePageInfo", info);
+                    accountsDb.close(); 
+                  }
+                } 
+                else { //if user's account is private:
+                  //only send info if user is friends with person requesting profile
+                  if (isFriendsWithUser) {
+                    if (rows[0].topic_practice_stats_privacy === "public" || rows[0].topic_practice_stats_privacy === "friends") {
+                      let info = {
+                        user_id: rows[0].user_id,
+                        username: rows[0].username,
+                        displayName: rows[0].display_name,
+                        profilePicture: rows[0].profile_picture,
+                        bio: rows[0].bio,
+                        publicly_displayed_achievements: rows[0].publicly_displayed_achievements,
+                        topicsPracticeStats: topicsPracticeStats,
+                        isFriend: isFriendsWithUser,
+                        sentFriendRequest: sentFriendRequestToUser,
+                        gettingFriendRequest: gettingFriendRequestFromUser
+                      }
+      
+                      socket.emit("userProfilePageInfo", info);
+                      accountsDb.close();
+                    } else {
+                      let info = {
+                        user_id: rows[0].user_id,
+                        username: rows[0].username,
+                        displayName: rows[0].display_name,
+                        profilePicture: rows[0].profile_picture,
+                        bio: rows[0].bio,
+                        publicly_displayed_achievements: rows[0].publicly_displayed_achievements,
+                        isFriend: isFriendsWithUser,
+                        sentFriendRequest: sentFriendRequestToUser,
+                        gettingFriendRequest: gettingFriendRequestFromUser
+                      }
+            
+                      socket.emit("userProfilePageInfo", info);
+                      accountsDb.close(); 
+                    }
+                  }
+                }
+              }
+            });
+          }
+        }
+      });
     });
   });
 
@@ -258,6 +357,30 @@ module.exports = function(socket, sqlite3, jwt) {
           } else {
             accountsDb.close();
             socket.emit("successfullyUpdatedAccountVisibility", newAccountVisibility);
+          }
+        });
+      }
+    });
+  });
+
+  socket.on("updateTopicsPracticeStatsPrivacy", (token, newTopicsPracticeStatsPrivacy) => {
+    jwt.verify(token, process.env['JWT_PRIVATE_KEY'], function(err, user) {
+      if (err) {
+        console.log(err);
+        socket.emit("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the home page. We'll look into it as soon as possible.");
+      } else {
+        let accountsDb = new sqlite3.Database(__dirname + "/database/accounts.db", (err) => {
+          if (err) {
+            console.log(err);
+          }
+        });  
+
+        accountsDb.run(`UPDATE users SET topic_practice_stats_privacy = ? WHERE user_id = ?`, [newTopicsPracticeStatsPrivacy, user.id], function(err) {
+          if (err) {
+            console.log(err);
+          } else {
+            accountsDb.close();
+            socket.emit("successfullyUpdatedTopicsPracticeStatsPrivacy");
           }
         });
       }

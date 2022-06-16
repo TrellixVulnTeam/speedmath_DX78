@@ -4,8 +4,16 @@ let btnSendFriendRequest = document.getElementById("btnSendFriendRequest");
 
 window.onload = function() {
   let url = window.location.href;
-  // get whatever's after the last / to get the username, and send it to the server to get the public info associated with that username
-  socket.emit("getPublicUserInfo", url.substring(url.lastIndexOf('/') + 1).toLowerCase());
+  
+  let token = localStorage.getItem("token") || sessionStorage.getItem("token");
+
+  if (token == null) { //if user isn't logged in,
+    // get whatever's after the last / to get the username, and send it to the server to get the public info associated with that username
+    socket.emit("getPublicUserInfo", url.substring(url.lastIndexOf('/') + 1).toLowerCase()); 
+  } else {
+    // get whatever's after the last / to get the username, and send it to the server to get the public info associated with that username
+    socket.emit("getUserInfoWhileLoggedIn", token, url.substring(url.lastIndexOf('/') + 1).toLowerCase()); 
+  }
 }
 
 socket.on("profileUsernameNotFound", () => {
@@ -58,79 +66,103 @@ socket.on("userProfilePageInfo", info => {
     });
   }
 
-  //Send friend request button code:
-  btnSendFriendRequest.addEventListener("click", function() {
-    let token = localStorage.getItem("token") || sessionStorage.getItem("token");
-
-    if (token === null) { //if page viewer is not logged in...
-      if (localStorage.getItem("theme") === "dark") {
+  if (info.isFriend) {
+    btnSendFriendRequest.textContent = "Unfriend";
+    btnSendFriendRequest.addEventListener("click", function() { //make button an "Unfriend" button
+      let token = localStorage.getItem("token") || sessionStorage.getItem("token");
+      socket.emit("unfriend", token, info.user_id);
+    });
+  } else if (info.sentFriendRequest) {
+    btnSendFriendRequest.textContent = "Cancel Friend Request";
+    btnSendFriendRequest.addEventListener("click", function() {
+      let token = localStorage.getItem("token") || sessionStorage.getItem("token");
+      socket.emit("cancelOutgoingFriendRequest", token, info.user_id);
+    });
+  } else if (info.gettingFriendRequest) {
+    btnSendFriendRequest.textContent = "Accept Friend Request";
+    btnSendFriendRequest.addEvenetListener("click", function() {
+      let token = localStorage.getItem("token") || sessionStorage.getItem("token");
+      socket.emit("acceptFriendRequest", token, info.user_id);
+    });
+  } else {
+    //Send friend request button code:
+    btnSendFriendRequest.addEventListener("click", function() {
+      let token = localStorage.getItem("token") || sessionStorage.getItem("token");
+  
+      if (token === null) { //if page viewer is not logged in...
         Swal.fire({
           title: "You are not logged in!",
           text: "You must be logged in to send friend requests.",
           icon: "error",
-          iconColor: themeSettings.contentTextColor.dark,
-          background: themeSettings.contentBackgroundColor.dark,
-          color: themeSettings.contentTextColor.dark
+          iconColor: themeSettings.contentTextColor[localStorage.getItem("theme")],
+          background: themeSettings.contentBackgroundColor[localStorage.getItem("theme")],
+          color: themeSettings.contentTextColor[localStorage.getItem("theme")],
         });
-      } else if (localStorage.getItem("theme") === "light") {
-        Swal.fire({
-          title: "You are not logged in!",
-          text: "You must be logged in to send friend requests.",
-          icon: "error",
-          iconColor: themeSettings.contentTextColor.light,
-          background: themeSettings.contentBackgroundColor.light,
-          color: themeSettings.contentTextColor.light
-        });
+      } else {
+        socket.emit("sendFriendRequest", token, info.user_id);
       }
-    } else {
-      socket.emit("sendFriendRequest", token, info.user_id);
-    }
-  });
+    });
+  }
 });
 
 socket.on("successfullySentFriendRequest", () => {
   btnSendFriendRequest.textContent = "Friend Request Sent!";
   btnSendFriendRequest.disabled = true;
     
-  if (localStorage.getItem("theme") === "dark") {
-    Swal.fire({
-      icon: 'success',
-      title: 'Friend Request sent!',
-      iconColor: themeSettings.contentTextColor.dark,
-      background: themeSettings.contentBackgroundColor.dark,
-      color: themeSettings.contentTextColor.dark
-    });
-  } else if (localStorage.getItem("theme") === "light") {
-    Swal.fire({
-      icon: 'success',
-      title: 'Friend Request sent!',
-      iconColor: themeSettings.contentTextColor.light,
-      background: themeSettings.contentBackgroundColor.light,
-      color: themeSettings.contentTextColor.light
-    });
-  }
+  Swal.fire({
+    icon: 'success',
+    title: 'Friend Request sent!',
+    iconColor: themeSettings.contentTextColor[localStorage.getItem("theme")],
+    background: themeSettings.contentBackgroundColor[localStorage.getItem("theme")],
+    color: themeSettings.contentTextColor[localStorage.getItem("theme")],
+  });
+});
+
+socket.on("successfullyUnfriendedFriend", () => {
+  Swal.fire({
+    icon: 'success',
+    title: 'Successfully unfriended user!',
+    iconColor: themeSettings.contentTextColor[localStorage.getItem("theme")],
+    background: themeSettings.contentBackgroundColor[localStorage.getItem("theme")],
+    color: themeSettings.contentTextColor[localStorage.getItem("theme")]
+  }).then(() => {
+    location.reload();
+  });
+});
+
+socket.on("successfullyAcceptedFriendRequest", () => {
+  Swal.fire({
+    icon: 'success',
+    title: 'Successfully accepted friend request!',
+    iconColor: themeSettings.contentTextColor[localStorage.getItem("theme")],
+    background: themeSettings.contentBackgroundColor[localStorage.getItem("theme")],
+    color: themeSettings.contentTextColor[localStorage.getItem("theme")]
+  }).then(() => {
+    location.reload();
+  });
+});
+
+socket.on("successfullyCancelledFriendRequest", () => {
+  Swal.fire({
+    icon: 'success',
+    title: 'Successfully cancelled friend request!',
+    iconColor: themeSettings.contentTextColor[localStorage.getItem("theme")],
+    background: themeSettings.contentBackgroundColor[localStorage.getItem("theme")],
+    color: themeSettings.contentTextColor[localStorage.getItem("theme")]
+  }).then(() => {
+    location.reload();
+  });
 });
 
 socket.on("youAreTryingToFriendYourself", () => {
-  if (localStorage.getItem("theme") === "dark") {
-    Swal.fire({
-      icon: 'error',
-      title: 'You cannot friend yourself.',
-      text: "This is your own public profile. You aren't allowed to friend yourself.",
-      iconColor: themeSettings.contentTextColor.dark,
-      background: themeSettings.contentBackgroundColor.dark,
-      color: themeSettings.contentTextColor.dark
-    });
-  } else if (localStorage.getItem("theme") === "light") {
-    Swal.fire({
-      icon: 'error',
-      title: 'You cannot friend yourself.',
-      text: "This is your own public profile. You aren't allowed to friend yourself.",
-      iconColor: themeSettings.contentTextColor.light,
-      background: themeSettings.contentBackgroundColor.light,
-      color: themeSettings.contentTextColor.light
-    });
-  }
+  Swal.fire({
+    icon: 'error',
+    title: 'You cannot friend yourself.',
+    text: "This is your own public profile. You aren't allowed to friend yourself.",
+    iconColor: themeSettings.contentTextColor[localStorage.getItem("theme")],
+    background: themeSettings.contentBackgroundColor[localStorage.getItem("theme")],
+    color: themeSettings.contentTextColor[localStorage.getItem("theme")],
+  });
 });
 
 //function to convert something like the string "addition_level" to "Addition"
