@@ -80,7 +80,7 @@ socket.on("userProfilePageInfo", info => {
     });
   } else if (info.gettingFriendRequest) {
     btnSendFriendRequest.textContent = "Accept Friend Request";
-    btnSendFriendRequest.addEvenetListener("click", function() {
+    btnSendFriendRequest.addEventListener("click", function() {
       let token = localStorage.getItem("token") || sessionStorage.getItem("token");
       socket.emit("acceptFriendRequest", token, info.user_id);
     });
