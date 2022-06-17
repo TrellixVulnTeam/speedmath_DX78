@@ -1,6 +1,6 @@
 var socket = io();
 
-class AdditionQuestion {
+class Question {
   //to create an addition question about adding an a-digit long number and a b-digit long number
   constructor(a, b) {
     let num1 = Math.floor(Math.random() * (Math.pow(10, a)-Math.pow(10, (a-1)))) + Math.pow(10, (a-1));
@@ -15,26 +15,41 @@ class AdditionQuestion {
 function generateQuestion(level) {
   switch (level) {
     case 1:
-      return new AdditionQuestion(1, 1);
+      return new Question(1, 1);
     case 2: 
-      return new AdditionQuestion(2, 1);
+      return new Question(2, 1);
     case 3:
-      return new AdditionQuestion(2, 2);
+      return new Question(2, 2);
     case 4:
-      return new AdditionQuestion(3, 2);
+      return new Question(3, 2);
     case 5:
-      return new AdditionQuestion(3, 3);
+      return new Question(3, 3);
     case 6:
-      return new AdditionQuestion(4, 3);
+      return new Question(4, 3);
     case 7:
-      return new AdditionQuestion(4, 4);
+      return new Question(4, 4);
     case 8: 
-      return new AdditionQuestion(5, 5);
+      return new Question(5, 5);
     case 9:
-      return new AdditionQuestion(7, 6);
+      return new Question(7, 6);
     case 10:
-      return new AdditionQuestion(8, 8);
+      return new Question(8, 8);
   }
+}
+
+//defining how much time user will have at each level
+//format is level: time (seconds)
+let levelTime = {
+  1: 8,
+  2: 8,
+  3: 8,
+  4: 15,
+  5: 15,
+  6: 15,
+  7: 20,
+  8: 20,
+  9: 20,
+  10: 20
 }
 
 let intro = document.getElementById("intro");
@@ -113,15 +128,7 @@ function nextQuestion() {
 
   answerField.focus();
 
-  let timeLeft; //seconds
-
-  if (userStats.level < 4) {
-    timeLeft = 8;
-  } else if (userStats.level < 7) {
-    timeLeft = 15;
-  } else {
-    timeLeft = 20;
-  }
+  let timeLeft = levelTime[userStats.level];
 
   timer.innerHTML = `${Math.floor(timeLeft/60)}m${timeLeft%60}s`;
 

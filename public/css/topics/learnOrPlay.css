@@ -1,3 +1,180 @@
+/* CSS that will be applied to every topic page: */
+
+* {
+  text-align: center;
+}
+
+#practiceContainer {
+  padding: 5px;
+}
+
+#intro {
+  width: 50vw;
+  margin: 10vh auto;
+  border-radius: 25px;
+  padding: 25px;
+  font-size: 1.25em
+}
+
+#btnStart {
+  cursor: pointer;
+  padding: 5px; 
+  margin: 5px;
+  font-size: 1.5em;
+  border: 2px solid;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: 0.1s ease-in;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+#game {
+  display: none;
+  padding: 5%;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  height: 90%;
+  margin: auto;
+}
+
+#question {
+  grid-area: 1 / 2 / 2 / 5;
+  font-size: 2em;
+  margin: 15px;
+}
+
+#answerField {
+  grid-area: 2 / 2 / 3 / 5;
+  font-size: 1.5em;
+  border: 2px solid;
+  border-radius: 8px;
+  margin: 15px;
+  outline: none;
+  font-weight: bold;
+}
+
+input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+#btnSubmit {
+  grid-area: 3 / 2 / 4 / 5;
+  font-size: 1.5em;
+  border: 2px solid;
+  border-radius: 8px;
+  margin: 15px;
+  transition: 0.1s;
+}
+
+#btnSubmit:hover {
+  border-width: 5px;
+}
+
+#timer {
+  grid-area: 1 / 5 / 2 / 6;
+  font-size: 1.5em;
+  padding: 5px;
+}
+
+#levelProgressBarContainer {
+  grid-area: 4 / 2 / 5 / 5;
+}
+
+#newLevelContainer {
+  display: none;
+  width: 80vw;
+  margin: 15vh auto;
+  border-radius: 22px;
+  padding: 10px;
+}
+
+#questionsProgressBar {
+  width: 70%;
+  height: 20%;
+  border: 3px solid;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+progress::-moz-progress-bar {
+  background-color: #e6e6e6;
+}
+
+progress::-moz-progress-value {
+  background-color: #50fb6d;
+  overflow: hidden;
+}
+
+progress::-webkit-progress-bar {
+  background-color: #e6e6e6;
+}
+
+progress::-webkit-progress-value {
+  background-color: #50fb6d;
+  overflow: hidden; 
+}
+
+#btnContinue {
+  font-size: 1.5em;
+  border: 2px solid;
+  border-radius: 8px;
+  margin: 15px;
+}
+
+#btnContinue:hover {
+  border-width: 5px;
+}
+
+#levelsProgressBar {
+  width: 50vw;
+  border: 3px solid;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+progress#levelsProgressBar::-moz-progress-bar {
+  background-color: #e6e6e6;
+}
+
+progress#levelsProgressBar::-moz-progress-value {
+  background-color: #50fb6d;
+  overflow: hidden;
+}
+
+progress#levelsProgressBar::-webkit-progress-bar {
+  background-color: #e6e6e6;
+}
+
+progress#levelsProgressBar::-webkit-progress-value {
+  background-color: #50fb6d;
+  overflow: hidden;
+}
+
+#mastered {
+  display: none;
+}
+
+#btnReturn {
+  cursor: pointer;
+  padding: 5px; 
+  margin: 5px;
+  font-size: 1.5em;
+  border: 2px solid;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+a {
+  color: inherit;
+}
+
+/* CSS to handle the learn or practice container. */
+
 #learnOrPracticeContainer {
   display: none;
   width: 70vw;
@@ -29,5 +206,6 @@
 }
 
 #learnOrPracticeContainer > button:hover {
-  transform: scale(1.05)
+  transform: scale(1.05);
+  cursor: pointer;
 }

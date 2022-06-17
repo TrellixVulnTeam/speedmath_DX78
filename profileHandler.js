@@ -165,7 +165,7 @@ module.exports = function(socket, sqlite3, jwt) {
                 let sentFriendRequestToUser = rows[0].incoming_friend_requests.includes(user.id); //whether the person already sent a friend request to this user
                 let gettingFriendRequestFromUser = rows[0].outgoing_friend_requests.includes(user.id); //whether the person is already getting a friend request from this user
                 if (rows[0].public_account == "true") { //if the user's account is public:
-                  if (rows[0].topic_practice_stats_privacy === "public" || rows[0].topic_practice_stats_privacy === "friends") { //if user's topics stats privacy is set to public or friends,
+                  if (rows[0].topic_practice_stats_privacy === "public" || (rows[0].topic_practice_stats_privacy === "friends" && isFriendsWithUser)) { //if user's topics stats privacy is set to public OR set to friends only and user is friends with person viewing their profile,
                     let info = {
                       user_id: rows[0].user_id,
                       username: rows[0].username,
