@@ -47,6 +47,12 @@ app.get('/tos', (req, res) => {
   res.sendFile(__dirname + "/pages/tos.html");
 });
 
+
+//THIS HAS TO BE KEPT AT THE END OF THE ROUTING SECTION OF THE CODE
+app.get('*', (req, res) => { //if user tries to go to a random subpage that doesn't exist,
+  res.redirect('/'); //redirect them to the home page
+});
+
 console.log("Initializing database...");
 
 let accountsDb = new sqlite3.Database(__dirname + "/database/accounts.db", (err) => {

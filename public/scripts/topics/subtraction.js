@@ -1,13 +1,18 @@
 var socket = io();
 
 class Question {
-  //to create an addition question about adding an a-digit long number and a b-digit long number
+  //to create an subtraction question about subtracting a b-digit number from an a-digit number
   constructor(a, b) {
     let num1 = Math.floor(Math.random() * (Math.pow(10, a)-Math.pow(10, (a-1)))) + Math.pow(10, (a-1)); //a-digit long number
     let num2 = Math.floor(Math.random() * (Math.pow(10, b)-Math.pow(10, (b-1)))) + Math.pow(10, (b-1)); //b-digit long number
 
-    this.question = `${num1} + ${num2}`;
-    this.answer = num1 + num2;
+    if (num2 > num1) { //if num2 is higher than num1, the question will be num2 - num1
+      this.question = `${num2} - ${num1}`;
+      this.answer = num2 - num1;
+    } else { //else, question will be num1 - num2
+      this.question = `${num1} - ${num2}`;
+      this.answer = num1 - num2;
+    }
   }
 }
 
@@ -41,15 +46,15 @@ function generateQuestion(level) {
 //format is level: time (seconds)
 let levelTime = {
   1: 8,
-  2: 10,
-  3: 10,
+  2: 8,
+  3: 8,
   4: 15,
-  5: 20,
-  6: 25,
-  7: 30,
-  8: 35,
-  9: 40,
-  10: 45
+  5: 15,
+  6: 15,
+  7: 20,
+  8: 20,
+  9: 20,
+  10: 20
 }
 
 let intro = document.getElementById("intro");
@@ -84,7 +89,7 @@ let loggedIn;
 
 if (token !== null) {
   loggedIn = true;
-  socket.emit("getTopicPracticeStats", token, "addition");
+  socket.emit("getTopicPracticeStats", token, "subtraction");
 } else {
   loggedIn = false;
   btnStart.addEventListener("click", function() {
@@ -155,7 +160,7 @@ function nextQuestion() {
         userStats.question = 1;
         displayLevelScreen();
         if (loggedIn) {
-          socket.emit("updateTopicPracticeStats", token, "addition", userStats.level);
+          socket.emit("updateTopicPracticeStats", token, "subtraction", userStats.level);
         }
         return;
       } else {
@@ -170,7 +175,7 @@ function nextQuestion() {
           userStats.question = 1;
           displayLevelScreen();
           if (loggedIn) {
-            socket.emit("updateTopicPracticeStats", token, "addition", userStats.level);
+            socket.emit("updateTopicPracticeStats", token, "subtraction", userStats.level);
           }
           return;
         } else {

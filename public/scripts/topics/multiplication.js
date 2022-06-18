@@ -1,13 +1,13 @@
 var socket = io();
 
 class Question {
-  //to create an addition question about adding an a-digit long number and a b-digit long number
-  constructor(a, b) {
-    let num1 = Math.floor(Math.random() * (Math.pow(10, a)-Math.pow(10, (a-1)))) + Math.pow(10, (a-1)); //a-digit long number
-    let num2 = Math.floor(Math.random() * (Math.pow(10, b)-Math.pow(10, (b-1)))) + Math.pow(10, (b-1)); //b-digit long number
+  //to create an multiplication question about multiplying a number between (inclusive) a and b by a number between (inclusive) c and d
+  constructor(a, b, c, d) {
+    let num1 = Math.floor(a + Math.random() * (b - a + 1)); //to generate a random number between a and b (inclusive)
+    let num2 = Math.floor(c + Math.random() * (d - c + 1)); //to generate a random number between c and d (inclusive)
 
-    this.question = `${num1} + ${num2}`;
-    this.answer = num1 + num2;
+    this.question = `${num1} × ${num2}`;
+    this.answer = num1 * num2;
   }
 }
 
@@ -15,25 +15,25 @@ class Question {
 function generateQuestion(level) {
   switch (level) {
     case 1:
-      return new Question(1, 1);
+      return new Question(1, 5, 1, 5);
     case 2: 
-      return new Question(2, 1);
+      return new Question(1, 10, 1, 10);
     case 3:
-      return new Question(2, 2);
+      return new Question(1, 10, 10, 50);
     case 4:
-      return new Question(3, 2);
+      return new Question(1, 10, 10, 99);
     case 5:
-      return new Question(3, 3);
+      return new Question(10, 25, 10, 25);
     case 6:
-      return new Question(4, 3);
+      return new Question(10, 50, 10, 50);
     case 7:
-      return new Question(4, 4);
+      return new Question(10, 99, 10, 99);
     case 8: 
-      return new Question(5, 5);
+      return new Question(1, 10, 100, 999);
     case 9:
-      return new Question(7, 6);
+      return new Question(10, 50, 100, 999);
     case 10:
-      return new Question(8, 8);
+      return new Question(10, 99, 100, 999);
   }
 }
 
@@ -41,15 +41,15 @@ function generateQuestion(level) {
 //format is level: time (seconds)
 let levelTime = {
   1: 8,
-  2: 10,
-  3: 10,
+  2: 8,
+  3: 8,
   4: 15,
-  5: 20,
-  6: 25,
-  7: 30,
-  8: 35,
-  9: 40,
-  10: 45
+  5: 15,
+  6: 15,
+  7: 20,
+  8: 20,
+  9: 20,
+  10: 20
 }
 
 let intro = document.getElementById("intro");
@@ -84,7 +84,7 @@ let loggedIn;
 
 if (token !== null) {
   loggedIn = true;
-  socket.emit("getTopicPracticeStats", token, "addition");
+  socket.emit("getTopicPracticeStats", token, "multiplication");
 } else {
   loggedIn = false;
   btnStart.addEventListener("click", function() {
@@ -155,7 +155,7 @@ function nextQuestion() {
         userStats.question = 1;
         displayLevelScreen();
         if (loggedIn) {
-          socket.emit("updateTopicPracticeStats", token, "addition", userStats.level);
+          socket.emit("updateTopicPracticeStats", token, "multiplication", userStats.level);
         }
         return;
       } else {
@@ -170,7 +170,7 @@ function nextQuestion() {
           userStats.question = 1;
           displayLevelScreen();
           if (loggedIn) {
-            socket.emit("updateTopicPracticeStats", token, "addition", userStats.level);
+            socket.emit("updateTopicPracticeStats", token, "multiplication", userStats.level);
           }
           return;
         } else {
