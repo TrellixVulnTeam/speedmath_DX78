@@ -15,8 +15,8 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + "/pages/honk.html");
 });
 
-app.get('/arithmetic', (req, res) => {
-  res.sendFile(__dirname + "/pages/speedmath.html");
+app.get('/games', (req, res) => {
+  res.sendFile(__dirname + "/pages/games/gamesIndex.html");
 });
 
 app.get('/topics', (req, res) => {
