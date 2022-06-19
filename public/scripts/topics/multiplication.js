@@ -42,14 +42,14 @@ function generateQuestion(level) {
 let levelTime = {
   1: 8,
   2: 8,
-  3: 8,
-  4: 15,
-  5: 15,
-  6: 15,
-  7: 20,
-  8: 20,
-  9: 20,
-  10: 20
+  3: 15,
+  4: 20,
+  5: 25,
+  6: 25,
+  7: 30,
+  8: 25,
+  9: 35,
+  10: 40
 }
 
 let intro = document.getElementById("intro");

@@ -58,9 +58,13 @@ darkModeToggle.onchange = function() {
 changeTheme();
 
 function changeTheme() {
+  let hrs = document.getElementsByTagName("hr");
+  
   if (localStorage.getItem("theme") == "dark") {
     document.body.style.backgroundColor = themeSettings.bodyBackgroundColor.dark;
     document.body.style.color = themeSettings.textColor.dark;
+
+    [...hrs].forEach(hr => hr.color = themeSettings.textColor.dark);
     
     document.querySelectorAll(".contentTheme").forEach(elem => {
       elem.style.backgroundColor = themeSettings.contentBackgroundColor.dark;
@@ -77,6 +81,8 @@ function changeTheme() {
   } else {
     document.body.style.backgroundColor = themeSettings.bodyBackgroundColor.light;
     document.body.style.color = themeSettings.textColor.light;
+
+    [...hrs].forEach(hr => hr.color = themeSettings.textColor.light);
     
     document.querySelectorAll(".contentTheme").forEach(elem => {
       elem.style.backgroundColor = themeSettings.contentBackgroundColor.light;

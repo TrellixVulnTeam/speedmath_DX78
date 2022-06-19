@@ -43,7 +43,127 @@
     </div>
     
     <div id="learnContainer">
-      <h1>Under Development 🔧</h1>
+      <div id="articleHeading">
+        Square Numbers Mentally!
+        <br>
+        <span style="text-align:left;font-size:0.5em;">By Long Long Eggroll</span>
+      </div>
+      <hr id="part1">
+      <h2>The Binomial Theorem</h2>
+      <p style="text-align:left;">
+        This theorem works for all numbers, so we're going over this method first. 
+        However, there are special cases where there are faster ways to calculate it mentally.
+        This trick is based on the fact that any 2 digit number can be represented as the expression (10a + b), where a is the tens place and b is the ones place. For example, 38 = (10 × 3 + 8). We can then derive a formula to square that number by squaring the binomial (10a + b)
+        <br>
+        <div class="center" style="font-size:1.2em;font-weight:bold;">(10a + b)² = 100a² + 20ab + b²</div>
+      </p>
+      <h3>Examples</h3>
+      <p class="center" style="font-size:1.2em;">
+        38² = 30² + (2 × 30 × 8) + 8² = 900 + 480 + 64 = 1380 + 64 = 1444
+        <br>
+        21² = 20² + (2 × 20 × 1) + 1² = 400 + 40 + 1 = 441
+        <br>
+        65² = 60² + (2 × 60 × 5) + 5² = 3600 + 600 + 25 = 4225
+      </p>
+      <hr id="part2">
+      <h2>Squaring numbers near 50</h2>
+      <p style="text-align:left;">
+        This trick works best for numbers between 40 and 60, or 30-70 if you've memorized the squares of numbers from 1-20.
+        <br><br>
+        Step 1: Find the distance from 50 to the number that you're squaring
+        <br>
+        Step 2: If the number is higher than 50, add the difference to 25, if the number is lower than 50, subtract the difference from 25
+        <br>
+        Step 3: The first 2 digits of the number will be the result you get from Step 2
+        <br>
+        Step 4: For the last 2 digits, square the ones digit of the number that you're squaring
+        <br>
+        Step 5: The last 2 digits of the number will be the result you get from Step 4
+        <br><br>
+        This process is easier done than described:
+      </p>
+      <h3>Examples</h3>
+      <p class="center" style="font-size:1.2em;">
+        47² ➡️ 47 is <b>3</b> below 50 ➡️ first 2 digits are 22 (25 - <b>3</b>) ➡️ <b>3</b>² = 9, last two digits are 09 ➡️ 2209
+        <br>
+        54² ➡️ 54 = 50 + <b>4</b> ➡️ 25 + <b>4</b> = 29 ➡️ <b>4</b>² = 16 ➡️ 2916
+        <br>
+        62² ➡️ 62 = 50 + <b>12</b> ➡️ 25 + <b>12</b> = 37 ➡️ <b>12</b>² = 144 ➡️ carry the 1 because 144 is 3 digits long ➡️ 3844
+      </p>
+      <h3>Algebraic Proof of how it works</h3>
+      <p class="center">
+        (50 + b)² = 2500 + 100b + b² using FOIL
+        <br>
+        2500 + 100b = (25 + b)*100, which is why the first part is 25 + (the difference from 50)
+        <br>
+        Then you add b² to the end (the difference squared)
+      </p>
+      <hr id="part3">
+      <h2>When units digits add up to 10</h2>
+      <p style="text-align:left;">
+        This trick works for multiplying any 2 numbers which have the same tens digit and whose units digits add up to 10. (Ex. 35×35, 46×44, 67×63)
+        <br>
+        <br>
+        Step 1. Increment the tens digit by 1
+        <br>
+        Step 2. Multiply that by the original tens digit, this result is the first 2 digits of the answer
+        <br>
+        Step 3. Multiply the units digits together, this result is the last 2 digits of the answer
+      </p>
+      <h3>Examples</h3>
+      <p class="center" style="font-size:1.2em;">
+        75² ➡️ 7 × 8 = 56 ➡️ 5 × 5 = 25 ➡️ 5625
+        <br>
+        35² ➡️ 3 × 4 = 12 ➡️ 5 × 5 = 25 ➡️ 1225
+        <br>
+        69 × 61 ➡️ 6 × 7 = 42 ➡️ 9 × 1 = 9 ➡️ 4209
+        <br>
+        87 × 83 ➡️ 8 × 9 = 72 ➡️ 7 × 3 = 21 ➡️ 7221
+      </p>
+      <h3>Algebraic Proof of how it works</h3>
+      <p class="center">
+        The numbers can be represented as (10a + b) and (10a + c), and b + c = 10
+        <br>
+        (10a + b)(10a + c) = 100a² + 10ab + 10ac + bc
+        <br>
+        We can use the distributive property on 10ab + 10ac by factoring out the 10a 
+        <br>
+        (10a + b)(10a + c) = 100a² + 10a(b + c) + bc
+        <br>
+        Substitute "10" in for (b + c) because this trick works when the unit digits add up to 10
+        <br>
+        (10a + b)(10a + c) = 100a² + 10a(10) + bc = 100a² + 100a + bc
+        <br>
+        We can use the distributive property again to factor out a 100a from "100a² + 100a"
+        <br>
+        (10a + b)(10a + c) = 100a² + 10a(10) + bc = 100a(a+1) + bc
+        <br>
+        a(a+1) means that we're multiplying the tens digit by the one that's 1 above it, and then we're multiplying the unit digits and adding it onto the end!
+      </p>
+      <hr id="part4">
+      <h2>Squaring numbers in the tens</h2>
+      <p style="text-align:left;">
+        This trick works for squaring numbers from 10 - 20, but it can be implemented in other tricks, such as the "Squaring numbers near 50" trick. 
+        <br><br>
+        Step 1: Add the units digit of the number that you're squaring to the number itself. For example, if you're squaring 14, in this step you'd add 4 to 14 to get 18.
+        <br>
+        Step 2: Square the units digit of the number that you're squaring. Continuing the example from Step 1, if you're squaring 14, you'd square 4 to get 16.
+        <br>
+        Step 3: Append your result from Step 2 to your result from Step 1. If your result from Step 2 was 2 digits long, carry the tens digit of your answer from Step 2. Continuing our example, if you're squaring 14, you'd carry the 1 from 16: 1(8<sup>+1</sup>)6 = 196 = 14²
+      </p>
+      <h3>Examples</h3>
+      <p class="center" style="font-size:1.2em;">
+        13² ➡️ 13+3 = 16, 3² = 9 ➡️ 169 = 13²
+        <br>
+        17² ➡️ 17+7 = 24, 7² = 49 ➡️ 2(4<sup>+4</sup>)9 ➡️ 289 = 17²
+        <br>
+        19² ➡️ 19+9 = 28, 9² = 81 ➡️ (28<sup>+8</sup>)1 ➡️ 361 = 19²
+        <br>
+        <br>
+        Implemented in the <a href="#part2">Near-50s trick</a>:
+        <br>
+        37² ➡️ 37 = 50 - <b>13</b> ➡️ 25 - <b>13</b> = 12 ➡️ <b>13</b>² = 169 ➡️ carry the 1 because 169 is 3 digits long ➡️ 1369 = 37²
+      </p>
     </div>
 
     <div id="practiceContainer">

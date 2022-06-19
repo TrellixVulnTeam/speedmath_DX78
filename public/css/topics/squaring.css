@@ -1,0 +1,30 @@
+#learnContainer {
+  margin-top: 1%;
+  margin-bottom: 1%;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+}
+
+#articleHeading {
+  font-weight: bold;
+  font-size: 2em;
+  text-align: center;
+  padding: 10px;
+}
+
+#learnContainer > h2 {
+  text-align: center;
+  font-size: 1.5em;
+}
+
+#articleContainer > h3 {
+  text-align: left;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.center {
+  text-align: center;
+}

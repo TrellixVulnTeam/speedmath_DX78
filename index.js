@@ -91,12 +91,13 @@ accountsDb.serialize(() => {
       addition_level INTEGER,
       subtraction_level INTEGER,
       multiplication_level INTEGER,
-      division_level INTEGER
+      division_level INTEGER,
+      squaring_level INTEGER
     )`
   );
   
-  accountsDb.all(`SELECT user_id, username, display_name, email, bio, friends, incoming_friend_requests, outgoing_friend_requests, publicly_displayed_achievements, achievements, public_account, topic_practice_stats_privacy FROM users`, [], (err, rows) => {
-  //accountsDb.all(`SELECT * FROM topicsPracticeStats`, [], (err, rows) => {
+  //accountsDb.all(`SELECT user_id, username, display_name, email, bio, friends, incoming_friend_requests, outgoing_friend_requests, publicly_displayed_achievements, achievements, public_account, topic_practice_stats_privacy FROM users`, [], (err, rows) => {
+  accountsDb.all(`SELECT * FROM topicsPracticeStats`, [], (err, rows) => {
     if (err) {
       console.log(err);
     } else {
@@ -213,7 +214,8 @@ function getTopicColumn(topic) {
     "addition": "addition_level",
     "subtraction": "subtraction_level",
     "multiplication": "multiplication_level",
-    "division": "division_level"
+    "division": "division_level",
+    "squaring": "squaring_level"
   }
 
   if (topic in dictionary) {
