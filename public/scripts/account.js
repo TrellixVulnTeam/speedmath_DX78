@@ -255,6 +255,23 @@ socket.on("ownProfileInfo", (info, topicsPracticeStats) => {
     }
   });
 
+  document.getElementById("deleteAccount").addEventListener("click", async function() {
+    let { value: password } = await Swal.fire({
+      title: "Are you sure?",
+      text: "Are you absolutely sure that you want to delete your account? All of your achievements, progress, etc. will be deleted. This action is irreversible.",
+      input: "password",
+      inputLabel: "Re-enter your password:",
+      showCancelButton: true,
+      background: themeSettings.contentBackgroundColor[localStorage.getItem("theme")],
+      color: themeSettings.contentTextColor[localStorage.getItem("theme")]
+    });
+
+    if (password) {
+      let token = localStorage.getItem("token") || sessionStorage.getItem("token");
+      socket.emit("deleteAccount", token, password);
+    }
+  });
+
   document.getElementById("changeDisplayName").addEventListener("click", async function() {
     let { value: newDisplayName } = await Swal.fire({
       title: "Enter your new display name",
@@ -308,6 +325,12 @@ socket.on("ownProfileInfo", (info, topicsPracticeStats) => {
     }
 
     socket.emit("updateAccountVisibility", token, newAccountVisibility);
+  });
+
+  document.getElementById("logOut").addEventListener("click", function() {
+    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
+    location.reload();
   });
 
   document.getElementById("changeTopicsPracticeStatsPrivacy").addEventListener("click", async function() {
@@ -483,6 +506,12 @@ socket.on("newFriend", (friendInfo) => {
   document.getElementById("friendsContainer").appendChild(friendDiv);
 
   changeTheme();
+});
+
+socket.on("successfullyDeletedAccount", () => {
+  localStorage.removeItem("token");
+  sessionStorage.removeItem("token");
+  location.reload();
 });
 
 socket.on("successfullyUpdatedBio", (newBio) => {

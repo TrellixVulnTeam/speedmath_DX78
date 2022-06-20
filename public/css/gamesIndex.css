@@ -1,0 +1,45 @@
+#gamesContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.gameHeading {
+  font-size: 1.70em;
+  font-weight: bold;
+  text-align: center;
+}
+
+.gameInfo {
+  margin: 15px;
+  padding: 15px;
+  width: 400px;
+  border: 3px solid;
+  border-radius: 22px; 
+  font-size: 1.15em;
+  text-align: center;
+  transition: 0.2s;
+}
+
+.gameInfo:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 40px -10px rgba(0, 0, 0, 0.25);
+}
+
+.playButton {
+  display: block;
+  text-align: center;
+  margin-top: 15px;
+  text-decoration: none;
+  padding: 10px 5px;
+  border: 2px solid;
+  border-radius: 22px;
+  font-weight: bold;
+  font-size: 16px;
+  box-shadow: 0 0 40px -10px rgba(0, 0, 0, 0.25);
+  transition: 0.3s ease-in-out;
+}
+
+.playButton:hover {
+  transform: scale(1.025)
+}

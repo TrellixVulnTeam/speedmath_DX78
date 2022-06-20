@@ -4,18 +4,18 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <meta property="og:title" content="Games"/>
+    <meta property="og:title" content="Challenge of the Day"/>
     <meta property="og:type" content="website"/>
-    <meta property="og:url" content="https://speedmath.ml/games"/>
-    <meta property="og:description" content="Check out our collection of games! Both single-player and multiplayer games!"/>
+    <meta property="og:url" content="https://speedmath.ml/games/qotd"/>
+    <meta property="og:description" content="A new challenging math question every day!"/>
     <meta property="og:image" content="https://speedmath.ml/assets/favicon.ico"/>
     <meta name="theme-color" content="#ff928b"/>
-    <title>Practice Speed Math</title>
+    <title>Question of the Day</title>
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" href="/css/navbar.css"/>
-    <link rel="stylesheet" type="text/css" href="/css/gamesIndex.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/games/qotd.css"/>
     <script src="/scripts/themeHandler.js" defer></script>
-    <script src="/scripts/gamesIndex.js" defer></script>
+    <script src="/scripts/games/qotd.js" defer></script>
   </head>
   <body>
     <!--   Navbar  -->
@@ -33,14 +33,8 @@
       </a>
     </div>
     <!-- Navbar ends -->
-    <div id="gamesContainer">
-      <div class="gameInfo contentTheme">
-        <div class="gameHeading">Challenge of the Day</div>
-        <br>
-        There will be a new challenge question every day (resets at 12:00 AM UTC). Players get a score every day out of 100 based on accuracy and time taken to solve the challenge problem. Players' scores are cumulative and players with a public account are ranked in a public leaderboard based on their cumulative score.
-        <br><br>
-        <a href="/games/qotd" class="playButton secondaryContentTheme">Play</a>
-      </div>
+    <div id="notLoggedIn" class="contentTheme">
+      <h1>Please log in or create an account to play!</h1>
     </div>
   </body>
 </html>

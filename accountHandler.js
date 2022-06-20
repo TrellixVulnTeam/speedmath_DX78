@@ -68,7 +68,7 @@ module.exports = function(socket, sqlite3, bcrypt, jwt) {
                         if (err) {
                           console.log(err);
                         } else {
-                          accountsDb.run(`INSERT INTO topicsPracticeStats(addition_level, subtraction_level, multiplication_level, division_level) VALUES (?, ?, ?, ?)`, [1, 1, 1, 1], function(err) {
+                          accountsDb.run(`INSERT INTO topicsPracticeStats(addition_level, subtraction_level, multiplication_level, division_level, squaring_level) VALUES (?, ?, ?, ?, ?)`, [1, 1, 1, 1, 1], function(err) {
                             if (err) {
                               console.log(err);
                             } else {
@@ -94,6 +94,58 @@ module.exports = function(socket, sqlite3, bcrypt, jwt) {
         } else {
           socket.emit("error", "Username already taken!", "Please choose an unique username. You can choose a separate display name, which will be how you will be referred to in-game, which doesn't have to be an unique name.");
         }
+      }
+    });
+  });
+
+  socket.on("deleteAccount", (token, password) => {
+    jwt.verify(token, process.env['JWT_PRIVATE_KEY'], function(err, user) {
+      if (err) {
+        console.log(err);
+        socket.emit("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the home page. We'll look into it as soon as possible.");
+      } else {
+        //open the database
+        let accountsDb = new sqlite3.Database(__dirname + "/database/accounts.db", (err) => {
+          if (err) {
+            console.log(err);
+          }
+        }); 
+
+        accountsDb.get(`SELECT password_hashed FROM users WHERE user_id = ?`, [user.id], function(err, row) {
+          if (err) {
+            console.log(err);
+            accountsDb.close();
+          } else {
+            bcrypt.compare(password, row.password_hashed, function(err, result) {
+              if (err) {
+                console.log(err);
+                accountsDb.close();
+              } else {
+                if (result == true) {
+                  accountsDb.run(`DELETE FROM users WHERE user_id = ?`, [user.id], function(err) {
+                    if (err) {
+                      console.log(err);
+                      accountsDb.close();
+                    } else {
+                      accountsDb.run(`DELETE FROM topicsPracticeStats WHERE user_id = ?`, [user.id], function(err) {
+                        if (err) {
+                          console.log(err);
+                          accountsDb.close();
+                        } else {
+                          socket.emit("successfullyDeletedAccount");
+                          accountsDb.close();
+                        }
+                      });
+                    }
+                  });
+                } else {
+                  socket.emit("error", "Wrong Password", "If you want to delete your account, you have to recall your password correctly.");
+                  accountsDb.close();
+                }
+              }
+            });
+          }
+        });
       }
     });
   });

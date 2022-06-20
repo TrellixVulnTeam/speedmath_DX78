@@ -19,6 +19,10 @@ app.get('/games', (req, res) => {
   res.sendFile(__dirname + "/pages/games/gamesIndex.html");
 });
 
+app.get('/games/:game', (req, res) => {
+  res.sendFile(__dirname + "/pages/games/" + req.params.game + ".html");
+});
+
 app.get('/topics', (req, res) => {
   res.sendFile(__dirname + "/pages/topics/topicsIndex.html");
 });
@@ -81,7 +85,8 @@ accountsDb.serialize(() => {
       publicly_displayed_achievements TEXT,
       achievements TEXT,
       public_account TEXT,
-      topic_practice_stats_privacy TEXT
+      topic_practice_stats_privacy TEXT,
+      qotd_points INTEGER
     )`
   );
   

@@ -152,8 +152,8 @@ a:hover {
 }
 
 #logOut {
-  float: left;
-  font-size: 0.5em;
+  display: block;
+  margin: auto;
 }
 
 .friendDiv {
