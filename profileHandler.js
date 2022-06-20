@@ -1,3 +1,4 @@
+
 module.exports = function(socket, sqlite3, jwt) {
   socket.on("getOwnProfileInfo", token => {
     jwt.verify(token, process.env['JWT_PRIVATE_KEY'], function(err, user) {

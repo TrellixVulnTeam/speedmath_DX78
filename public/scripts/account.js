@@ -78,7 +78,12 @@ socket.on("successfullySignedUp", () => {
     background: themeSettings.contentBackgroundColor[localStorage.getItem("theme")],
     color: themeSettings.contentTextColor[localStorage.getItem("theme")],
   }).then(() => {
-    btnSwitchToLoginForm.click();
+    let urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has("redirect")) {
+      window.location.href = urlParams.get("redirect");
+    } else {
+      btnSwitchToLoginForm.click();
+    }
   }); 
 });
 
@@ -109,7 +114,12 @@ socket.on("successfulLogin", (token, remember) => {
     background: themeSettings.contentBackgroundColor[localStorage.getItem("theme")],
     color: themeSettings.contentTextColor[localStorage.getItem("theme")]
   }).then(() => {
-    location.reload();
+    let urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has("redirect")) {
+      window.location.href = urlParams.get("redirect");
+    } else {
+      location.reload();
+    }
   }); 
 });
 

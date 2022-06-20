@@ -16,6 +16,7 @@
     <link rel="stylesheet" type="text/css" href="/css/games/qotd.css"/>
     <script src="/scripts/themeHandler.js" defer></script>
     <script src="/scripts/games/qotd.js" defer></script>
+    <script src="/socket.io/socket.io.js"></script>
   </head>
   <body>
     <!--   Navbar  -->
@@ -33,8 +34,27 @@
       </a>
     </div>
     <!-- Navbar ends -->
-    <div id="notLoggedIn" class="contentTheme">
+    <div id="divNotLoggedIn">
       <h1>Please log in or create an account to play!</h1>
+      <a href="/account?redirect=%2fgames%2fqotd" id="logInOrSignUp" class="contentTheme">Login or Register</a>
+    </div>
+    <div id="gameInfoContainer">
+      <h1>Challenge of the Day</h1>
+      <p>
+        Welcome! There will be a new challenge question every day (resets at 12:00 AM EST).
+        Players get a score every day out of 100 based on accuracy and time taken to solve the challenge problem.
+        Players' scores are cumulative and players with a public account are ranked in a public leaderboard based on their cumulative score.
+        <br>
+        <br>
+        Click the "Play" button to play! Click the "View Leaderboard" button to view the leaderboard. Good luck!
+      </p>
+
+      <button id="btnPlay" class="contentTheme">Play</button>
+      <br>
+      <button id="btnShowLeaderboard" class="contentTheme">View Leaderboard</a>
+    </div>
+    <div id="leaderboardContainer">
+      <h1>Leaderboard</h1>
     </div>
   </body>
 </html>

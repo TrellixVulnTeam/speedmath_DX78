@@ -1,0 +1,93 @@
+h1 {
+  text-align: center;
+}
+
+p {
+  margin: 0 5vw;
+  font-size: 1.1em;
+}
+
+button {
+  cursor: pointer;
+}
+
+#divNotLoggedIn {
+  display: none;
+  text-align: center;
+  padding: 10px;
+  border: 2px solid;
+  border-radius: 22px;
+}
+
+#gameInfoContainer {
+  display: none;
+  text-align: center;
+}
+
+#leaderboardContainer {
+  display: none;
+}
+
+#logInOrSignUp, #btnShowLeaderboard, #btnPlay {
+  display: block;
+  text-align: center;
+  margin-top: 15px;
+  text-decoration: none;
+  padding: 10px 5px;
+  border: 2px solid;
+  border-radius: 22px;
+  font-weight: bold;
+  font-size: 16px;
+  box-shadow: 0 0 40px -10px rgba(0, 0, 0, 0.25);
+  transition: 0.3s ease-in-out;
+}
+
+#logInOrSignUp {
+  width: 50%;
+  margin: 15px auto;
+  font-size: 1.3em;
+}
+
+#btnShowLeaderboard:hover, #logInOrSignUp:hover, #btnPlay:hover {
+  transform: scale(1.025);
+}
+
+/* For mobile: */
+@media only screen and (max-width: 550px) {
+  #divNotLoggedIn { 
+    width: 85vw;
+    margin: 10vh auto;
+  }
+  
+  #btnPlay {
+    width: 80vw;
+    margin: 20px auto;
+    font-size: 1.5em;
+  }
+  
+  #btnShowLeaderboard {
+    width: 80vw;
+    margin: 20px auto;
+    font-size: 1.5em;
+  }
+}
+
+/* For laptop/PC/wide screens */
+@media only screen and (min-width: 550px) {
+  #divNotLoggedIn { 
+    width: 50vw;
+    margin: 10vh auto;
+  }
+  
+  #btnPlay {
+    width: 40vw;
+    font-size: 1.5em;
+    margin: 20px auto;
+  }
+  
+  #btnShowLeaderboard {
+    width: 40vw;
+    font-size: 1.5em;
+    margin: 20px auto;
+  }
+}
