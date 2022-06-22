@@ -13,9 +13,9 @@
     <title>Question of the Day</title>
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" href="/css/navbar.css"/>
-    <link rel="stylesheet" type="text/css" href="/css/games/qotd.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/games/qotd/qotd.css"/>
     <script src="/scripts/themeHandler.js" defer></script>
-    <script src="/scripts/games/qotd.js" defer></script>
+    <script src="/scripts/games/qotd/qotd.js" defer></script>
     <script src="/socket.io/socket.io.js"></script>
   </head>
   <body>
@@ -51,10 +51,7 @@
 
       <button id="btnPlay" class="contentTheme">Play</button>
       <br>
-      <button id="btnShowLeaderboard" class="contentTheme">View Leaderboard</a>
-    </div>
-    <div id="leaderboardContainer">
-      <h1>Leaderboard</h1>
+      <a id="btnShowLeaderboard" class="contentTheme" href="/games/qotd/leaderboard" target="_blank" rel="noopener noreferrer">View Leaderboard</a>
     </div>
   </body>
 </html>

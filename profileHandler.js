@@ -1,4 +1,3 @@
-
 module.exports = function(socket, sqlite3, jwt) {
   socket.on("getOwnProfileInfo", token => {
     jwt.verify(token, process.env['JWT_PRIVATE_KEY'], function(err, user) {
@@ -141,7 +140,6 @@ module.exports = function(socket, sqlite3, jwt) {
     });
   });
 
-  //unfinished
   socket.on("getUserInfoWhileLoggedIn", (token, username) => {
     jwt.verify(token, process.env['JWT_PRIVATE_KEY'], function(err, user) {
       let accountsDb = new sqlite3.Database(__dirname + "/database/accounts.db", (err) => {

@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const http = require("http");
 const server = http.createServer(app);
+const fs = require("fs");
 const { Server } = require("socket.io");
 const io = new Server(server);
 
@@ -19,8 +20,12 @@ app.get('/games', (req, res) => {
   res.sendFile(__dirname + "/pages/games/gamesIndex.html");
 });
 
-app.get('/games/:game', (req, res) => {
-  res.sendFile(__dirname + "/pages/games/" + req.params.game + ".html");
+app.get('/games/qotd', (req, res) => {
+  res.sendFile(__dirname + "/pages/games/qotd/qotd.html");
+});
+
+app.get('/games/qotd/leaderboard', (req, res) => {
+  res.sendFile(__dirname + "/pages/games/qotd/leaderboard.html");
 });
 
 app.get('/topics', (req, res) => {
@@ -121,11 +126,16 @@ accountsDb.close((err) => {
   }
 });
 
+
+let rawQOTDQuestions = fs.readFileSync('/database/qotdQuestions.json');
+let qotdQuestionsJSON = JSON.parse(rawQOTDQuestions);
+
+
 io.on('connection', (socket) => {
   require('./accountHandler.js')(socket, sqlite3, bcrypt, jwt); //logging in, signing up
   require('./profileHandler.js')(socket, sqlite3, jwt); //public profile pages, getting own profile info, updating profile info, adding friends, getting incoming/outgoing friend requests
   require('./suggestionHandler.js')(socket); //suggestions 
-  require('./qotdHandler.js')(socket, sqlite3, jwt); //question of the day game handler
+  require('./qotdHandler.js')(socket, sqlite3, jwt, qotdQuestionsJSON); //question of the day game handler
 
   socket.on("getTopicPracticeStats", (token, topic) => {
     jwt.verify(token, process.env['JWT_PRIVATE_KEY'], function (err, user) {

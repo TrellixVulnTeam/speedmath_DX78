@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta property="og:title" content="Leaderboard"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="https://speedmath.ml/games/qotd/leaderboard"/>
+    <meta property="og:description" content="View the leaderboard for the Challenge-Of-The-Day game!"/>
+    <meta property="og:image" content="https://speedmath.ml/assets/favicon.ico"/>
+    <meta name="theme-color" content="#ff928b"/>
+    <title>Leaderboard - QOTD</title>
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/css/navbar.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/games/qotd/leaderboard.css"/>
+    <script src="/scripts/themeHandler.js" defer></script>
+    <script src="/scripts/games/qotd/leaderboard.js" defer></script>
+    <script src="/socket.io/socket.io.js"></script>
+  </head>
+  <body>
+    <!--   Navbar  -->
+    <div class="topnav">
+      <a href="/">Home</a>
+      <a class="active" href="/games">Games</a>
+      <a href="/topics">Topics</a>
+      <a href="/contributors">Contributors</a>
+      <a href="/account">Account</a>
+      <a>
+        <label class="switch">
+          <input type="checkbox" id="darkModeToggle">
+          <span class="slider round"></span>
+        </label>
+      </a>
+    </div>
+    <!-- Navbar ends -->
+    <div id="leaderboardContainer">
+      <h1>Leaderboard</h1>
+      <table id="leaderboardTable">
+        <tr>
+          <th>Rank</th>
+          <th>Name</th>
+          <th>Points</th>
+        </tr>
+      </table>
+      <button id="btnPrevious10" class="contentTheme">Previous 10</button>
+      <button id="btnNext10" class="contentTheme">Next 10</button>
+    </div>
+  </body>
+</html>

@@ -76,8 +76,6 @@ module.exports = function(socket, sqlite3, bcrypt, jwt) {
                               accountsDb.close((err) => {
                                 if (err) {
                                   console.log(err);
-                                } else {
-                                  console.log("Signed them up and closed the database!");
                                 }
                               });
                             }

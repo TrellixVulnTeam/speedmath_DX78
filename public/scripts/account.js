@@ -79,11 +79,7 @@ socket.on("successfullySignedUp", () => {
     color: themeSettings.contentTextColor[localStorage.getItem("theme")],
   }).then(() => {
     let urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has("redirect")) {
-      window.location.href = urlParams.get("redirect");
-    } else {
-      btnSwitchToLoginForm.click();
-    }
+    btnSwitchToLoginForm.click();
   }); 
 });
 

@@ -11,6 +11,14 @@ button {
   cursor: pointer;
 }
 
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
 #divNotLoggedIn {
   display: none;
   text-align: center;
@@ -24,12 +32,7 @@ button {
   text-align: center;
 }
 
-#leaderboardContainer {
-  display: none;
-}
-
-#logInOrSignUp, #btnShowLeaderboard, #btnPlay {
-  display: block;
+#logInOrSignUp, #btnPlay, #btnShowLeaderboard {
   text-align: center;
   margin-top: 15px;
   text-decoration: none;
@@ -42,18 +45,26 @@ button {
   transition: 0.3s ease-in-out;
 }
 
+#logInOrSignUp, #btnPlay, #btnShowLeaderboard {
+  display: block;
+}
+
 #logInOrSignUp {
   width: 50%;
   margin: 15px auto;
   font-size: 1.3em;
 }
 
-#btnShowLeaderboard:hover, #logInOrSignUp:hover, #btnPlay:hover {
+#btnShowLeaderboard:hover, #logInOrSignUp:hover, #btnPlay:hover, #btnShowLeaderboard:hover {
   transform: scale(1.025);
 }
 
 /* For mobile: */
 @media only screen and (max-width: 550px) {
+  a {
+    text-decoration: underline;
+  }
+  
   #divNotLoggedIn { 
     width: 85vw;
     margin: 10vh auto;
