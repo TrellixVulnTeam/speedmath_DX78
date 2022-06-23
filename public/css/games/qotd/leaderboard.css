@@ -6,14 +6,13 @@ button {
   cursor: pointer;
 }
 
-a {
+td > a {
   text-decoration: none;
 }
 
-a:hover {
+td > a:hover {
   text-decoration: underline;
 }
-
 
 #btnPrevious10, #btnNext10 {
   text-align: center;
@@ -64,7 +63,7 @@ td > a {
 
 /* For mobile: */
 @media only screen and (max-width: 550px) {
-  a {
+  td > a {
     text-decoration: underline;
   }
 }

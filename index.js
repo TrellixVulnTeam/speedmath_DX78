@@ -91,7 +91,8 @@ accountsDb.serialize(() => {
       achievements TEXT,
       public_account TEXT,
       topic_practice_stats_privacy TEXT,
-      qotd_points INTEGER
+      qotd_points INTEGER,
+      qotd_last_completed INTEGER
     )`
   );
   
@@ -106,7 +107,7 @@ accountsDb.serialize(() => {
     )`
   );
   
-  /*accountsDb.all(`SELECT user_id, username, display_name, email, bio, friends, incoming_friend_requests, outgoing_friend_requests, publicly_displayed_achievements, achievements, public_account, topic_practice_stats_privacy, qotd_points FROM users`, [], (err, rows) => {
+  /*accountsDb.all(`SELECT user_id, username, display_name, email, bio, friends, incoming_friend_requests, outgoing_friend_requests, publicly_displayed_achievements, achievements, public_account, topic_practice_stats_privacy, qotd_points, qotd_last_completed FROM users`, [], (err, rows) => {
   //accountsDb.all(`SELECT * FROM topicsPracticeStats`, [], (err, rows) => {
     if (err) {
       console.log(err);
@@ -127,15 +128,16 @@ accountsDb.close((err) => {
 });
 
 
-let rawQOTDQuestions = fs.readFileSync('/database/qotdQuestions.json');
+let rawQOTDQuestions = fs.readFileSync('./database/qotdQuestions.json');
 let qotdQuestionsJSON = JSON.parse(rawQOTDQuestions);
+let qotd_usersCurrentlyPlaying = {};
 
 
 io.on('connection', (socket) => {
   require('./accountHandler.js')(socket, sqlite3, bcrypt, jwt); //logging in, signing up
   require('./profileHandler.js')(socket, sqlite3, jwt); //public profile pages, getting own profile info, updating profile info, adding friends, getting incoming/outgoing friend requests
   require('./suggestionHandler.js')(socket); //suggestions 
-  require('./qotdHandler.js')(socket, sqlite3, jwt, qotdQuestionsJSON); //question of the day game handler
+  require('./qotdHandler.js')(socket, sqlite3, jwt, qotdQuestionsJSON, qotd_usersCurrentlyPlaying); //question of the day game handler
 
   socket.on("getTopicPracticeStats", (token, topic) => {
     jwt.verify(token, process.env['JWT_PRIVATE_KEY'], function (err, user) {
