@@ -4,10 +4,10 @@ let divNotLoggedIn = document.getElementById("divNotLoggedIn");
 let gameInfoContainer = document.getElementById("gameInfoContainer");
 let alreadyCompletedTodays = document.getElementById("alreadyCompletedTodays");
 let gameContainer = document.getElementById("gameContainer");
+let endScreenContainer = document.getElementById("endScreenContainer");
 
 let btnPlay = document.getElementById("btnPlay");
 let btnShowLeaderboard = document.getElementById("btnShowLeaderboard");
-
 
 //check if user is logged in on pageload
 window.onload = function() {
@@ -27,9 +27,27 @@ btnPlay.addEventListener("click", function() {
   }
 });
 
+socket.on("qotd_alreadyCompletedTodays", (secondsUntilTomorrows) => {
+  gameInfoContainer.style.display = "none";
+  gameContainer.style.display = "none";
+  alreadyCompletedTodays.style.display = "block";
+
+  document.getElementById("countdown").innerHTML = "Tomorrow's QOTD in <br>" + new Date(secondsUntilTomorrows * 1000).toISOString().slice(11, 19);
+  
+  let countdownUpdate = setInterval(function() {
+    if (secondsUntilTomorrows > 0) {
+      secondsUntilTomorrows -= 1;
+      document.getElementById("countdown").innerHTML = "Tomorrow's QOTD in <br>" + new Date(secondsUntilTomorrows * 1000).toISOString().slice(11, 19);
+    } else {
+      location.reload();
+    }
+  }, 1000);
+});
+
 socket.on("qotd_displayQuestion", (question) => {
   gameContainer.style.display = "block";
   gameInfoContainer.style.display = "none";
+  alreadyCompletedTodays.style.display = "none";
 
   document.getElementById("question").innerHTML = question.question;
 
@@ -39,8 +57,47 @@ socket.on("qotd_displayQuestion", (question) => {
     answerBtn.id = choice;
     answerBtn.innerHTML = question.answerChoices[choice]; 
     document.getElementById("answerChoicesContainer").appendChild(answerBtn);
+
+    answerBtn.addEventListener("click", function() {
+      let token = localStorage.getItem("token") || sessionStorage.getItem("token");
+      if (token) {
+        socket.emit("qotd_verifyAnswer", token, choice);
+      }
+    });
   });
 
   changeTheme();
+  //MathJax.typeset();
+
   //alert(JSON.stringify(question));
+});
+
+socket.on("qotd_displayEndScreen", (points, timeTaken, secondsUntilTomorrows) => {
+  gameContainer.style.display = "none";
+  gameInfoContainer.style.display = "none";
+  alreadyCompletedTodays.style.display = "none";
+  endScreenContainer.style.display = "block";
+
+  document.getElementById("results").innerHTML = `You took ${Math.floor(timeTaken)} minutes and ${Math.floor((timeTaken - Math.floor(timeTaken))*60)} seconds to solve today's QOTD.<br>You earned ${points} points.`;
+  document.getElementById("endScreenCountdown").innerHTML = "Tomorrow's QOTD in <br>" + new Date(secondsUntilTomorrows * 1000).toISOString().slice(11, 19);
+
+  let countdownUpdate = setInterval(function() {
+    if (secondsUntilTomorrows > 0) {
+      secondsUntilTomorrows -= 1;
+      document.getElementById("endScreenCountdown").innerHTML = "Tomorrow's QOTD in <br>" + new Date(secondsUntilTomorrows * 1000).toISOString().slice(11, 19);
+    } else {
+      location.reload();
+    }
+  }, 1000);
+});
+
+socket.on("error", (errorTitle, errorMessage) => {
+  Swal.fire({
+    title: errorTitle,
+    text: errorMessage,
+    icon: "error",
+    iconColor: themeSettings.contentTextColor[localStorage.getItem("theme")],
+    background: themeSettings.contentBackgroundColor[localStorage.getItem("theme")],
+    color: themeSettings.contentTextColor[localStorage.getItem("theme")]
+  });
 });

@@ -6,14 +6,6 @@ button {
   cursor: pointer;
 }
 
-td > a {
-  text-decoration: none;
-}
-
-td > a:hover {
-  text-decoration: underline;
-}
-
 #btnPrevious10, #btnNext10 {
   text-align: center;
   margin-top: 15px;
@@ -35,7 +27,7 @@ td > a:hover {
 }
 
 table, th, td {
-  border: 1px solid;
+  border: 1.5px solid;
   border-collapse: collapse;
 }
 
@@ -44,17 +36,25 @@ table {
 }
 
 th {
-  font-size: 1.2em;
-  padding: 2px 30px;
+  font-size: 1.3em;
+  padding: 10px 15px;
+  font-weight: bold;
+  border-spacing: 0;
 }
 
 td {
   text-align: center;
-  padding: 5px;
+  padding: 10px;
+  border-spacing: 0;
 }
 
 td > a {
+  text-decoration: none;
   color: inherit;
+}
+
+td > a:hover {
+  text-decoration: underline;
 }
 
 #leaderboardTable {
@@ -65,5 +65,12 @@ td > a {
 @media only screen and (max-width: 550px) {
   td > a {
     text-decoration: underline;
+  }
+}
+
+/* For laptop/wider screens: */
+@media only screen and (min-width: 550px) {
+  #leaderboardTable {
+    width: 70vw;
   }
 }

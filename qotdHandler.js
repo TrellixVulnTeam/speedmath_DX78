@@ -55,9 +55,9 @@ module.exports = function(socket, sqlite3, jwt, qotdQuestionsJSON, qotd_usersCur
           }
         });
         
-        let releaseDate = new Date("June 22, 2022 04:00:00"); //time when first qotd problem was released, set to 4 AM because we want it to be in terms of EDT/EST and default js time is EST
+        let releaseDate = new Date("June 24, 2022 00:00:00"); //time when first qotd problem was released, set to 4 AM because we want it to be in terms of EDT/EST and default js time is EST
         let currentTime = new Date();
-    
+
         let qotdDay = Math.ceil((currentTime.getTime() - releaseDate.getTime())/(1000*60*60*24));
 
         let questionToDisplay = {
@@ -73,14 +73,17 @@ module.exports = function(socket, sqlite3, jwt, qotdQuestionsJSON, qotd_usersCur
               console.log(err);
             } else {
               if (row.qotd_last_completed === qotdDay) {
-                let now = new Date();
-                let nextMidnight = new Date(now);
-                nextMidnight.setHours(24, 0, 0, 0);
-                let secondsUntilTomorrows = (nextMidnight - now)/1000
+                let nextMidnight = new Date(currentTime);
+                nextMidnight.setHours(23, 59, 59, 999);
+                
+                let secondsUntilTomorrows = (nextMidnight.getTime() - currentTime.getTime())/1000;
                 
                 socket.emit("qotd_alreadyCompletedTodays", secondsUntilTomorrows);
               } else {
-                qotd_usersCurrentlyPlaying[user.id] = {startTime: new Date().getTime()};
+                qotd_usersCurrentlyPlaying[user.id] = {
+                  startTime: currentTime.getTime(), 
+                  oldTotalScore: row.qotd_points
+                };
                 socket.emit("qotd_displayQuestion", questionToDisplay);
               }
             }
@@ -91,4 +94,60 @@ module.exports = function(socket, sqlite3, jwt, qotdQuestionsJSON, qotd_usersCur
       }
     });
   });
+
+  socket.on("qotd_verifyAnswer", (token, answer) => {
+    jwt.verify(token, process.env['JWT_PRIVATE_KEY'], function(err, user) {
+      if (err) {
+        console.log(err);
+        ("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the home page. We'll look into it as soon as possible.");
+      } else {
+        let releaseDate = new Date("June 24, 2022 00:00:00"); //time when first qotd problem was released, set to 4 AM because we want it to be in terms of EDT/EST and default js time is EST
+        let currentTime = new Date();
+    
+        let qotdDay = Math.ceil((currentTime.getTime() - releaseDate.getTime())/(1000*60*60*24));
+
+        if (user.id.toString() in qotd_usersCurrentlyPlaying) {
+          let timeDifference = (currentTime.getTime() - qotd_usersCurrentlyPlaying[user.id].startTime)/1000/60; //get time difference in minutes
+          let pointsEarned;
+          
+          if (answer == qotdQuestionsJSON[qotdDay].correctAnswer) {
+            pointsEarned = points(timeDifference);
+          } else {
+            pointsEarned = 0;
+          }
+          
+          let newTotalPoints = qotd_usersCurrentlyPlaying[user.id].oldTotalScore + pointsEarned; 
+
+          //open the database
+          let accountsDb = new sqlite3.Database(__dirname + "/database/accounts.db", (err) => {
+            if (err) {
+              console.log(err);
+            }
+          });     
+
+          //update user's qotd_points and qotd_last_completed
+          accountsDb.run(`UPDATE users SET qotd_points = ?, qotd_last_completed = ? WHERE user_id = ?`, [newTotalPoints, qotdDay, user.id], function(err) {
+            if (err) {
+              console.log(err);
+            } else {
+              let nextMidnight = new Date(currentTime);
+              nextMidnight.setHours(23, 59, 59, 999);  
+              let secondsUntilTomorrows = (nextMidnight.getTime() - currentTime.getTime())/1000
+              
+              delete qotd_usersCurrentlyPlaying[user.id];
+              accountsDb.close();
+              socket.emit("qotd_displayEndScreen", pointsEarned, timeDifference, secondsUntilTomorrows); 
+            }
+          });
+        } else {
+          socket.emit("error", "This should not happen.", "This shouldn't be happening unless you're trying to cheat.");
+        }
+      }
+    });
+  });
+
+  //time has to be in minutes
+  function points(time) {
+    return Math.floor(100 * Math.pow(0.9, time));
+  }
 }

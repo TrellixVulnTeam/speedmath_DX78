@@ -4,20 +4,18 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <meta property="og:title" content="Leaderboard"/>
+    <meta property="og:title" content="MathWars"/>
     <meta property="og:type" content="website"/>
-    <meta property="og:url" content="https://speedmath.ml/qotd/leaderboard"/>
-    <meta property="og:description" content="View the leaderboard for the Challenge-Of-The-Day game!"/>
+    <meta property="og:url" content="https://speedmath.ml/mathwars"/>
+    <meta property="og:description" content="Play MathWars with your friends!"/>
     <meta property="og:image" content="https://speedmath.ml/assets/favicon.ico"/>
     <meta name="theme-color" content="#ff928b"/>
-    <title>Leaderboard - QOTD</title>
+    <title>MathWars</title>
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" href="/css/navbar.css"/>
-    <link rel="stylesheet" type="text/css" href="/css/games/qotd/leaderboard.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/gamesIndex.css"/>
     <script src="/scripts/themeHandler.js" defer></script>
-    <script src="/scripts/games/qotd/leaderboard.js" defer></script>
-    <script src="https://kit.fontawesome.com/32630c0ab4.js" crossorigin="anonymous"></script>
-    <script src="/socket.io/socket.io.js"></script>
+    <script src="/scripts/gamesIndex.js" defer></script>
   </head>
   <body>
     <!--   Navbar  -->
@@ -35,17 +33,7 @@
       </a>
     </div>
     <!-- Navbar ends -->
-    <div id="leaderboardContainer">
-      <h1>Leaderboard 🏆</h1>
-      <table id="leaderboardTable">
-        <tr>
-          <th>Rank</th>
-          <th>Name</th>
-          <th>Points</th>
-        </tr>
-      </table>
-      <button id="btnPrevious10" class="contentTheme"><i class="fa-solid fa-arrow-left"></i> Previous 10</button>
-      <button id="btnNext10" class="contentTheme">Next 10 <i class="fa-solid fa-arrow-right"></i></button>
-    </div>
+
+    
   </body>
 </html>

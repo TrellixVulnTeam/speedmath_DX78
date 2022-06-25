@@ -1,9 +1,11 @@
 h1 {
   text-align: center;
+  margin: 15px;
 }
 
 h2 {
   text-align: center;
+  margin: 15px;
 }
 
 p {
@@ -19,7 +21,6 @@ button {
   display: none;
   text-align: center;
   padding: 10px;
-  border: 2px solid;
   border-radius: 22px;
 }
 
@@ -28,7 +29,12 @@ button {
   text-align: center;
 }
 
-#logInOrSignUp, #btnPlay, #btnShowLeaderboard {
+#endScreenContainer {
+  display: none;
+  text-align: center;
+}
+
+#logInOrSignUp, #btnPlay, .btnShowLeaderboard {
   text-align: center;
   margin-top: 15px;
   text-decoration: none;
@@ -41,7 +47,7 @@ button {
   transition: 0.3s ease-in-out;
 }
 
-#logInOrSignUp, #btnPlay, #btnShowLeaderboard {
+#logInOrSignUp, #btnPlay, .btnShowLeaderboard {
   display: block;
 }
 
@@ -51,7 +57,7 @@ button {
   font-size: 1.3em;
 }
 
-#btnShowLeaderboard:hover, #logInOrSignUp:hover, #btnPlay:hover, #btnShowLeaderboard:hover {
+.btnShowLeaderboard:hover, #logInOrSignUp:hover, #btnPlay:hover {
   transform: scale(1.025);
 }
 
@@ -106,7 +112,7 @@ button {
     font-size: 1.5em;
   }
   
-  #btnShowLeaderboard {
+  .btnShowLeaderboard {
     width: 80vw;
     margin: 20px auto;
     font-size: 1.5em;
@@ -133,7 +139,7 @@ button {
     margin: 20px auto;
   }
   
-  #btnShowLeaderboard {
+  .btnShowLeaderboard {
     width: 40vw;
     font-size: 1.5em;
     margin: 20px auto;

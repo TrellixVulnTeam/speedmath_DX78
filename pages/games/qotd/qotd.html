@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta property="og:title" content="Challenge of the Day"/>
     <meta property="og:type" content="website"/>
-    <meta property="og:url" content="https://speedmath.ml/games/qotd"/>
+    <meta property="og:url" content="https://speedmath.ml/qotd"/>
     <meta property="og:description" content="A new challenging math question every day!"/>
     <meta property="og:image" content="https://speedmath.ml/assets/favicon.ico"/>
     <meta name="theme-color" content="#ff928b"/>
@@ -16,6 +16,7 @@
     <link rel="stylesheet" type="text/css" href="/css/games/qotd/qotd.css"/>
     <script src="/scripts/themeHandler.js" defer></script>
     <script src="/scripts/games/qotd/qotd.js" defer></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/socket.io/socket.io.js"></script>
   </head>
   <body>
@@ -36,7 +37,7 @@
     <!-- Navbar ends -->
     <div id="divNotLoggedIn">
       <h1>Please log in or create an account to play!</h1>
-      <a href="/account?redirect=%2fgames%2fqotd" id="logInOrSignUp" class="contentTheme">Login or Register</a>
+      <a href="/account?redirect=%2fqotd" id="logInOrSignUp" class="contentTheme">Login or Register</a>
     </div>
     <div id="gameInfoContainer">
       <h1>Challenge of the Day</h1>
@@ -51,18 +52,24 @@
 
       <button id="btnPlay" class="contentTheme">Play</button>
       <br>
-      <a id="btnShowLeaderboard" class="contentTheme" href="/games/qotd/leaderboard">View Leaderboard</a>
+      <a class="btnShowLeaderboard contentTheme" href="/qotd/leaderboard">View Leaderboard</a>
     </div>
     <div id="gameContainer">
       <div id="question"></div>
-      <div id="answerChoicesContainer">
-        
-      </div>
+      <div id="answerChoicesContainer"></div>
     </div>
     <div id="alreadyCompletedTodays">
       <h1>You already completed today's QOTD</h1>
       <h2>Come back tomorrow (after 12 AM EST) for a new QOTD!</h2>
-      <h2 id="countdown"></h3>
+      <h2 id="countdown"></h2>
+      <br>
+      <a class="btnShowLeaderboard contentTheme" href="/qotd/leaderboard">View Leaderboard</a>
+    </div>
+    <div id="endScreenContainer">
+      <h1>Come back tomorrow for a new QOTD!</h1>
+      <p id="results"></p>
+      <h2 id="endScreenCountdown"></h2>
+      <a class="btnShowLeaderboard contentTheme" href="/qotd/leaderboard">View Leaderboard</a>
     </div>
   </body>
 </html>

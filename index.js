@@ -12,6 +12,8 @@ const jwt = require('jsonwebtoken');
 
 app.use(express.static("public"));
 
+process.env.TZ = 'America/New_York'; 
+
 app.get('/', (req, res) => {
   res.sendFile(__dirname + "/pages/honk.html");
 });
@@ -20,13 +22,17 @@ app.get('/games', (req, res) => {
   res.sendFile(__dirname + "/pages/games/gamesIndex.html");
 });
 
-app.get('/games/qotd', (req, res) => {
+app.get('/qotd', (req, res) => {
   res.sendFile(__dirname + "/pages/games/qotd/qotd.html");
 });
 
-app.get('/games/qotd/leaderboard', (req, res) => {
+app.get('/qotd/leaderboard', (req, res) => {
   res.sendFile(__dirname + "/pages/games/qotd/leaderboard.html");
 });
+
+app.get('/mathwars', (req, res) => {
+  res.sendFile(__dirname + "/pages/games/mathwars/index.html");
+})
 
 app.get('/topics', (req, res) => {
   res.sendFile(__dirname + "/pages/topics/topicsIndex.html");
@@ -55,6 +61,10 @@ app.get('/nsfw', (req, res) => {
 app.get('/tos', (req, res) => {
   res.sendFile(__dirname + "/pages/tos.html");
 });
+
+app.get('/katex-testing', (req, res) => {
+  res.sendFile(__dirname + "/pages/katex-testing.html");
+})
 
 
 //THIS HAS TO BE KEPT AT THE END OF THE ROUTING SECTION OF THE CODE
@@ -103,7 +113,8 @@ accountsDb.serialize(() => {
       subtraction_level INTEGER,
       multiplication_level INTEGER,
       division_level INTEGER,
-      squaring_level INTEGER
+      squaring_level INTEGER,
+      square_root_level INTEGER
     )`
   );
   
@@ -138,6 +149,7 @@ io.on('connection', (socket) => {
   require('./profileHandler.js')(socket, sqlite3, jwt); //public profile pages, getting own profile info, updating profile info, adding friends, getting incoming/outgoing friend requests
   require('./suggestionHandler.js')(socket); //suggestions 
   require('./qotdHandler.js')(socket, sqlite3, jwt, qotdQuestionsJSON, qotd_usersCurrentlyPlaying); //question of the day game handler
+  require('./mathwarsHandler.js')(socket, sqlite3, jwt); //MathWars game handler
 
   socket.on("getTopicPracticeStats", (token, topic) => {
     jwt.verify(token, process.env['JWT_PRIVATE_KEY'], function (err, user) {
@@ -233,7 +245,8 @@ function getTopicColumn(topic) {
     "subtraction": "subtraction_level",
     "multiplication": "multiplication_level",
     "division": "division_level",
-    "squaring": "squaring_level"
+    "squaring": "squaring_level",
+    "squareroot": "square_root_level"
   }
 
   if (topic in dictionary) {

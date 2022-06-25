@@ -28,27 +28,15 @@ btnPractice.addEventListener("click", function() {
   let token = localStorage.getItem("token") || sessionStorage.getItem("token");
   
   if (token === null) {
-    if (localStorage.getItem("theme") === "dark") {
-      Swal.fire({
-        icon: "warning",
-        title: "You are not logged in.",
-        text: "Please log in or create an account on the accounts page to save your progress. You can play as a guest user, but your progress won't be saved and you won't be able to collect achievements.",
-        confirmButtonText: "OK",
-        iconColor: themeSettings.contentTextColor.dark,
-        background: themeSettings.contentBackgroundColor.dark,
-        color: themeSettings.contentTextColor.dark
-      });
-    } else if (localStorage.getItem("theme") === "light") {
-      Swal.fire({
-        icon: "warning",
-        title: "You are not logged in.",
-        text: "Please log in or create an account on the accounts page to save your progress. You can play as a guest user, but your progress won't be saved and you won't be able to collect achievements.",
-        confirmButtonText: "OK",
-        iconColor: themeSettings.contentTextColor.light,
-        background: themeSettings.contentBackgroundColor.light,
-        color: themeSettings.contentTextColor.light
-      });
-    }
+    Swal.fire({
+      icon: "warning",
+      title: "You are not logged in.",
+      text: "Please log in or create an account to save your progress. You can play as a Guest, but your progress won't be saved.",
+      confirmButtonText: "OK",
+      iconColor: themeSettings.contentTextColor[localStorage.getItem("theme")],
+      background: themeSettings.contentBackgroundColor[localStorage.getItem("theme")],
+      color: themeSettings.contentTextColor[localStorage.getItem("theme")]
+    });
   }
 })
 

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Ling Simps</title>
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/css/navbar.css"/>
+    <script src="scripts/themeHandler.js" defer></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0-rc.1/dist/katex.min.css" integrity="sha384-D+9gmBxUQogRLqvARvNLmA9hS2x//eK1FhVb9PiU86gmcrBrJAQT8okdJ4LMp2uv" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.10.0-rc.1/dist/katex.min.js" integrity="sha384-483A6DwYfKeDa0Q52fJmxFXkcPCFfnXMoXblOkJ4JcA8zATN6Tm78UNL72AKk+0O" crossorigin="anonymous"></script>
+    
+    <style>
+        * {
+          text-align: center;
+        }
+      
+      #output {
+        text-align: center;
+        font-size: 2em;
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <!--   Navbar  -->
+    <div class="topnav">
+      <a class="active" href="/">Home</a>
+      <a href="/games">Games</a>
+      <a href="/topics">Topics</a>
+      <a href="/contributors">Contributors</a>
+      <a href="/account">Account</a>
+      <a>
+        <label class="switch">
+          <input type="checkbox" id="darkModeToggle">
+          <span class="slider round"></span>
+        </label>
+      </a>
+    </div>
+    <!-- Navbar ends -->
+
+    Enter some LaTeX to render:
+    <input id="userInput" type="text">
+    <br>
+    <br>
+    <button id="render" class="contentTheme">Render</button>
+    <br>
+    <br>
+    <p id="output"></p>
+
+    <script>
+      document.getElementById("render").onclick = function() {
+        document.getElementById("output").innerHTML = katex.renderToString(document.getElementById("userInput").value);
+      }
+    </script>
+  </body>
+</html>

@@ -32,7 +32,7 @@ let themeSettings = {
   "secondaryContentBorderColor": {
     "dark": "#000000",
     "light": "#432818"
-  }
+  },
 }
 
 if (localStorage.getItem("theme")) {
