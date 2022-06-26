@@ -167,9 +167,14 @@ socket.on("youAreTryingToFriendYourself", () => {
 
 //function to convert something like the string "addition_level" to "Addition"
 function getTopicFromDatabaseColumnName(databaseColumnName) {
-  databaseColumnName = databaseColumnName.substring(0, databaseColumnName.length - 6); //use substring to cut out the last 6 chars of the topic to get the topic by itself, because it's initally in the form topic_level (because that's what the database column name is)
-  databaseColumnName.replaceAll("_", " "); //replace all other underscores with spaces after the "_level" at the end has been removed
-  databaseColumnName = databaseColumnName[0].toUpperCase() + databaseColumnName.substring(1); //capitalize the first letter
+  let dict = {
+    "addition_level": "Addition",
+    "subtraction_level": "Subtraction",
+    "multiplication_level": "Multiplication",
+    "division_level": "Division",
+    "squaring_level": "Squaring",
+    "square_root_level": "Square Root"
+  }
 
-  return databaseColumnName;
+  return dict[databaseColumnName];
 }

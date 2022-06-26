@@ -49,13 +49,13 @@ socket.on("qotd_displayQuestion", (question) => {
   gameInfoContainer.style.display = "none";
   alreadyCompletedTodays.style.display = "none";
 
-  document.getElementById("question").innerHTML = question.question;
+  document.getElementById("question").innerHTML = katex.renderToString(question.question);
 
   Object.keys(question.answerChoices).forEach(choice => {
     let answerBtn = document.createElement("button");
     answerBtn.classList.add("answerChoiceButton", "contentTheme");
     answerBtn.id = choice;
-    answerBtn.innerHTML = question.answerChoices[choice]; 
+    answerBtn.innerHTML = katex.renderToString(question.answerChoices[choice]); 
     document.getElementById("answerChoicesContainer").appendChild(answerBtn);
 
     answerBtn.addEventListener("click", function() {

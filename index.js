@@ -23,7 +23,8 @@ app.get('/games', (req, res) => {
 });
 
 app.get('/qotd', (req, res) => {
-  res.sendFile(__dirname + "/pages/games/qotd/qotd.html");
+  //res.sendFile(__dirname + "/pages/games/qotd/qotd.html");
+  res.sendFile(__dirname + "/pages/down-for-maintenance.html");
 });
 
 app.get('/qotd/leaderboard', (req, res) => {
@@ -117,7 +118,7 @@ accountsDb.serialize(() => {
       square_root_level INTEGER
     )`
   );
-  
+
   /*accountsDb.all(`SELECT user_id, username, display_name, email, bio, friends, incoming_friend_requests, outgoing_friend_requests, publicly_displayed_achievements, achievements, public_account, topic_practice_stats_privacy, qotd_points, qotd_last_completed FROM users`, [], (err, rows) => {
   //accountsDb.all(`SELECT * FROM topicsPracticeStats`, [], (err, rows) => {
     if (err) {
