@@ -412,7 +412,7 @@ module.exports = function(socket, sqlite3, jwt) {
                   } else {
                     let publicly_displayed_achievements = JSON.parse(row.publicly_displayed_achievements); //get array of currently publicly displayed achievements
     
-                    if (publicly_displayed_achievements.length >= 5) { // if there are >= 5 publicly displayed, prompt user to remove one
+                    if (publicly_displayed_achievements.length >= 10) { // if there are >= 10 publicly displayed, prompt user to remove one
                       socket.emit("error", "You already have 5 publicly displayed achievements", "Please remove one before pinning a new one. You can have a maximum of 5 publicly displayed badges.")
                     } else if (publicly_displayed_achievements.includes(achievement)) {
                       socket.emit("error", "You already pinned that achievement!", "If you want to unpin it, click on the badge in the \"Publicly Displayed Achievements\" box.")

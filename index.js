@@ -23,8 +23,8 @@ app.get('/games', (req, res) => {
 });
 
 app.get('/qotd', (req, res) => {
-  //res.sendFile(__dirname + "/pages/games/qotd/qotd.html");
-  res.sendFile(__dirname + "/pages/down-for-maintenance.html");
+  res.sendFile(__dirname + "/pages/games/qotd/qotd.html");
+  //res.sendFile(__dirname + "/pages/down-for-maintenance.html");
 });
 
 app.get('/qotd/leaderboard', (req, res) => {
@@ -33,6 +33,10 @@ app.get('/qotd/leaderboard', (req, res) => {
 
 app.get('/mathwars', (req, res) => {
   res.sendFile(__dirname + "/pages/games/mathwars/index.html");
+})
+
+app.get('/mathwars/:roomId', (req, res) => {
+  res.sendFile(__dirname + "/pages/games/mathwars/room.html");
 })
 
 app.get('/topics', (req, res) => {
@@ -144,13 +148,16 @@ let rawQOTDQuestions = fs.readFileSync('./database/qotdQuestions.json');
 let qotdQuestionsJSON = JSON.parse(rawQOTDQuestions);
 let qotd_usersCurrentlyPlaying = {};
 
+//for MathWars:
+let rooms = [];
+
 
 io.on('connection', (socket) => {
   require('./accountHandler.js')(socket, sqlite3, bcrypt, jwt); //logging in, signing up
   require('./profileHandler.js')(socket, sqlite3, jwt); //public profile pages, getting own profile info, updating profile info, adding friends, getting incoming/outgoing friend requests
   require('./suggestionHandler.js')(socket); //suggestions 
   require('./qotdHandler.js')(socket, sqlite3, jwt, qotdQuestionsJSON, qotd_usersCurrentlyPlaying); //question of the day game handler
-  require('./mathwarsHandler.js')(socket, sqlite3, jwt); //MathWars game handler
+  require('./mathwarsHandler.js')(socket, sqlite3, jwt, rooms); //MathWars game handler
 
   socket.on("getTopicPracticeStats", (token, topic) => {
     jwt.verify(token, process.env['JWT_PRIVATE_KEY'], function (err, user) {

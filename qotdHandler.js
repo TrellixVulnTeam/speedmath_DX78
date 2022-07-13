@@ -55,7 +55,7 @@ module.exports = function(socket, sqlite3, jwt, qotdQuestionsJSON, qotd_usersCur
           }
         });
         
-        let releaseDate = new Date("June 24, 2022 00:00:00"); //time when first qotd problem was released, set to 4 AM because we want it to be in terms of EDT/EST and default js time is EST
+        let releaseDate = new Date("July 2, 2022 00:00:00"); //time when first qotd problem was released, set to 4 AM because we want it to be in terms of EDT/EST and default js time is EST
         let currentTime = new Date();
 
         let qotdDay = Math.ceil((currentTime.getTime() - releaseDate.getTime())/(1000*60*60*24));
@@ -101,7 +101,7 @@ module.exports = function(socket, sqlite3, jwt, qotdQuestionsJSON, qotd_usersCur
         console.log(err);
         ("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the home page. We'll look into it as soon as possible.");
       } else {
-        let releaseDate = new Date("June 24, 2022 00:00:00"); //time when first qotd problem was released, set to 4 AM because we want it to be in terms of EDT/EST and default js time is EST
+        let releaseDate = new Date("July 2, 2022 00:00:00"); //time when first qotd problem was released, set to 4 AM because we want it to be in terms of EDT/EST and default js time is EST
         let currentTime = new Date();
     
         let qotdDay = Math.ceil((currentTime.getTime() - releaseDate.getTime())/(1000*60*60*24));

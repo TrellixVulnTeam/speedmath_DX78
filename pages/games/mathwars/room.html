@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta property="og:title" content="MathWars"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="https://speedmath.ml/mathwars"/>
+    <meta property="og:description" content="Play MathWars with your friends!"/>
+    <meta property="og:image" content="https://speedmath.ml/assets/favicon.ico"/>
+    <meta name="theme-color" content="#ff928b"/>
+    <title>MathWars</title>
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/css/navbar.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/games/mathwars/gameRoom.css"/>
+    <script src="/scripts/themeHandler.js" defer></script>
+    <script src="/scripts/games/mathwars/game.js" defer></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/socket.io/socket.io.js"></script>
+  </head>
+  <body>
+    <!--   Navbar  -->
+    <div class="topnav">
+      <a href="/">Home</a>
+      <a class="active" href="/games">Games</a>
+      <a href="/topics">Topics</a>
+      <a href="/contributors">Contributors</a>
+      <a href="/account">Account</a>
+      <a>
+        <label class="switch">
+          <input type="checkbox" id="darkModeToggle">
+          <span class="slider round"></span>
+        </label>
+      </a>
+    </div>
+    <!-- Navbar ends -->
+    <div id="lobbyContainer">
+      <div id="gamePinDisplay"></div>
+    </div>
+  </body>
+</html>

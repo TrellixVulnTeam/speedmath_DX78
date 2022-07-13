@@ -13,9 +13,11 @@
     <title>MathWars</title>
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" href="/css/navbar.css"/>
-    <link rel="stylesheet" type="text/css" href="/css/gamesIndex.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/games/mathwars/joinOrMakeRooms.css"/>
     <script src="/scripts/themeHandler.js" defer></script>
-    <script src="/scripts/gamesIndex.js" defer></script>
+    <script src="/scripts/games/mathwars/joinOrMakeRooms.js" defer></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/socket.io/socket.io.js"></script>
   </head>
   <body>
     <!--   Navbar  -->
@@ -33,7 +35,44 @@
       </a>
     </div>
     <!-- Navbar ends -->
+    <h1>MathWars</h1>
+    <div id="usernameInputContainer" class="contentTheme">
+      <b>Enter Username:</b>
+      <br>
+      <input id="username" class="secondaryContentTheme">
+    </div>
+    <div id="joinOrMakeContainer">
+      <form id="joinRoom" class="contentTheme">
+        <h1>Join Room</h1>
+        Enter Room Code:
+        <br>
+        <input id="roomCode" class="secondaryContentTheme" required>
+        <br><br>
+        <button type="submit" class="secondaryContentTheme" id="btnJoin">Join</button>
+      </form>
+      <form id="makeRoom" class="contentTheme">
+        <h1>Make Room</h1>
+        Set Room Privacy:
+        <br>
+        <input type="radio" id="private" name="privacy" value="private" checked>
+        <label for="private">Private</label>
+        <br>
+        <input type="radio" id="public" name="privacy" value="public">
+        <label for="public">Public</label>
+        <br><br>
+        <button type="submit" class="secondaryContentTheme" id="btnMake">Make Room</button>
+      </form>
+    </div>
+    <div id="publicRooms" class="contentTheme">
+      <h4>Open Public Rooms:</h4>
+      <ul id="publicRoomsList">
+        <div class="secondaryContentTheme">
+          Example Room
+          <button class="contentTheme">Join</button>
+        </div>
+      </ul>
+    </div>
 
-    
+    <button id="displayRooms">Testing will be removed later</button>
   </body>
 </html>

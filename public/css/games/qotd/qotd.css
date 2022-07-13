@@ -75,6 +75,8 @@ button {
   font-size: 1.7em;
   width: 90vw;
   margin: 20px auto;
+  display: block;
+  overflow: scroll;
 }
 
 #answerChoicesContainer {

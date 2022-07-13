@@ -412,8 +412,6 @@ socket.on("newIncomingFriendRequest", (incomingRequest) => {
   friendDiv.appendChild(declineButton);
 
   document.getElementById("incomingFriendRequestsContainer").appendChild(friendDiv);
-
-  changeTheme();
 });
 
 socket.on("newOutgoingFriendRequest", (outgoingRequest) => {
@@ -468,8 +466,6 @@ socket.on("newOutgoingFriendRequest", (outgoingRequest) => {
   friendDiv.appendChild(cancelRequestButton);
 
   document.getElementById("outgoingFriendRequestsContainer").appendChild(friendDiv);
-
-  changeTheme();
 });
 
 socket.on("newFriend", (friendInfo) => {
@@ -510,8 +506,6 @@ socket.on("newFriend", (friendInfo) => {
   friendDiv.appendChild(unfriendButton);
 
   document.getElementById("friendsContainer").appendChild(friendDiv);
-
-  changeTheme();
 });
 
 socket.on("successfullyDeletedAccount", () => {

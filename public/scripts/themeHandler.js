@@ -1,13 +1,55 @@
-let darkModeToggle = document.getElementById("darkModeToggle");
-
 let themeSettings = {
-  "bodyBackgroundColor": {
-    "dark": "#121212", 
+  "--scrollbar": {
+    "-track-color": {
+      "dark": "", // change this
+      "light": "#f1f1f1"
+    },
+    "-thumb": {
+      "-color": {
+        "dark": "",
+        "light": "#888"
+      },
+      "-color-hover": {
+        "dark": "",
+        "light": "#555"
+      }
+    }
+  },
+  "--body-color": {
+    "dark": "#121212",
     "light": "#FFF5DB"
   },
-  "textColor": {
+  "--text-color": {
     "dark": "#ffffff",
     "light": "#000000"
+  },
+  "--content": {
+    "-background-color": {
+      "dark": "#ffb8ac",
+      "light": "#C1DBCC"
+    },
+    "-text-color": {
+      "dark": "#000000",
+      "light": "#000000"
+    },
+    "-border-color": {
+      "dark": "#ffffff",
+      "light": "#432818"
+    }
+  },
+  "--secondary-content": {
+    "-background-color": {
+      "dark": "#d4f6f2",
+      "light": "#f08080"
+    },
+    "-text-color": {
+      "dark": "#000000",
+      "light": "#000000"
+    },
+    "-border-color": {
+      "dark": "#000000",
+      "light": "#432818"
+    }
   },
   "contentBackgroundColor": {
     "dark": "#ffb8ac",
@@ -16,25 +58,10 @@ let themeSettings = {
   "contentTextColor": {
     "dark": "#000000",
     "light": "#000000"
-  },
-  "contentBorderColor": {
-    "dark": "#ffffff",
-    "light": "#432818"
-  },
-  "secondaryContentBackgroundColor": {
-    "dark": "#d4f6f2",
-    "light": "#f08080"
-  },
-  "secondaryContentTextColor": {
-    "dark": "#000000",
-    "light": "#000000"
-  },
-  "secondaryContentBorderColor": {
-    "dark": "#000000",
-    "light": "#432818"
-  },
+  }
 }
 
+let darkModeToggle = document.getElementById("darkModeToggle");
 if (localStorage.getItem("theme")) {
   if (localStorage.getItem("theme") == "light") {
     darkModeToggle.checked = false;
@@ -52,48 +79,28 @@ darkModeToggle.onchange = function() {
     localStorage.setItem("theme", "light");
   }
   
-  changeTheme();
+  changeTheme(localStorage.getItem("theme"));
 }
 
-changeTheme();
+changeTheme(localStorage.getItem("theme"));
 
-function changeTheme() {
-  let hrs = document.getElementsByTagName("hr");
+function changeTheme(theme) {
+  let r = document.querySelector(':root'); // get root
+  let dark = theme == "dark"
   
-  if (localStorage.getItem("theme") == "dark") {
-    document.body.style.backgroundColor = themeSettings.bodyBackgroundColor.dark;
-    document.body.style.color = themeSettings.textColor.dark;
-
-    [...hrs].forEach(hr => hr.color = themeSettings.textColor.dark);
-    
-    document.querySelectorAll(".contentTheme").forEach(elem => {
-      elem.style.backgroundColor = themeSettings.contentBackgroundColor.dark;
-      elem.style.color = themeSettings.contentTextColor.dark;
-      elem.style.borderColor = themeSettings.contentBorderColor.dark;
-    });
-
-    document.querySelectorAll(".secondaryContentTheme").forEach(elem => {
-      elem.style.backgroundColor = themeSettings.secondaryContentBackgroundColor.dark;
-      elem.style.color = themeSettings.secondaryContentTextColor.dark;
-      elem.style.borderColor = themeSettings.secondaryContentBorderColor.dark;
-    });
-    
-  } else {
-    document.body.style.backgroundColor = themeSettings.bodyBackgroundColor.light;
-    document.body.style.color = themeSettings.textColor.light;
-
-    [...hrs].forEach(hr => hr.color = themeSettings.textColor.light);
-    
-    document.querySelectorAll(".contentTheme").forEach(elem => {
-      elem.style.backgroundColor = themeSettings.contentBackgroundColor.light;
-      elem.style.color = themeSettings.contentTextColor.light;
-      elem.style.borderColor = themeSettings.contentBorderColor.light;
-    });
-
-    document.querySelectorAll(".secondaryContentTheme").forEach(elem => {
-      elem.style.backgroundColor = themeSettings.secondaryContentBackgroundColor.light;
-      elem.style.color = themeSettings.secondaryContentTextColor.light;
-      elem.style.borderColor = themeSettings.secondaryContentBorderColor.light;
-    });
+  function subChangeTheme(parent, a) {
+    for (const property in a) {
+      if (property == "dark" || property == "light") {
+        // lowest depth in object
+        r.style.setProperty(parent, a[dark ? "dark" : "light"])
+      } else {
+        // means we can still recurse through it
+        subChangeTheme(`${parent}${property}`, a[property])
+      }
+    }
   }
-}
+
+  for (const property in themeSettings) {
+    subChangeTheme(property, themeSettings[property])
+  }
+} 

@@ -1,0 +1,106 @@
+* {
+  text-align: center;
+}
+
+#usernameInputContainer {
+  margin: auto;
+  border-radius: 22px;
+  padding: 20px;
+  font-size: 1.5em;
+}
+
+#username {
+  border: 2px solid;
+  font-size: 1.1em;
+  width: 80%;
+  margin: auto;
+  margin-top: 10px;
+  border-radius: 10px;
+}
+
+#joinOrMakeContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+#joinOrMakeContainer > form {
+  border-radius: 10px;
+  padding: 20px;
+  margin: 30px;
+}
+
+#joinOrMakeContainer > form > button {
+  font-size: 1.5em;
+  border-radius: 22px;
+  padding: 5px 100px;
+  cursor: pointer;
+}
+
+#joinOrMakeContainer > form > button:hover {
+  transform: scale(1.05);
+}
+
+#roomCode {
+  border: 2px solid;
+  font-size: 1.2em;
+  width: 80%;
+  margin: auto;
+  border-radius: 22px;
+}
+
+#publicRooms {
+  margin: auto;
+  padding: 20px;
+  border-radius: 22px;
+  font-size: 1.5em;
+}
+
+#publicRoomsList {
+  list-style-type: none;
+}
+
+#publicRoomsList > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+}
+
+#publicRoomsList > div > button {
+  margin-left: 5vw;
+  border-radius: 5px;
+  border: solid 1px;
+  padding: 5px 16px;
+  text-align: center;
+  display: inline;
+  font-size: 16px;
+  float: right;
+  cursor: pointer;
+}
+
+#publicRoomsList > div > button:hover {
+  transform: scale(1.05)
+}
+
+/* For mobile: */
+@media only screen and (max-width: 550px) {
+  #usernameInputContainer {
+    width: 80%;
+  }
+
+  #publicRooms {
+    width: 80%;
+  }
+}
+
+/* For laptop/PC/wide screens */
+@media only screen and (min-width: 550px) {
+  #usernameInputContainer {
+    width: 40%;
+  }
+
+  #publicRooms {
+    width: 40%;
+  }
+}

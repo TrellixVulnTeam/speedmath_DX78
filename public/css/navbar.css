@@ -5,36 +5,57 @@
 }
 
 :root {
-  --bg-color: #F9E7E4;
+  --body-color: #fff5db;
+
+  --text-color: #000000;
+
+  --content-background-color: #c1dbcc;
+  --content-text-color: #000000;
+  --content-border-color: #432818;
+
+  --secondary-content-background-color: #f08080;
+  --secondary-content-text-color: #000000;
+  --secondary-border-color: #432818;
+  
   --scrollbar-track-color: #f1f1f1;
   --scrollbar-thumb-color: #888;
   --scrollbar-thumb-color-hover: #555;
+
+  --timing-func: ease-in-out;
 }
 
-/* Theme Styling */
+/*#region ThemeStyling*/
 
 hr {
   color: var(--text-color);
+  transition: all 0.4s var(--timing-func) 0s;
 }
 
 .contentTheme {
   background-color: var(--content-background-color);
   color: var(--content-text-color);
   border-color: var(--content-border-color);
+  transition: all 0.4s var(--timing-func) 0s;
 }
 
 .secondaryContentTheme {
   background-color: var(--secondary-content-background-color);
   color: var(--secondary-content-text-color);
   border-color: var(--secondary-content-border-color);
+  transition: all 0.4s var(--timing-func) 0s;
 }
 
 body {
+  background-color: var(--body-color);
+  color: var(--text-color);
+  transition: all 0.4s var(--timing-func) 0s;
+}
+
+/*#endregion ThemeStyling*/
+
+body {
   box-sizing: border-box;
-  background-color: var(--bg-color);
   margin: 0;
-  /* Transitions the background */
-  transition: all 0.4s ease 0s;
 }
 
 .topnav {
