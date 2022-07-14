@@ -14,9 +14,12 @@
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" href="/css/navbar.css"/>
     <link rel="stylesheet" type="text/css" href="/css/games/mathwars/gameRoom.css"/>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
     <script src="/scripts/themeHandler.js" defer></script>
     <script src="/scripts/games/mathwars/game.js" defer></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
   </head>
   <body>
@@ -37,6 +40,19 @@
     <!-- Navbar ends -->
     <div id="lobbyContainer">
       <div id="gamePinDisplay"></div>
+      <div id="gameSettings">
+        
+      </div>
+      <div id="lobbyMembersContainer">
+      </div>
+      <div id="lobbyChatContainer" class="contentTheme">
+        <h1>Lobby Chat:</h1>
+        <ul id="messages"></ul>
+        <form id="lobbyChatForm">
+          <input id="lobbyChatInput" class="secondaryContentTheme" autocomplete="off">
+          <button type="submit" class="secondaryContentTheme">Send</button>
+        </form>
+      </div>
     </div>
   </body>
 </html>

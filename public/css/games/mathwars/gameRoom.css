@@ -1,0 +1,90 @@
+* {
+  text-align: center;
+}
+
+#lobbyContainer {
+  padding: 10px;
+}
+
+#gamePinDisplay {
+  font-size: 2em;
+  cursor: pointer;
+}
+
+#lobbyMembersContainer {
+  margin: 20px auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  border-radius: 22px;
+}
+
+.memberInLobby {
+  padding: 10px;
+  border-radius: 10px;
+  margin: 10px;
+}
+
+.memberInLobby:hover {
+  filter: brightness(110%);
+}
+
+#lobbyChatContainer {
+  margin: auto;
+  border-radius: 22px;
+}
+
+#messages {
+  list-style-type: none;
+  overflow: scroll;
+  overflow-x: hidden;
+  max-height: 200px;
+  border: 2px solid;
+  width: 80%;
+  margin: auto;
+}
+
+#messages > li {
+  text-align: left;
+}
+
+#lobbyChatInput {
+  border: 2px solid;
+  font-size: 1.2em;
+  width: 70%;
+  margin: 10px auto;
+  border-radius: 22px;
+}
+
+#lobbyChatForm > button {
+  font-size: 1.3em;
+  border-radius: 22px;
+  padding: 2px 10px;
+  cursor: pointer;
+}
+
+#lobbyChatForm > button:hover {
+  filter: brightness(1.15);
+}
+
+/* For mobile: */
+@media only screen and (max-width: 550px) {
+  #lobbyChatContainer {
+    width: 80%;
+  }
+
+  #lobbyMembersContainer {
+    width: 80%;
+  }
+}
+
+/* For laptop/PC/wide screens */
+@media only screen and (min-width: 550px) {
+  #lobbyChatContainer {
+    width: 50%;
+  }
+
+  #lobbyMembersContainer {
+    width: 60%;
+  }
+}

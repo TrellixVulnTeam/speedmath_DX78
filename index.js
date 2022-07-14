@@ -33,11 +33,11 @@ app.get('/qotd/leaderboard', (req, res) => {
 
 app.get('/mathwars', (req, res) => {
   res.sendFile(__dirname + "/pages/games/mathwars/index.html");
-})
+});
 
 app.get('/mathwars/:roomId', (req, res) => {
   res.sendFile(__dirname + "/pages/games/mathwars/room.html");
-})
+});
 
 app.get('/topics', (req, res) => {
   res.sendFile(__dirname + "/pages/topics/topicsIndex.html");

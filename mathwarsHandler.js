@@ -50,21 +50,67 @@ module.exports = function(socket, sqlite3, jwt, rooms) {
   socket.on("mathwars_loadLobby", (roomCode, oldSocketId) => {
     if (validateRoomId(roomCode)) {
       let roomIndex = getRoomIndex(roomCode);
-      console.log(roomIndex);
+
+      let roomInfo = {
+        roomCode: roomCode,
+        members: []
+      }
 
       if (oldSocketId === rooms[roomIndex].owner.user_id) {
         rooms[roomIndex].owner.user_id = socket.id;
+        roomInfo.isOwner = true;
       }
 
       for (let i = 0; i < rooms[roomIndex].members.length; i++) {
         if (rooms[roomIndex].members[i].user_id === oldSocketId) {
           rooms[roomIndex].members[i].user_id = socket.id;
+          
           break;
         }
       }
+
+      for (let i = 0; i < rooms[roomIndex].members.length; i++) {
+        roomInfo.members.push({
+          username: rooms[roomIndex].members[i].username,
+          user_id: rooms[roomIndex].members[i].user_id,
+          isOwner: rooms[roomIndex].members[i].user_id === rooms[roomIndex].owner.user_id
+        });
+      }
+
+      console.log(roomInfo);
+
+      socket.join(`room${roomCode}`);
+
+      socket.emit("mathwars_getLobby", roomInfo);
+
+      socket.on("disconnect", () => {
+        for (let i = 0; i < rooms.length; i++) {
+          //if the user owns a room,
+          if (rooms[i].owner.user_id === socket.id) {
+            socket.to("room" + rooms[i].roomId).emit("mathwars_ownerLeftRoom"); //notify users that they're being kicked
+            //delete the room from the array of rooms
+            rooms.splice(i, 1);
+            break;
+          } else {
+            //if the user is just a member of a room, remove them from the array of members in the room
+            for (let j = 0; j < rooms[i].members.length; j++) {
+              if (rooms[i].members[j].user_id === socket.id) {
+                rooms[i].members.splice(j, 1);
+                break;
+              }
+            }
+          }
+        }
+      });
     } else {
       socket.emit("mathwars_invalidRoom");
     }
+  });
+
+  socket.on("mathwars_lobbyChatMessageSend", (message) => {
+    let room = [...socket.rooms][1];
+    let username = getUsernameFromSocketId(socket.id);
+    socket.to(room).emit("mathwars_lobbyChatNewMessage", username, message);
   });
                
   socket.on("mathwars_logRooms", () => {
@@ -112,5 +158,16 @@ module.exports = function(socket, sqlite3, jwt, rooms) {
     }
 
     return null;
+  }
+
+  //get username of user from socket.id
+  function getUsernameFromSocketId(id) {
+    for (let i = 0; i < rooms.length; i++) {
+      for (let j = 0; j < rooms[i].members.length; j++) {
+        if (rooms[i].members[j].user_id === id) {
+          return rooms[i].members[j].username;
+        }
+      }
+    }
   }
 }

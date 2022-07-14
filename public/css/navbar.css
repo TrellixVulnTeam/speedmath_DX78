@@ -28,27 +28,27 @@
 
 hr {
   color: var(--text-color);
-  transition: all 0.4s var(--timing-func) 0s;
+  /*transition: all 0.4s var(--timing-func) 0s;*/
 }
 
 .contentTheme {
   background-color: var(--content-background-color);
   color: var(--content-text-color);
   border-color: var(--content-border-color);
-  transition: all 0.4s var(--timing-func) 0s;
+  /*transition: all 0.4s var(--timing-func) 0s;*/
 }
 
 .secondaryContentTheme {
   background-color: var(--secondary-content-background-color);
   color: var(--secondary-content-text-color);
   border-color: var(--secondary-content-border-color);
-  transition: all 0.4s var(--timing-func) 0s;
+  /*transition: all 0.4s var(--timing-func) 0s;*/
 }
 
 body {
   background-color: var(--body-color);
   color: var(--text-color);
-  transition: all 0.4s var(--timing-func) 0s;
+  /*transition: all 0.4s var(--timing-func) 0s;*/
 }
 
 /*#endregion ThemeStyling*/
@@ -91,6 +91,10 @@ body {
 
 .topnav a:last-child:hover {
   border-bottom: 0;
+}
+
+.topnav a:last-child {
+  float: right; /* For the switch */
 }
 
 .switch {

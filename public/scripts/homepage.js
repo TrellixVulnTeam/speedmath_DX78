@@ -34,21 +34,11 @@ suggestionsForm.addEventListener("submit", function(e) {
   socket.emit("suggestion", contact, suggestion);
   suggestionsForm.reset();
 
-  if (localStorage.getItem("theme") === "dark") {
-    Swal.fire({
-      title: "Suggestion Sent!",
-      text: "A member of our team will contact you back as soon as possible!",
-      icon: "success",
-      confirmButtonColor: "#000000",
-      color: themeSettings.contentTextColor.dark
-    });
-  } else if (localStorage.getItem("theme") === "light") {
-    Swal.fire({
-      title: "Suggestion Sent!",
-      text: "A member of our team will contact you back as soon as possible!",
-      icon: "success",
-      confirmButtonColor: "#000000",
-      color: themeSettings.contentTextColor.light
-    });
-  }
+  Swal.fire({
+    title: "Suggestion Sent!",
+    text: "A member of our team will contact you back as soon as possible!",
+    icon: "success",
+    confirmButtonColor: "#000000",
+    color: themeSettings["--content-text-color"][localStorage.getItem("theme")]
+  });
 });
