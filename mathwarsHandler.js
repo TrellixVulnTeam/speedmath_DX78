@@ -1,4 +1,4 @@
-module.exports = function(socket, sqlite3, jwt, rooms) {
+module.exports = function(io, socket, sqlite3, jwt, rooms) {
   class Room {
     constructor(roomId, owner, settings) {
       this.roomId = roomId;
@@ -81,7 +81,7 @@ module.exports = function(socket, sqlite3, jwt, rooms) {
 
       socket.join(`room${roomCode}`);
 
-      socket.emit("mathwars_getLobby", roomInfo);
+      io.to(`room${roomCode}`).emit("mathwars_updateLobby", roomInfo);
 
       socket.on("disconnect", () => {
         for (let i = 0; i < rooms.length; i++) {
@@ -99,6 +99,21 @@ module.exports = function(socket, sqlite3, jwt, rooms) {
                 break;
               }
             }
+
+            let roomInfo = {
+              roomCode: rooms[i].roomId,
+              members: []
+            }
+
+            for (let j = 0; j < rooms[i].members.length; j++) {
+              roomInfo.members.push({
+                username: rooms[i].members[j].username,
+                user_id: rooms[i].members[j].user_id,
+                isOwner: rooms[i].members[j].user_id === rooms[roomIndex].owner.user_id
+              });
+            }
+
+            io.to(`room${rooms[i].roomId}`).emit("mathwars_updateLobby", roomInfo);
           }
         }
       });

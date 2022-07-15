@@ -6,6 +6,8 @@ let lobbyChatForm = document.getElementById("lobbyChatForm");
 let lobbyChatInput = document.getElementById("lobbyChatInput");
 let messagesContainer = document.getElementById("messages");
 
+let isRoomOwner;
+
 window.onload = function() {
   let url = window.location.href;
   let roomCode = url.substring(url.lastIndexOf('/') + 1).toLowerCase();
@@ -24,14 +26,9 @@ socket.on("mathwars_invalidRoom", () => {
   window.location.href = '/mathwars';
 });
 
-socket.on("mathwars_getLobby", (roomInfo) => {
-  console.log(roomInfo);
+socket.on("mathwars_updateLobby", (roomInfo) => {
   //show room code at top of page:
   gamePinDisplay.innerHTML = `Room Code: ${roomInfo.roomCode}<br>🔗 (click to copy link) 🔗`;
-  gamePinDisplay.addEventListener("click", function() {
-    navigator.clipboard.writeText(`https://speedmath.ml/mathwars?join=${roomInfo.roomCode}`);
-    alertify.notify('Copied to clipboard!', 'success', 5); 
-  });
   //display member list:
   lobbyMembersContainer.innerHTML = ""; //clear anything from last lobby load
   roomInfo.members.forEach(member => {
@@ -43,9 +40,18 @@ socket.on("mathwars_getLobby", (roomInfo) => {
     memberDiv.classList.add("secondaryContentTheme", "memberInLobby");
     lobbyMembersContainer.appendChild(memberDiv);
   });
+
+  if (roomInfo.isOwner) {
+    isRoomOwner = true;
+  }
 });
 
-
+gamePinDisplay.addEventListener("click", function() {
+  let url = window.location.href;
+  let roomCode = url.substring(url.lastIndexOf('/') + 1).toLowerCase();
+  navigator.clipboard.writeText(`https://speedmath.ml/mathwars?join=${roomCode}`);
+  alertify.notify('Copied to clipboard!', 'success', 5); 
+});
 
 socket.on("mathwars_ownerLeftRoom", () => {
   Swal.fire({
