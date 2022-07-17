@@ -95,6 +95,13 @@ socket.on("mathwars_updateLobby", (roomInfo) => {
     let gameTopic = document.createElement("div");
     gameTopic.classList.add("secondaryContentTheme");
     gameTopic.textContent = possibleMathWarsTopics[topic].name;
+    if (isRoomOwner) {
+      gameTopic.textContent += " ❌";
+      gameTopic.style.cursor = "pointer";
+      gameTopic.addEventListener("click", function() {
+        socket.emit("mathwars_removeTopic", topic, roomInfo.roomCode);
+      });
+    }
     gameTopicsContainer.appendChild(gameTopic);
   });
   //display member list:
@@ -163,6 +170,15 @@ socket.on("mathwars_updateTopicsDisplay", (topics) => {
     let gameTopic = document.createElement("div");
     gameTopic.classList.add("secondaryContentTheme");
     gameTopic.textContent = possibleMathWarsTopics[topic].name;
+    if (isRoomOwner) {
+      gameTopic.textContent += " ❌";
+      gameTopic.style.cursor = "pointer";
+      gameTopic.addEventListener("click", function() {
+        let url = window.location.href;
+        let roomCode = url.substring(url.lastIndexOf('/') + 1).toLowerCase();
+        socket.emit("mathwars_removeTopic", topic, roomCode);
+      });
+    }
     gameTopicsContainer.appendChild(gameTopic);
   });
 });

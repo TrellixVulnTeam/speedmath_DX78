@@ -157,6 +157,23 @@ module.exports = function(io, socket, sqlite3, jwt, rooms, possibleMathWarsTopic
     }
   });
 
+  socket.on("mathwars_removeTopic", (topic, roomId) => {
+    let roomIndex = getRoomIndex(roomId);
+    if (roomIndex !== null) {
+      //check to make sure the person sending the request is actually the owner of the room and not injecting a script
+      if (rooms[roomIndex].owner.user_id === socket.id) {
+        if (rooms[roomIndex].settings.topics.includes(topic)) { //check if the room even has the topic that the owner is trying to remove
+          rooms[roomIndex].settings.topics = removeElementFromArray(rooms[roomIndex].settings.topics, topic); //use a helper function to remove the topic from the array of topics contained in the room settings object
+          io.to(`room${roomId}`).emit("mathwars_updateTopicsDisplay", rooms[roomIndex].settings.topics); //display this change to everyone in the room
+        } else {
+          socket.emit("error", "Stop trying to hack!", "You shouldn't be getting this error unless you're trying to hack!");
+        }
+      } else {
+        socket.emit("error", "Stop trying to hack!", "You shouldn't be getting this error unless you're trying to hack!");
+      }
+    }
+  });
+
   socket.on("mathwars_lobbyChatMessageSend", (message) => {
     let room = [...socket.rooms][1];
     let username = getUsernameFromSocketId(socket.id);
@@ -219,5 +236,10 @@ module.exports = function(io, socket, sqlite3, jwt, rooms, possibleMathWarsTopic
         }
       }
     }
+  }
+
+  //source: https://stackoverflow.com/a/21688894/
+  function removeElementFromArray(arrOriginal, elementToRemove){
+    return arrOriginal.filter(function(el){return el !== elementToRemove});
   }
 }
