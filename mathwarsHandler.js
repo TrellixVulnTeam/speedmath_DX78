@@ -1,4 +1,4 @@
-module.exports = function(io, socket, sqlite3, jwt, rooms) {
+module.exports = function(io, socket, sqlite3, jwt, rooms, possibleMathWarsTopics) {
   class Room {
     constructor(roomId, owner, settings) {
       this.roomId = roomId;
@@ -53,12 +53,14 @@ module.exports = function(io, socket, sqlite3, jwt, rooms) {
 
       let roomInfo = {
         roomCode: roomCode,
-        members: []
+        members: [],
+        settings: rooms[roomIndex].settings
       }
 
       if (oldSocketId === rooms[roomIndex].owner.user_id) {
         rooms[roomIndex].owner.user_id = socket.id;
         roomInfo.isOwner = true;
+        roomInfo.possibleTopics = possibleMathWarsTopics;
       }
 
       for (let i = 0; i < rooms[roomIndex].members.length; i++) {
@@ -76,8 +78,6 @@ module.exports = function(io, socket, sqlite3, jwt, rooms) {
           isOwner: rooms[roomIndex].members[i].user_id === rooms[roomIndex].owner.user_id
         });
       }
-
-      console.log(roomInfo);
 
       socket.join(`room${roomCode}`);
 
@@ -102,7 +102,8 @@ module.exports = function(io, socket, sqlite3, jwt, rooms) {
 
             let roomInfo = {
               roomCode: rooms[i].roomId,
-              members: []
+              members: [],
+              settings: rooms[i].settings
             }
 
             for (let j = 0; j < rooms[i].members.length; j++) {
@@ -119,6 +120,40 @@ module.exports = function(io, socket, sqlite3, jwt, rooms) {
       });
     } else {
       socket.emit("mathwars_invalidRoom");
+    }
+  });
+
+  socket.on("mathwars_kickPlayerFromLobby", (player_id, room_id) => {
+    let roomIndex = getRoomIndex(room_id);
+    if (roomIndex !== null) {
+      if (rooms[roomIndex].owner.user_id === socket.id) {
+      
+      } else {
+        socket.emit("error", "Stop trying to hack!", "You shouldn't be getting this error unless you're trying to hack!");
+      }
+    } else {
+      socket.emit("error", "Stop trying to hack!", "You shouldn't be getting this error unless you're trying to hack!");
+    }
+  });
+
+  socket.on("mathwars_addTopic", (topic, roomId) => {
+    let roomIndex = getRoomIndex(roomId);
+    if (roomIndex !== null) {
+      //check to make sure the person sending the request is actually the owner of the room and not injecting a script
+      if (rooms[roomIndex].owner.user_id === socket.id) {
+        if (topic in possibleMathWarsTopics) { //validate the topic on server side again 
+          if (rooms[roomIndex].settings.topics.includes(topic)) { //if the topic is already chosen
+            socket.emit("error", "Topic already added!", "Please choose a different topic to add.");
+          } else {
+            rooms[roomIndex].settings.topics.push(topic); //add the topic to the room's settings
+            io.to(`room${roomId}`).emit("mathwars_updateTopicsDisplay", rooms[roomIndex].settings.topics);
+          }
+        } else {
+          socket.emit("error", "Stop trying to hack!", "You shouldn't be getting this error unless you're trying to hack!");
+        }
+      } else {
+        socket.emit("error", "Stop trying to hack!", "You shouldn't be getting this error unless you're trying to hack!");
+      }
     }
   });
 

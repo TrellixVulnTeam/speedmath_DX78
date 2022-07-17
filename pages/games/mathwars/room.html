@@ -40,8 +40,17 @@
     <!-- Navbar ends -->
     <div id="lobbyContainer">
       <div id="gamePinDisplay"></div>
-      <div id="gameSettings">
-        
+      <div id="gameSettingsContainer" class="contentTheme">
+        <h1>Game Settings:</h1>
+        <div id="chooseGameTopicsContainer">
+          <input list="topicsList" name="topic" id="topicInput">
+          <datalist id="topicsList">
+            
+          </datalist>
+          <button id="addTopic" disabled>Add Topic</button>
+        </div>
+        <div id="gameTopicsContainer">
+        </div>
       </div>
       <div id="lobbyMembersContainer">
       </div>

@@ -1,6 +1,7 @@
 var socket = io();
 
 let username = document.getElementById("username");
+let btnGenUsername = document.getElementById("genUsername");
 let roomCode = document.getElementById("roomCode");
 let joinRoom = document.getElementById("joinRoom");
 let btnJoin = document.getElementById("btnJoin");
@@ -15,6 +16,10 @@ window.onload = function() {
     username.focus();
   }
 }
+
+btnGenUsername.addEventListener("click", function() {
+  username.value = randomUsername(); //random adjective + random animal
+});
 
 joinRoom.addEventListener("submit", function(e) {
   e.preventDefault(); //prevent page from reloading

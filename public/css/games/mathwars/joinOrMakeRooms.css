@@ -2,6 +2,10 @@
   text-align: center;
 }
 
+button {
+  transition: 0.4s;
+}
+
 #usernameInputContainer {
   margin: auto;
   border-radius: 22px;
@@ -16,6 +20,18 @@
   margin: auto;
   margin-top: 10px;
   border-radius: 10px;
+}
+
+#genUsername {
+  margin-top: 10px;
+  padding: 5px;
+  font-size: 0.8em;
+  border-radius: 22px;
+  cursor: pointer;
+}
+
+#genUsername:hover {
+  transform: scale(1.05);
 }
 
 #joinOrMakeContainer {

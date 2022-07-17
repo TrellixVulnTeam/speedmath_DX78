@@ -65,8 +65,6 @@ socket.on("qotd_displayQuestion", (question) => {
       }
     });
   });
-
-  changeTheme();
   //MathJax.typeset();
 
   //alert(JSON.stringify(question));

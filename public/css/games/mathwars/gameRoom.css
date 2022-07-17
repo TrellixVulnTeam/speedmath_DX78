@@ -2,6 +2,10 @@
   text-align: center;
 }
 
+h1 {
+  margin-top: 0px;
+}
+
 #lobbyContainer {
   padding: 10px;
 }
@@ -9,6 +13,37 @@
 #gamePinDisplay {
   font-size: 2em;
   cursor: pointer;
+}
+
+#gameSettingsContainer {
+  margin: 10px auto;
+  border-radius: 22px;
+  padding: 10px;
+}
+
+#chooseGameTopicsContainer {
+  display: none;
+}
+
+#gameTopicsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  border-radius: 22px;
+}
+
+#gameTopicsContainer > div {
+  font-size: 1.3em;
+  border: 2px solid;
+  padding: 5px;
+  border-radius: 10px;
+  margin: 10px;
+  transition: 0.5s;
+}
+
+#gameTopicsContainer > div:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
 }
 
 #lobbyMembersContainer {
@@ -70,6 +105,10 @@
 
 /* For mobile: */
 @media only screen and (max-width: 550px) {
+  #gameSettingsContainer {
+    width: 80%;
+  }
+  
   #lobbyChatContainer {
     width: 80%;
   }
@@ -81,6 +120,10 @@
 
 /* For laptop/PC/wide screens */
 @media only screen and (min-width: 550px) {
+  #gameSettingsContainer {
+    width: 50%;
+  }
+  
   #lobbyChatContainer {
     width: 50%;
   }

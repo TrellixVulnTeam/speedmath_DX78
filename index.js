@@ -150,6 +150,26 @@ let qotd_usersCurrentlyPlaying = {};
 
 //for MathWars:
 let rooms = [];
+let possibleMathWarsTopics = {
+  "addition": {
+    "name": "Addition"
+  },
+  "subtraction": {
+    "name": "Subtraction"
+  },
+  "multiplication": {
+    "name": "Multiplication"
+  },
+  "division": {
+    "name": "Division"
+  },
+  "squaring": {
+    "name": "Squaring"
+  },
+  "sqrt": {
+    "name": "Square Rooting"
+  }
+}
 
 
 io.on('connection', (socket) => {
@@ -157,7 +177,7 @@ io.on('connection', (socket) => {
   require('./profileHandler.js')(socket, sqlite3, jwt); //public profile pages, getting own profile info, updating profile info, adding friends, getting incoming/outgoing friend requests
   require('./suggestionHandler.js')(socket); //suggestions 
   require('./qotdHandler.js')(socket, sqlite3, jwt, qotdQuestionsJSON, qotd_usersCurrentlyPlaying); //question of the day game handler
-  require('./mathwarsHandler.js')(io, socket, sqlite3, jwt, rooms); //MathWars game handler
+  require('./mathwarsHandler.js')(io, socket, sqlite3, jwt, rooms, possibleMathWarsTopics); //MathWars game handler
 
   socket.on("getTopicPracticeStats", (token, topic) => {
     jwt.verify(token, process.env['JWT_PRIVATE_KEY'], function (err, user) {
