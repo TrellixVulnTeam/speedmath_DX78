@@ -8,6 +8,8 @@ let btnJoin = document.getElementById("btnJoin");
 let makeRoom = document.getElementById("makeRoom");
 let btnMake = document.getElementById("btnMake");
 
+let publicRoomsList = document.getElementById("publicRoomsList");
+
 window.onload = function() {
   let urlParams = new URLSearchParams(window.location.search);
 
@@ -15,7 +17,32 @@ window.onload = function() {
     roomCode.value = urlParams.get("join");
     username.focus();
   }
+
+  socket.emit("mathwars_loadPublicRooms");
 }
+
+socket.on("mathwars_displayPublicRooms", function(roomList) {
+  roomList.forEach(room => {
+    let roomDiv = document.createElement("div");
+    let joinBtn = document.createElement("button");
+    
+    roomDiv.textContent += room.name + " ";
+    roomDiv.classList.add("secondaryContentTheme");
+    roomDiv.appendChild(joinBtn);
+    
+    
+    joinBtn.textContent = "Join";
+    joinBtn.classList.add("contentTheme");
+    
+    joinBtn.addEventListener("click", function() {
+      let username = document.getElementById("username").value || randomUsername();
+      socket.emit("mathwars_joinRoom", username, room.roomCode);
+      joinBtn.disabled = true;
+    });
+    
+    publicRoomsList.appendChild(roomDiv);
+  });
+});
 
 btnGenUsername.addEventListener("click", function() {
   username.value = randomUsername(); //random adjective + random animal
@@ -45,6 +72,7 @@ socket.on("mathwars_redirectToRoomPage", (id, roomCode) => {
   window.location.href = "/mathwars/" + roomCode;
 });
 
+//general error alert:
 socket.on("error", (errorTitle, errorMessage) => {
   Swal.fire({
     title: errorTitle,

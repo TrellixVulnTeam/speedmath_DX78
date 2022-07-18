@@ -15,6 +15,21 @@ module.exports = function(io, socket, sqlite3, jwt, rooms, possibleMathWarsTopic
     }
   }
 
+  socket.on("mathwars_loadPublicRooms", () => {
+    let publicRooms = [];
+      
+    for (let i = 0; i < rooms.length; i++) {
+      if (rooms[i].settings.privacy === "public") {
+        publicRooms.push({
+          name: `${rooms[i].owner.username}'s room`,
+          roomCode: rooms[i].roomId
+        });
+      }
+    }
+
+    socket.emit("mathwars_displayPublicRooms", publicRooms);
+  });
+
   socket.on("mathwars_joinRoom", (username, roomCode) => {
     if (validateRoomId(roomCode)) {
       for (let i = 0; i < rooms.length; i++) {
@@ -45,6 +60,21 @@ module.exports = function(io, socket, sqlite3, jwt, rooms, possibleMathWarsTopic
     rooms.push(room);
 
     socket.emit("mathwars_redirectToRoomPage", socket.id, roomId);
+
+    if (privacy === "public") {
+      let publicRooms = [];
+      
+      for (let i = 0; i < rooms.length; i++) {
+        if (rooms[i].settings.privacy === "public") {
+          publicRooms.push({
+            name: `${rooms[i].owner.username}'s room`,
+            roomCode: rooms[i].roomId
+          });
+        }
+      }
+
+      io.emit('mathwars_displayPublicRooms', publicRooms);
+    }
   });
 
   socket.on("mathwars_loadLobby", (roomCode, oldSocketId) => {
@@ -127,7 +157,8 @@ module.exports = function(io, socket, sqlite3, jwt, rooms, possibleMathWarsTopic
     let roomIndex = getRoomIndex(room_id);
     if (roomIndex !== null) {
       if (rooms[roomIndex].owner.user_id === socket.id) {
-      
+        //io.sockets.connected[player_id].disconnect();
+        io.to(player_id).emit("mathwars_youGotKicked");
       } else {
         socket.emit("error", "Stop trying to hack!", "You shouldn't be getting this error unless you're trying to hack!");
       }

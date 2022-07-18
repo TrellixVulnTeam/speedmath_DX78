@@ -8,33 +8,75 @@
 }
 
 #changelog {
-  margin: 10px auto;
-  width: 80vw;
+  margin: auto;
   height: 400px;
-  overflow: scroll;
   padding: 15px;
-  border: 3px solid;
+  overflow-y: scroll;
 }
 
-#changelog::-webkit-scrollbar {
-  width: 10px;
+.menu {
+  margin: none;
+  width: 100%;
 }
 
-#changeloautowebkit-scrollbar-track {
+.item {
+  display: block;
+  background: var(--secondary-content-background-color);
+  margin-bottom: 10px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  transition: all 0.1s;
+  overflow: auto;
+}
+
+.item.collapsed {
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.btn {
+  display: block;
+  padding: 16px 20px;
+  color: var(--secondary-content-text-color);
+}
+
+.sub-menu {
+  display: block;
+  background: var(--content-background-color);
+  border-radius: 0 0 8px 8px;
+  transition: all 0.5s;
+  height: auto;
   overflow: hidden;
 }
 
-#changelog::-webkit-scrollbar-thumb {
-  background-color: #7ee8fa;
-  background-image: linear-gradient(315deg, #CAFFBF 0%, #9BF6FF 74%);
-  border-radius: 100vw;
+.sub-menu.collapsed {
+  height: 0;
 }
 
-#changelog::-webkit-scrollbar-corner {
-  display: none;
+.sub-menu p {
+  display: block;
+  color: var(--secondary-content-text-color);
+  padding: 16px 20px;
 }
 
-@media only screen and (min-width: 500px) {
+.btn i {
+  transform: rotate(0deg);
+  transition: all 0.5s;
+}
+
+.btn i.collapsed {
+  transform: rotate(90deg);
+}
+
+
+/*For PC: */
+@media only screen and (min-width: 550px) {
+  #changelog {
+    width: 60%;
+  }
+  
   .ad {
     width: 20vw;
     padding: 1.5vh 2.5vw;
@@ -50,7 +92,13 @@
   }
 }
 
-@media only screen and (max-width: 500px) {
+
+/*For mobile: */
+@media only screen and (max-width: 550px) {
+  #changelog {
+    width: 90%;
+  }
+  
   .ad {
     width: 80vw;
     margin: 5vh 0;
