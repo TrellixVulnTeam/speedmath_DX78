@@ -1,16 +1,16 @@
 let themeSettings = {
   "--scrollbar": {
     "-track-color": {
-      "dark": "", // change this
-      "light": "#f1f1f1"
+      "dark": "#121212",
+      "light": "#FFF5DB"
     },
     "-thumb": {
       "-color": {
-        "dark": "",
+        "dark": "", // change this if u want
         "light": "#888"
       },
       "-color-hover": {
-        "dark": "",
+        "dark": "", // and this
         "light": "#555"
       }
     }
@@ -25,7 +25,7 @@ let themeSettings = {
   },
   "--content": {
     "-background-color": {
-      "dark": "#ffb8ac",
+      "dark": "#ffb8ac", 
       "light": "#C1DBCC"
     },
     "-text-color": {
@@ -48,7 +48,7 @@ let themeSettings = {
     },
     "-border-color": {
       "dark": "#000000",
-      "light": "#432818"
+      "light": "#432818" 
     }
   },
   "contentBackgroundColor": {
@@ -62,14 +62,19 @@ let themeSettings = {
 }
 
 let darkModeToggle = document.getElementById("darkModeToggle");
-if (localStorage.getItem("theme")) {
+if (localStorage.getItem("theme")) { //for returning users that have a theme for the site saved in their browser
   if (localStorage.getItem("theme") == "light") {
     darkModeToggle.checked = false;
   } else if (localStorage.getItem("theme") == "dark") {
     darkModeToggle.checked = true;
   }
-} else {
-  localStorage.setItem("theme", "light");
+} else { //for first-time users
+  localStorage.setItem("theme", 
+    (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)?
+      "dark"
+      :
+      "light"
+    );
 }
 
 darkModeToggle.onchange = function() {

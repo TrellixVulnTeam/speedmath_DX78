@@ -28,27 +28,45 @@
 
 hr {
   color: var(--text-color);
-  /*transition: all 0.4s var(--timing-func) 0s;*/
+  transition: all 0.4s var(--timing-func) 0s;
 }
 
 .contentTheme {
   background-color: var(--content-background-color);
   color: var(--content-text-color);
   border-color: var(--content-border-color);
-  /*transition: all 0.4s var(--timing-func) 0s;*/
+  transition: all 0.4s var(--timing-func) 0s;
 }
 
 .secondaryContentTheme {
   background-color: var(--secondary-content-background-color);
   color: var(--secondary-content-text-color);
   border-color: var(--secondary-content-border-color);
-  /*transition: all 0.4s var(--timing-func) 0s;*/
+  transition: all 0.4s var(--timing-func) 0s;
 }
 
 body {
   background-color: var(--body-color);
   color: var(--text-color);
-  /*transition: all 0.4s var(--timing-func) 0s;*/
+  transition: all 0.4s var(--timing-func) 0s;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background-color: var(--scrollbar-track-color);
+  transition: background-color 0.4s var(--timing-func) 0s;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb-color);
+  transition: background-color 0.4s var(--timing-func) 0s;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-color-hover);
+
 }
 
 /*#endregion ThemeStyling*/
@@ -163,20 +181,7 @@ input:checked + .slider:before {
   width: 10px;
 }
 
-/* Track */
-::-webkit-scrollbar-track {
-  background: var(--scrollbar-track-color);
-}
-
-/* Handle */
 ::-webkit-scrollbar-thumb {
-  background: var(--scrollbar-thumb-color);
   border-radius: 10px;
   margin: 2px;
-  transition: all 0.3s;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: var(--scrollbar-thumb-color-hover);
 }

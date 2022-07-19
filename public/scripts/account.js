@@ -632,7 +632,8 @@ function getTopicFromDatabaseColumnName(databaseColumnName) {
     "multiplication_level": "Multiplication",
     "division_level": "Division",
     "squaring_level": "Squaring",
-    "square_root_level": "Square Root"
+    "square_root_level": "Square Root",
+    "modular_arithmetic_level": "Modular Arithmetic"
   }
 
   return dict[databaseColumnName];

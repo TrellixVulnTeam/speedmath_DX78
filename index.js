@@ -119,10 +119,14 @@ accountsDb.serialize(() => {
       multiplication_level INTEGER,
       division_level INTEGER,
       squaring_level INTEGER,
-      square_root_level INTEGER
+      square_root_level INTEGER,
+      modular_arithmetic_level INTEGER
     )`
   );
 
+  
+  
+  //logging database, uncomment following code to log profiles in console at runtime:
   /*accountsDb.all(`SELECT user_id, username, display_name, email, bio, friends, incoming_friend_requests, outgoing_friend_requests, publicly_displayed_achievements, achievements, public_account, topic_practice_stats_privacy, qotd_points, qotd_last_completed FROM users`, [], (err, rows) => {
   //accountsDb.all(`SELECT * FROM topicsPracticeStats`, [], (err, rows) => {
     if (err) {
@@ -274,7 +278,8 @@ function getTopicColumn(topic) {
     "multiplication": "multiplication_level",
     "division": "division_level",
     "squaring": "squaring_level",
-    "squareroot": "square_root_level"
+    "squareroot": "square_root_level",
+    "modular-arithmetic": "modular_arithmetic_level"
   }
 
   if (topic in dictionary) {

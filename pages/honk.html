@@ -65,9 +65,17 @@
     <h1>CHANGELOG:</h1>
     <div id="changelog">
       <div class="menu">
-        <div class="item">
-          <p class="btn"><i class="fa-solid fa-chevron-right collapsed"></i> 6/23/2022</a>
+         <div class="item">
+          <p class="btn"><i class="fa-solid fa-chevron-right collapsed"></i> 7/18/2022</a>
           <div class="sub-menu">
+            <p>
+              Changelog now uses CSS+JS accordion.
+            </p>
+          </div>
+        </div>
+        <div class="item collapsed">
+          <p class="btn"><i class="fa-solid fa-chevron-right"></i> 6/23/2022</a>
+          <div class="sub-menu collapsed">
             <p>
               A challenge/question of the day system was added. A leaderboard was also added. This will be a monthly challenge, with the leaderboards resetting at the beginning of each month.
             </p>
@@ -246,14 +254,14 @@
     <div id="suggestionFormContainer" class="contentTheme">
       <h1>SUGGESTIONS</h1>
       <form id="suggestionsForm" action="/">
-        Give us a way to contact you (such as your email, Discord username, etc.) 
+        Give us a way to contact you (such as your email, Discord username, etc.):
         <br>
-        <input id="contact" maxlength="75" required>
+        <input id="contact" class="secondaryContentTheme" maxlength="75" required>
         <br>
         <br>
-        Enter your suggestion (be detailed)
+        Enter your suggestion (be detailed):
         <br>
-        <textarea id="suggestion" maxlength="5000" required></textarea>
+        <textarea id="suggestion" maxlength="5000" class="secondaryContentTheme" required></textarea>
         <br>
         <button id="btnSuggest" class="secondaryContentTheme" type="submit">Suggest!</button>
       </form>

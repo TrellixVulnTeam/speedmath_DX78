@@ -182,7 +182,7 @@ socket.on("mathwars_updateLobby", (roomInfo) => {
         memberDiv.title = 'Double-click to kick...';
         memberDiv.addEventListener("dblclick", function() {
           Swal.fire({
-            title: "Are you sure you want to kick" + member.username + "?",
+            title: "Are you sure you want to kick " + member.username + "?",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Kick',

@@ -21,32 +21,25 @@
 
 .item {
   display: block;
-  background: var(--secondary-content-background-color);
+  background-color: var(--secondary-content-background-color);
   margin-bottom: 10px;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-  border-bottom-left-radius: 0px;
-  border-bottom-right-radius: 0px;
-  transition: all 0.1s;
+  border-radius: 8px;
+  transition: all 0.1s, background-color 0.4s var(--timing-func) 0s;
   overflow: auto;
-}
-
-.item.collapsed {
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
 }
 
 .btn {
   display: block;
   padding: 16px 20px;
   color: var(--secondary-content-text-color);
+  text-align: left;
 }
 
 .sub-menu {
   display: block;
-  background: var(--content-background-color);
+  background-color: var(--content-background-color);
   border-radius: 0 0 8px 8px;
-  transition: all 0.5s;
+  transition: all 0.5s ease-in-out, background-color 0.4s var(--timing-func) 0s;
   height: auto;
   overflow: hidden;
 }
@@ -63,7 +56,7 @@
 
 .btn i {
   transform: rotate(0deg);
-  transition: all 0.5s;
+  transition: all 0.5s ease-in-out;
 }
 
 .btn i.collapsed {
@@ -90,6 +83,10 @@
     margin-left: 10vw;
     margin-right: 10vw;
   }
+
+  #suggestionFormContainer {
+    width: 50%;
+  }
 }
 
 
@@ -112,12 +109,16 @@
     margin-left: 5vw;
     margin-right: 5vw;
   }
+
+  #suggestionFormContainer {
+    width: 90%;
+  }
 }
 
 #suggestionFormContainer {
-  width: 88vw;
   margin: 5vh auto;
-  border: 3px solid;
+  padding-top: 15px;
+  border-radius: 8px;
 }
 
 #suggestionsForm {
@@ -125,11 +126,12 @@
 }
 
 #contact {
+  margin-top: 5px;
   border: 3px solid;
   border-radius: 22px;
   font-weight: bold;
   font-size: 1.2em;
-  width: 65vw;
+  width: 81%;
   resize: none;
   outline: none;
   overflow: scroll;
@@ -140,13 +142,14 @@
 }
 
 #suggestion {
+  margin-top: 5px;
   text-align: left;
   border: 3px solid;
   border-radius: 22px;
   padding: 10px;
   font-weight: bold;
   font-size: 1.1em;
-  width: 65vw;
+  width: 81%;
   resize: none;
   outline: none;
   overflow: scroll;

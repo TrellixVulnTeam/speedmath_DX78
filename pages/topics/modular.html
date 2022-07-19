@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Modular Arithmetic</title>
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/css/navbar.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/topics/learnOrPlay.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/topics/modular.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <script src="/scripts/themeHandler.js" defer></script>
+    <script src="/scripts/topics/modular.js" defer></script>
+    <script src="/scripts/topics/learnOrPlay.js" defer></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/socket.io/socket.io.js"></script>
+  </head>
+  <body>
+    <!--   Navbar  -->
+    <div class="topnav">
+      <a href="/">Home</a>
+      <a href="/games">Games</a>
+      <a class="active" href="/topics">Topics</a>
+      <a href="/contributors">Contributors</a>
+      <a href="/account">Account</a>
+      <a>
+        <label class="switch">
+          <input type="checkbox" id="darkModeToggle">
+          <span class="slider round"></span>
+        </label>
+      </a>
+    </div>
+    <!-- Navbar ends -->
+
+    <div id="learnOrPracticeContainer" class="contentTheme">
+      Click the <b>Learn</b> button if you want to learn some tricks about modular arithmetic!
+      <br>
+      Click the <b>Practice</b> button if you want to challenge yourself and practice this topic!
+      <br>
+      <button id="btnLearn" class="secondaryContentTheme">Learn</button>
+      <button id="btnPractice" class="secondaryContentTheme">Practice</button>
+    </div>
+    
+    <div id="learnContainer">
+      <div id="articleHeading">
+        Modular Arithmetic
+        <br>
+        <span style="text-align:left;font-size:0.5em;">Last Updated: 07/19/2022</span>
+      </div>
+    </div>
+
+    <div id="practiceContainer">
+      <div id="intro" class="contentTheme">
+        <h3>Welcome!</h3>
+        You will be given modular arithmetic questions in rapid succession.
+        <br>
+        Getting the answers correct will advance you to higher levels.
+        <br>
+        The questions will become harder as your level increases.
+        <br>
+        <br>
+        <button id="btnStart" class="secondaryContentTheme">Start</button>
+      </div>
+
+      <div id="game"> 
+        <div id="question"></div>
+        <p id="timer" class="contentTheme"></p>
+        <input type="number" id="answerField" class="contentTheme" placeholder="Answer..." onpaste="return false;" autofocus/>
+        <button id="btnSubmit" class="contentTheme">Submit</button>
+        <div id="levelProgressBarContainer">
+          <span id="spanCurrentLevel" style="font-size:1.1em;font-weight:bold;"></span> <progress id="questionsProgressBar" min="1" max="11"></progress> <span id="spanNextLevel" style="font-size:1.1em;font-weight:bold;"></span>
+        </div>
+      </div>
+
+      <div id="newLevelContainer" class="contentTheme">
+        <p id="newLevelMessage"></p>
+        <span style="font-size:1.1em;font-weight:bold;">Start</span> <progress id="levelsProgressBar" min="1" max="11"></progress> <span style="font-size:1.1em;font-weight:bold;">Mastery</span>
+        <br>
+        <button id="btnContinue" class="secondaryContentTheme">Continue</button>
+      </div>
+
+      <div id="mastered">
+        <br>
+        <img src="/assets/congratulations.png" alt="progress" style="width:50%">
+        <br>
+        You mastered modular arithmetic! 
+        <br>
+        Make sure to take a screenshot of this page for bragging rights!
+        <br>
+        <br>
+        <button id="btnReturn" class="contentTheme"><a href="/topics">Return</button>
+      </div>
+    </div>
+  </body>
+</html>
