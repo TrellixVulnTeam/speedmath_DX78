@@ -7,6 +7,7 @@
     <title>Modular Arithmetic</title>
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" href="/css/navbar.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="/css/topics/learnOrPlay.css"/>
     <link rel="stylesheet" type="text/css" href="/css/topics/modular.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
@@ -15,6 +16,10 @@
     <script src="/scripts/topics/learnOrPlay.js" defer></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/socket.io/socket.io.js"></script>
+    <!-- KaTeX: -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0-rc.1/dist/katex.min.css" integrity="sha384-D+9gmBxUQogRLqvARvNLmA9hS2x//eK1FhVb9PiU86gmcrBrJAQT8okdJ4LMp2uv" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.10.0-rc.1/dist/katex.min.js" integrity="sha384-483A6DwYfKeDa0Q52fJmxFXkcPCFfnXMoXblOkJ4JcA8zATN6Tm78UNL72AKk+0O" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"></script>
   </head>
   <body>
     <!--   Navbar  -->
@@ -24,6 +29,9 @@
       <a class="active" href="/topics">Topics</a>
       <a href="/contributors">Contributors</a>
       <a href="/account">Account</a>
+      <a href="javascript:void(0);" class="icon" onclick="toggleResponsiveNavbar()">
+        <i class="fa fa-bars"></i>
+      </a>
       <a>
         <label class="switch">
           <input type="checkbox" id="darkModeToggle">
@@ -46,7 +54,182 @@
       <div id="articleHeading">
         Modular Arithmetic
         <br>
-        <span style="text-align:left;font-size:0.5em;">Last Updated: 07/19/2022</span>
+        <span style="text-align:left;font-size:0.5em;">Last Updated: 07/23/2022</span>
+      </div>
+      <hr id="part1">
+      <h2>What is the modulo operator?</h2>
+      When you divide two integers A and B, you get an equation that looks like this:
+      <br>
+      $$\frac{A}{B}=Q\ remainder\ R$$
+      <div class="center">
+        Where:
+        <br>
+        A is the dividend
+        <br>
+        B is the divisor
+        <br>
+        Q is the quotient
+        <br>
+        R is the remainder
+        <br>
+        $$A\ mod\ B = R$$
+      </div>
+      <br>
+      Sometimes, we are only interested in R, or the remainder, instead of the quotient. For these cases, we use the modulo operator, or mod. While modular arithmetic is a cornerstone of number theory and discrete mathematics, it has applications beyond math, such as in computer science, with hashing functions and cryptography. By the end of this article, you will learn how to quickly evaluate expressions such as $12^{134}\operatorname{mod}7$. Have fun!
+      <br>
+      <div class="center">
+        <br>
+        Example:
+        $$\frac{11}{3}=3\ remainder\ 2$$
+        Therefore:
+        $$11\ \operatorname{mod}\ 3\ =\ 2$$
+      </div>
+      <div class="contentTheme quickPracticeContainer" data-question-type="basic">
+        <h3>Practice what you learned:</h3>
+        <div class="quickPracticeQuestion"></div>
+        <input class="quickPracticeAnswerInput secondaryContentTheme">
+        <button class="checkAnswerButton secondaryContentTheme">Check</button>
+        <div class="result">
+        </div>
+      </div>
+      <hr id="part2">
+      <h2>Modular Arithmetic with Negative Numbers</h2>
+      Negative numbers are something that you cannot avoid in math in general, so this section will show you how to perform the modulo operation when there is a negative dividend. The remainder returned by the modulo operator must always be a positive number, so when there is a negative dividend, we have to "overshoot" and multiply our divisor by a number that will result in a product lower than our dividend. Then we have to see how far away we landed from our dividend, and that difference is the remainder.<br><br>Another method to calculate the modulo with a negative dividend is to repeatedly add the divisor to the modulo until we get a number that is between 0 and (the divisor - 1).
+      <div class="center">
+        $$-11\operatorname{mod}7$$
+        <h3>Method 1:</h3>
+        $$7\cdot\left(-2\right)=-14$$
+        $$-11-\left(-14\right)=3$$
+        $$-11\operatorname{mod}7=3$$
+        <h3>Method 2:</h3>
+        $$-11+7\left(2\right)=3$$
+        $$-11\operatorname{mod}7=3$$
+      </div>
+      <div class="contentTheme quickPracticeContainer" data-question-type="negative">
+        <h3>Practice what you learned:</h3>
+        <div class="quickPracticeQuestion"></div>
+        <input class="quickPracticeAnswerInput secondaryContentTheme">
+        <button class="checkAnswerButton secondaryContentTheme">Check</button>
+        <div class="result">
+        </div>
+      </div>
+      <hr id="part3">
+      <h2>Modular Addition and Subtraction</h2>
+      <div class="center">  
+        $$\left(A+B\right)\operatorname{mod}C=\left(A\operatorname{mod}C+B\operatorname{mod}C\right)\operatorname{mod}C$$
+        Example:
+        A = 14, B = 17, C = 3
+        $$\left(14+17\right)\operatorname{mod}3=\left(14\operatorname{mod}3+17\operatorname{mod}3\right)\operatorname{mod}3$$
+        $$\left(14+17\right)\operatorname{mod}3=\left(2+2\right)\operatorname{mod}3$$
+        $$\left(14+17\right)\operatorname{mod}3=4\operatorname{mod}3=1\enspace\checkmark$$
+        $$31\operatorname{mod}3=1\enspace\checkmark$$ 
+        <br>
+        This property is also observed with modular subtraction:
+        $$\left(A-B\right)\operatorname{mod}C=\left(A\operatorname{mod}C-B\operatorname{mod}C\right)\operatorname{mod}C$$
+        Example:
+        A = 37, B = 18, C = 5
+        $$\left(37-18\right)\operatorname{mod}5=\left(37\operatorname{mod}5-18\operatorname{mod}5\right)\operatorname{mod}5$$
+        $$\left(37-18\right)\operatorname{mod}5=\left(2-3\right)\operatorname{mod}5$$
+        $$\left(37-18\right)\operatorname{mod}5=-1\operatorname{mod}5=4\enspace\checkmark$$
+        $$19\operatorname{mod}5=4\enspace\checkmark$$
+      </div>
+      <div class="contentTheme quickPracticeContainer" data-question-type="additionOrSubtraction">
+        <h3>Practice what you learned:</h3>
+        <div class="quickPracticeQuestion"></div>
+        <input class="quickPracticeAnswerInput secondaryContentTheme">
+        <button class="checkAnswerButton secondaryContentTheme">Check</button>
+        <div class="result">
+        </div>
+      </div>
+      <hr id="part4">
+      <h2>Modular Multiplication</h2>
+      $$\left(A\cdot B\right)\operatorname{mod}C=\left(A\operatorname{mod}C\cdot B\operatorname{mod}C\right)\operatorname{mod}C$$
+      <div class="center">
+        Example:
+        A = 19, B = 17, C = 8
+        $$\left(19\cdot17\right)\operatorname{mod}8=\left(19\operatorname{mod}8\cdot17\operatorname{mod}8\right)\operatorname{mod}8$$
+        $$\left(19\cdot17\right)\operatorname{mod}8=\left(3\cdot1\right)\operatorname{mod}8$$
+        $$\left(19\cdot17\right)\operatorname{mod}8=3\operatorname{mod}8=3\enspace\checkmark$$
+        $$323\operatorname{mod}8=3\enspace\checkmark$$
+        This property will be extremely helpful later on in modular exponentiation!
+      </div>
+      <br>
+      <div class="contentTheme quickPracticeContainer" data-question-type="multiplication">
+        <h3>Practice what you learned:</h3>
+        <div class="quickPracticeQuestion"></div>
+        <input class="quickPracticeAnswerInput secondaryContentTheme">
+        <button class="checkAnswerButton secondaryContentTheme">Check</button>
+        <div class="result">
+        </div>
+      </div>
+      <hr id="part5">
+      <h2>Modular Exponentiation</h2>
+      $$A^{B}\operatorname{mod}C=\left(\left(A\operatorname{mod}C\right)^{B}\right)\operatorname{mod}C$$
+      <div class="center">
+        Example: 
+        A = 9, B = 5, C = 7
+        $$9^{5}\operatorname{mod}7=\left(\left(9\operatorname{mod}7\right)^{5}\right)\operatorname{mod}7$$
+        $$9^{5}\operatorname{mod}7=\left(2^{5}\right)\operatorname{mod}7$$
+        $$9^{5}\operatorname{mod}7=32\operatorname{mod}7=4\enspace\checkmark$$
+        $$9^{5}\operatorname{mod}7=4\enspace\checkmark$$
+      </div>
+      However, $\left(A\operatorname{mod}C\right)^{B}$ can become very large for even relatively low values of B, too large for even calculators to calculate, so by itself, the property's use is very limited. We can overcome this shortcoming by combining this property with the Modular Multiplication property, which we previously learned, by splitting up large exponents into smaller exponents using the Multiplication Property of Exponents:
+      <div class="center">
+        $$a^{\left(x+y\right)}=a^{x}\cdot a^{y}$$
+        Example:
+        $$2^{8}=2^{5}\cdot2^{3}$$
+        <br>
+        Example using the Modular Multiplication property with this:
+        $$7^{4}\operatorname{mod}5$$
+        can be broken up into:
+        $$\left(7^{2}\cdot7^{2}\right)\operatorname{mod}5$$
+        and solved as:
+        $$\left(\left(7^{2}\operatorname{mod}5\right)\cdot\left(7^{2}\operatorname{mod}5\right)\right)\operatorname{mod}5$$
+        $$\left(4\cdot4\right)\operatorname{mod}5=1$$
+      </div>
+      Now, going back to what we were trying to simplify, $\left(A\operatorname{mod}C\right)^{B}$. We can break up B into a sum of numbers that are powers of 2 by converting it to binary <a href="/topics/bases">(our base conversion topic page)</a>, as it's easy to find $A^{B}\operatorname{mod}C$ when B is a power of 2, as you will see in the example, where we work through the problem that we promised that you would learn how to solve at the beginning of the article:
+      <div class="center">
+        $$12^{134}\operatorname{mod}7$$
+        First, we have to break 134 into powers of 2, or convert it into binary:
+        $$134_{10}=10000110_{2}$$
+        $$134=128+4+2$$
+        $$12^{134}=12^{128}\cdot12^{4}\cdot12^{2}$$
+        Now, we have to find $12^{2}\operatorname{mod}7$, $12^{4}\operatorname{mod}7$, and $12^{128}\operatorname{mod}7$
+        $$12\operatorname{mod}7=5$$
+        $12^{2}\operatorname{mod}7=\left(12\operatorname{mod}7\right)^{2}\operatorname{mod}7=25\operatorname{mod}7=4$
+        <br>
+        $12^{4}\operatorname{mod}7=\left(12^{2}\operatorname{mod}7\right)^{2}\operatorname{mod}7=16\operatorname{mod}7=2$
+        <br>
+        $12^{8}\operatorname{mod}7=\left(12^{4}\operatorname{mod}7\right)^{2}\operatorname{mod}7=4\operatorname{mod}7=4$
+        <br>
+        $12^{16}\operatorname{mod}7=\left(12^{8}\operatorname{mod}7\right)^{2}\operatorname{mod}7=16\operatorname{mod}7=2$
+        <br>
+        $12^{32}\operatorname{mod}7=\left(12^{16}\operatorname{mod}7\right)^{2}\operatorname{mod}7=4\operatorname{mod}7=4$
+        <br>
+        $12^{64}\operatorname{mod}7=\left(12^{32}\operatorname{mod}7\right)^{2}\operatorname{mod}7=16\operatorname{mod}7=2$
+        <br>
+        $12^{128}\operatorname{mod}7=\left(12^{64}\operatorname{mod}7\right)^{2}\operatorname{mod}7=4\operatorname{mod}7=4$
+        <br>
+        (Note: A pattern like the 4, 2, 4, 2... pattern that you might have noticed in this example won't show up in every problem like this.)
+        <br>
+        <br>
+        Now, we put it all back together with the modular multiplication property:
+        $$12^{134}\operatorname{mod}7=\left(12^{128}\cdot12^{4}\cdot12^{2}\right)\operatorname{mod}7$$
+        $=\left(\left(12^{128}\operatorname{mod}7\right)\cdot\left(12^{4}\operatorname{mod}7\right)\cdot\left(12^{2}\operatorname{mod}7\right)\right)\operatorname{mod}7$
+        <br><br>
+        Now, we substitute in the values that we found:
+        <br>
+        $$=\left(4\cdot2\cdot4\right)\operatorname{mod}7$$
+        $$=32\operatorname{mod}7$$
+        $$=4\enspace\checkmark$$
+      </div>
+      <div class="contentTheme quickPracticeContainer" data-question-type="exponentiation">
+        <h3>Practice what you learned:</h3>
+        <div class="quickPracticeQuestion"></div>
+        <input class="quickPracticeAnswerInput secondaryContentTheme">
+        <button class="checkAnswerButton secondaryContentTheme">Check</button>
+        <div class="result">
+        </div>
       </div>
     </div>
 

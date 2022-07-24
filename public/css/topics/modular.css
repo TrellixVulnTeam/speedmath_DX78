@@ -1,0 +1,79 @@
+#learnContainer {
+  margin-top: 1%;
+  margin-bottom: 1%;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+}
+
+#articleHeading {
+  font-weight: bold;
+  font-size: 2em;
+  text-align: center;
+  padding: 10px;
+}
+
+#learnContainer > h2 {
+  text-align: center;
+  font-size: 1.5em;
+}
+
+.center {
+  text-align: center;
+}
+
+.quickPracticeContainer {
+  border-radius: 22px;
+  padding-top: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+  margin: auto;
+  margin-bottom: 25px;
+}
+
+.quickPracticeContainer > .quickPracticeAnswerInput {
+  border-radius: 22px;
+  padding: 5px;
+  margin: 15px;
+  font-size: 1.2em;
+  width: 90%;
+}
+
+.quickPracticeContainer > .checkAnswerButton {
+  border-radius: 22px;
+  padding: 5px 20px;
+  font-size: 1.2em;
+  cursor: pointer;
+}
+
+.quickPracticeContainer > .result {
+  margin-top: 10px;
+}
+
+/* For mobile: */
+@media only screen and (max-width: 650px) {
+  .quickPracticeContainer {
+    width: 95%;
+  }
+}
+
+/* For laptop/PC/wide screens */
+@media only screen and (min-width: 650px) {
+  .quickPracticeContainer {
+    width: 600px;
+  }
+}
+
+/* KaTeX styling that I literally copied from their website: */
+
+.katex-display {
+  overflow: auto hidden;
+}
+
+.katex-display > .katex { white-space: normal }
+/* Add space between broken lines: */
+.katex-display > .base { margin: 0.25em 0 }
+/* Compensate by reducing space around display math */
+.katex-display { margin: 0.5em 0; }

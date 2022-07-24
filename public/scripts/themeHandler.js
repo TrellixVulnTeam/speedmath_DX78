@@ -25,8 +25,8 @@ let themeSettings = {
   },
   "--content": {
     "-background-color": {
-      "dark": "#ffb8ac", 
-      "light": "#C1DBCC"
+      "dark": "#9a87a1", 
+      "light": "#a0bbcf"
     },
     "-text-color": {
       "dark": "#000000",
@@ -39,8 +39,8 @@ let themeSettings = {
   },
   "--secondary-content": {
     "-background-color": {
-      "dark": "#d4f6f2",
-      "light": "#f08080"
+      "dark": "#ADC5C6",
+      "light": "#975db6"
     },
     "-text-color": {
       "dark": "#000000",
@@ -108,4 +108,13 @@ function changeTheme(theme) {
   for (const property in themeSettings) {
     subChangeTheme(property, themeSettings[property])
   }
-} 
+}
+
+
+//technically this code is for the navbar but i'm putting it here because this file of code is applied to every page:
+
+/* Toggle between adding and removing the "responsive" class to topnav when the user clicks on the icon */
+function toggleResponsiveNavbar() {
+  let navbar = document.querySelector(".topnav");
+  navbar.classList.toggle("responsive");
+}
