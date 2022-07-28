@@ -4,24 +4,26 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <meta property="og:title" content="Games"/>
+    <meta property="og:title" content="Full Precision Calculator"/>
     <meta property="og:type" content="website"/>
-    <meta property="og:url" content="https://speedmath.ml/games"/>
-    <meta property="og:description" content="Check out our collection of games! Both single-player and multiplayer games!"/>
+    <meta property="og:url" content="https://speedmath.ml/fullprecision"/>
+    <meta property="og:description" content="A full precision calculator that can display extremely large numbers instead of just expressing them in scientific notation like your average calculator."/>
     <meta property="og:image" content="https://speedmath.ml/assets/favicon.ico"/>
     <meta name="theme-color" content="#ff928b"/>
-    <title>Games</title>
+    <title>Full Precision Calculator</title>
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" href="/css/navbar.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="/css/gamesIndex.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/games/full-precision-calculator/style.css"/>
     <script src="/scripts/themeHandler.js" defer></script>
-    <script src="/scripts/gamesIndex.js" defer></script>
+    <script src="/scripts/games/full-precision-calculator/script.js" defer></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- KaTeX: -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" integrity="sha384-Xi8rHCmBmhbuyyhbI88391ZKP2dmfnOl4rT9ZfRI7mLTdk1wblIUnrIq35nqwEvC" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js" integrity="sha384-X/XCfMm41VSsqRNQgDerQczD69XqmjOOOwYQvr/uuC+j4OPoNhVgjdGFwhvN02Ja" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"></script>
   </head>
+  
   <body>
     <!--   Navbar  -->
     <div class="topnav">
@@ -41,30 +43,32 @@
       </a>
     </div>
     <!-- Navbar ends -->
-    <div id="gamesContainer">
-      <div class="gameInfo contentTheme">
-        <div class="gameHeading">Challenge of the Day</div>
-        <br>
-        There will be a new challenge question every day (resets at 12:00 AM EST). Players get a score every day out of 100 based on accuracy and time taken to solve the challenge problem. Players' scores are cumulative and players with a public account are ranked in a public leaderboard based on their cumulative score.
-        <br><br>
-        <a href="/qotd" class="playButton secondaryContentTheme">Play</a>
-      </div>
-
-      <div class="gameInfo contentTheme">
-        <div class="gameHeading">MathWars</div>
-        <br>
-        MathWars is a multiplayer math game! You can make a room and invite your friends with a join code! We will add more text here describing how to play once we figure out how the game will work and game rules!
-        <br><br>
-        <a href="/mathwars" class="playButton secondaryContentTheme">Play</a>
-      </div>
-
-      <div class="gameInfo contentTheme">
-        <div class="gameHeading">Full Precision Calculator</div>
-        <br>
-        Ever felt limited by the display size on a regular calculator? Hate how your calculator puts really large numbers in scientific notation instead of just giving you the answer? Do you ever want to calculate really large values such as $123^{456}$? If so, our calculator is perfect for you!
-        <br><br>
-        <a href="/fullprecision" class="playButton secondaryContentTheme">Play</a>
+    <h1>Full Precision Calculator</h1>
+    <h3>(Speed depends on your browser's capabilities, although there is no theoretical limit)</h3>
+    <div id="inputsContainer">
+      <label for="inputX">Enter $x$:</label>
+      <input type="number" id="inputX" class="contentTheme">
+      <br>
+      <label for="inputY">Enter $y$:</label>
+      <input type="number" id="inputY" class="contentTheme">
+    </div>
+    <div id="operationsContainer">
+      <button id="add" class="contentTheme">$x+y$</button>
+      <button id="subtract" class="contentTheme">$x-y$</button>
+      <button id="multiply" class="contentTheme">$x\cdot y$</button>
+      <button id="divide" class="contentTheme">$x\div y$</button>
+      <button id="mod" class="contentTheme">$x\operatorname{mod}y$</button>
+      <button id="exponentiate" class="contentTheme">$x^{y}$</button>
+      <button id="factorial" class="contentTheme">x!</button>
+    </div>
+    <div id="resultContainer">
+      <h1>Result:</h1>
+      <p id="result"></p>
+      <div id="moveResultToInput">
+        <button id="answerToX" class="contentTheme">$\operatorname{ans}\to x$</button>
+        <button id="answerToY" class="contentTheme">$\operatorname{ans}\to y$</button>
       </div>
     </div>
+    <button id="downloadResultAsTxt" class="secondaryContentTheme">Download answer as .txt file</button>
   </body>
 </html>

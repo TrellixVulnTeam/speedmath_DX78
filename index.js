@@ -39,6 +39,10 @@ app.get('/mathwars/:roomId', (req, res) => {
   res.sendFile(__dirname + "/pages/games/mathwars/room.html");
 });
 
+app.get('/fullprecision', (req, res) => {
+  res.sendFile(__dirname + "/pages/games/full-precision-calculator/index.html");
+});
+
 app.get('/topics', (req, res) => {
   res.sendFile(__dirname + "/pages/topics/topicsIndex.html");
 });
@@ -69,7 +73,7 @@ app.get('/tos', (req, res) => {
 
 app.get('/katex-testing', (req, res) => {
   res.sendFile(__dirname + "/pages/katex-testing.html");
-})
+});
 
 
 //THIS HAS TO BE KEPT AT THE END OF THE ROUTING SECTION OF THE CODE

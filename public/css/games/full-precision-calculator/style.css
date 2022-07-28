@@ -1,0 +1,98 @@
+* {
+  text-align: center;
+}
+
+#inputsContainer > input {
+  margin: 20px auto;
+  border-radius: 22px;
+  border: 2px solid;
+  font-size: 1.1em;
+  padding: 5px;
+}
+
+#inputsContainer > label {
+  margin-right: 15px;
+}
+
+/*Removing increment/decrement arrows from number inputs:*/
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+#operationsContainer {
+  margin: 20px auto;
+}
+
+#operationsContainer > button, #moveResultToInput > button {
+  padding: 5px 25px;
+  font-size: 1.2em;
+  border: 2px solid;
+  border-radius: 15px;
+  cursor: pointer;
+  margin: 15px;
+}
+
+#operationsContainer > button:hover, #moveResultToInput > button:hover {
+  transform: scale(105%);
+  filter: brightness(105%);
+}
+
+#downloadResultAsTxt {
+  font-size: 1.3em;
+  padding: 10px;
+  border-radius: 22px;
+  border: 2px solid;
+  cursor: pointer;
+  display: block;
+  margin: 15px auto;
+}
+
+#downloadResultAsTxt {
+  display: none;
+}
+
+#downloadResultAsTxt:hover {
+  transform: scale(105%);
+  filter: brightness(105%);
+}
+
+#moveResultToInput {
+  display: none;
+}
+
+#result {
+  margin: auto;
+  overflow-wrap: break-word;
+}
+
+/* For mobile: */
+@media only screen and (max-width: 550px) {
+  #inputsContainer > input {
+    margin-top: 5px;
+    width: 90%;
+  }
+
+  #result {
+    width: 90%;
+  }
+}
+
+/* For laptop/PC/wide screens */
+@media only screen and (min-width: 550px) {
+  #inputsContainer > input {
+    width: 50%;
+  }
+
+  #result {
+    width: 50%;
+  }
+}

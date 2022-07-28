@@ -8,8 +8,76 @@
   padding: 5px;
 }
 
+/* For mobile: */
+@media only screen and (max-width: 550px) {
+  #intro {
+    width: 80vw;
+  }
+
+  #game {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+  }
+
+  #question {
+    grid-area: 2 / 1 / 3 / 4;
+  }
+
+  #answerField {
+    grid-area: 3 / 1 / 4 / 4;
+  }
+
+  #btnSubmit {
+    grid-area: 4 / 2 / 5 / 3;
+  }
+
+  #timer {
+    grid-area: 1 / 3 / 2 / 4;
+  }
+
+  #levelProgressBarContainer {
+    grid-area: 5 / 1 / 6 / 4;
+  }
+}
+
+/* For laptop/PC/wide screens */
+@media only screen and (min-width: 550px) {
+  #intro {
+    width: 50vw;
+  }
+
+  #game {
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+  }
+
+  #question {
+    grid-area: 1 / 2 / 2 / 5;
+  }
+
+  #answerField {
+    grid-area: 2 / 2 / 3 / 5;
+  }
+
+  #btnSubmit {
+    grid-area: 3 / 2 / 4 / 5;
+  }
+
+  #timer {
+    grid-area: 1 / 5 / 2 / 6;
+  }
+
+  #levelProgressBarContainer {
+    grid-area: 4 / 2 / 5 / 5;
+  }
+}
+
 #intro {
-  width: 50vw;
   margin: 10vh auto;
   border-radius: 25px;
   padding: 25px;
@@ -18,13 +86,12 @@
 
 #btnStart {
   cursor: pointer;
-  padding: 5px; 
+  padding: 5px 50px; 
   margin: 5px;
   font-size: 1.5em;
-  border: 2px solid;
   border-radius: 8px;
-  font-weight: bold;
   transition: 0.1s ease-in;
+  border: 0px;
 }
 
 button:hover {
@@ -34,16 +101,11 @@ button:hover {
 #game {
   display: none;
   padding: 5%;
-  grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: repeat(4, 1fr);
-  grid-column-gap: 0px;
-  grid-row-gap: 0px;
   height: 90%;
   margin: auto;
 }
 
 #question {
-  grid-area: 1 / 2 / 2 / 5;
   font-size: 2em;
   margin: 15px;
   -webkit-user-select: none; /* Safari */
@@ -52,10 +114,9 @@ button:hover {
 }
 
 #answerField {
-  grid-area: 2 / 2 / 3 / 5;
   font-size: 1.5em;
   border: 2px solid;
-  border-radius: 8px;
+  border-radius: 22px;
   margin: 15px;
   outline: none;
   font-weight: bold;
@@ -66,10 +127,9 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 }
 
 #btnSubmit {
-  grid-area: 3 / 2 / 4 / 5;
   font-size: 1.5em;
   border: 2px solid;
-  border-radius: 8px;
+  border-radius: 22px;
   margin: 15px;
   transition: 0.1s;
 }
@@ -79,13 +139,9 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 }
 
 #timer {
-  grid-area: 1 / 5 / 2 / 6;
   font-size: 1.5em;
   padding: 5px;
-}
-
-#levelProgressBarContainer {
-  grid-area: 4 / 2 / 5 / 5;
+  border-radius: 22px;
 }
 
 #newLevelContainer {
