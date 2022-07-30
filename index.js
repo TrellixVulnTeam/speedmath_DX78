@@ -51,8 +51,8 @@ app.get('/topics/:topic', (req, res) => {
   res.sendFile(__dirname + "/pages/topics/" + req.params.topic + ".html");
 });
 
-app.get('/contributors', (req, res) => {
-  res.sendFile(__dirname +"/pages/contributors.html");
+app.get('/aboutus', (req, res) => {
+  res.sendFile(__dirname +"/pages/about.html");
 });
 
 app.get('/account', (req, res) => {
@@ -111,7 +111,8 @@ accountsDb.serialize(() => {
       public_account TEXT,
       topic_practice_stats_privacy TEXT,
       qotd_points INTEGER,
-      qotd_last_completed INTEGER
+      qotd_last_completed INTEGER,
+      balance INTEGER
     )`
   );
   
@@ -127,11 +128,9 @@ accountsDb.serialize(() => {
       modular_arithmetic_level INTEGER
     )`
   );
-
-  
   
   //logging database, uncomment following code to log profiles in console at runtime:
-  /*accountsDb.all(`SELECT user_id, username, display_name, email, bio, friends, incoming_friend_requests, outgoing_friend_requests, publicly_displayed_achievements, achievements, public_account, topic_practice_stats_privacy, qotd_points, qotd_last_completed FROM users`, [], (err, rows) => {
+  /*accountsDb.all(`SELECT user_id, username, display_name, email, bio, friends, incoming_friend_requests, outgoing_friend_requests, publicly_displayed_achievements, achievements, public_account, topic_practice_stats_privacy, qotd_points, qotd_last_completed, balance FROM users`, [], (err, rows) => {
   //accountsDb.all(`SELECT * FROM topicsPracticeStats`, [], (err, rows) => {
     if (err) {
       console.log(err);

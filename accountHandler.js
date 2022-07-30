@@ -64,11 +64,11 @@ module.exports = function(socket, sqlite3, bcrypt, jwt) {
                     if (bcryptError) {
                       console.log(bcryptError)
                     } else {
-                      accountsDb.run(`INSERT INTO users(username, password_hashed, display_name, email, profile_picture, bio, friends, incoming_friend_requests, outgoing_friend_requests, achievements, publicly_displayed_achievements, public_account, topic_practice_stats_privacy, qotd_points) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [username, hashedPassword, displayName, email, "defaultAvatar", "No bio yet.", "[]", "[]", "[]", "[]", "[]", "true", "friends", 0], function(err) {
+                      accountsDb.run(`INSERT INTO users(username, password_hashed, display_name, email, profile_picture, bio, friends, incoming_friend_requests, outgoing_friend_requests, achievements, publicly_displayed_achievements, public_account, topic_practice_stats_privacy, qotd_points, balance) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [username, hashedPassword, displayName, email, "defaultAvatar", "No bio yet.", "[]", "[]", "[]", "[]", "[]", "true", "friends", 0, 0], function(err) {
                         if (err) {
                           console.log(err);
                         } else {
-                          accountsDb.run(`INSERT INTO topicsPracticeStats(addition_level, subtraction_level, multiplication_level, division_level, squaring_level, square_root_level) VALUES (?, ?, ?, ?, ?, ?)`, [1, 1, 1, 1, 1, 1], function(err) {
+                          accountsDb.run(`INSERT INTO topicsPracticeStats(addition_level, subtraction_level, multiplication_level, division_level, squaring_level, square_root_level, modular_arithmetic_level) VALUES (?, ?, ?, ?, ?, ?)`, [1, 1, 1, 1, 1, 1, 1], function(err) {
                             if (err) {
                               console.log(err);
                             } else {

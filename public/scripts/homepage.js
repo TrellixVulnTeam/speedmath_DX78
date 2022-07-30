@@ -74,7 +74,9 @@ suggestionsForm.addEventListener("submit", function(e) {
     text: "A member of our team will contact you back as soon as possible!",
     icon: "success",
     confirmButtonColor: "#000000",
-    color: themeSettings["--content-text-color"][localStorage.getItem("theme")]
+    iconColor: themeSettings.contentTextColor[localStorage.getItem("theme")],
+    background: themeSettings.contentBackgroundColor[localStorage.getItem("theme")],
+    color: themeSettings.contentTextColor[localStorage.getItem("theme")]
   });
 });
 

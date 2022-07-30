@@ -26,7 +26,7 @@
       <a href="/">Home</a>
       <a href="/games">Games</a>
       <a href="/topics">Topics</a>
-      <a href="/contributors">Contributors</a>
+      <a href="/aboutus">About Us</a>
       <a class="active" href="/account">Account</a>
       <a href="javascript:void(0);" class="icon" onclick="toggleResponsiveNavbar()">
         <i class="fa fa-bars"></i>
@@ -44,12 +44,12 @@
         <h1>Log In</h1>
         <label for="usernameLogin">Username</label>
         <br>
-        <input id="usernameLogin" required onkeypress="return event.charCode != 32"></input>
+        <input id="usernameLogin" class="secondaryContentTheme" required onkeypress="return event.charCode != 32"></input>
         <br>
         <br>
         <label for="passwordLogin">Password</label>
         <br>
-        <input id="passwordLogin" type="password" required onkeypress="return event.charCode != 32"></input>
+        <input id="passwordLogin" class="secondaryContentTheme" type="password" required onkeypress="return event.charCode != 32"></input>
         <br>
         <br>
         <label for="rememberMe">Remember Me</label>
@@ -65,27 +65,27 @@
         <h1>Sign Up</h1>
         <label for="usernameSignUp">Username</label>
         <br>
-        <input id="usernameSignUp" required autocomplete="off" onkeypress="return event.charCode != 32"></input>
+        <input id="usernameSignUp" class="secondaryContentTheme" required autocomplete="off" onkeypress="return event.charCode != 32"></input>
         <br>
         <br>
         <label for="displayName">Display Name</label>
         <br>
-        <input id="displayName" required autocomplete="off"></input>
+        <input id="displayName" class="secondaryContentTheme" required autocomplete="off"></input>
         <br>
         <br>
         <label for="email">Email (optional)</label>
         <br>
-        <input type="email" id="email" autocomplete="off"></input>
+        <input type="email" class="secondaryContentTheme" id="email" autocomplete="off"></input>
         <br>
         <br>
         <label for="passwordSignUp">Password</label>
         <br>
-        <input id="passwordSignUp" type="password" required autocomplete="new-password" onkeypress="return event.charCode != 32" minlength="8"></input>
+        <input id="passwordSignUp" class="secondaryContentTheme" type="password" required autocomplete="new-password" onkeypress="return event.charCode != 32" minlength="8"></input>
         <br>
         <br>
         <label for="confirmPassword">Confirm Password</label>
         <br>
-        <input id="confirmPassword" type="password" required autocomplete="new-password" onkeypress="return event.charCode != 32" minlength="8"></input>
+        <input id="confirmPassword" class="secondaryContentTheme" type="password" required autocomplete="new-password" onkeypress="return event.charCode != 32" minlength="8"></input>
         <br>
         <br> 
         <span id="beOver13">By signing up, you agree to our <a href="/tos" target="_blank" rel="noopener noreferrer">Terms of Service</a></span>
@@ -106,6 +106,9 @@
           <span id="profileInfoDisplayName"></span>
           <br>
           <span id="profileInfoUsername"></span>
+          <br>
+          <span id="balance"></span>
+          <span id="piecoinIconInProfile" class="icon-piecoin"></span>
           <br>
           <span id="profileInfoBio"></span>
           <a id="changeBio" style="font-size:1.1em;text-decoration:underline;cursor:pointer;">Update bio</a>

@@ -11,7 +11,7 @@ module.exports = function(socket, sqlite3, jwt) {
           }
         }); 
 
-        accountsDb.get(`SELECT username, display_name, email, profile_picture, bio, friends, incoming_friend_requests, outgoing_friend_requests, achievements, publicly_displayed_achievements, public_account, topic_practice_stats_privacy FROM users WHERE user_id = ?`, [user.id], function(err, row) {
+        accountsDb.get(`SELECT username, display_name, email, profile_picture, bio, friends, incoming_friend_requests, outgoing_friend_requests, achievements, publicly_displayed_achievements, public_account, topic_practice_stats_privacy, balance FROM users WHERE user_id = ?`, [user.id], function(err, row) {
           if (err) {
             console.log(err);
           } else {

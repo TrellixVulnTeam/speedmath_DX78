@@ -4,12 +4,15 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>Contributors</title>
+    <title>About Us</title>
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" href="/css/navbar.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="/css/contributors.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/about.css"/>
     <script src="/scripts/themeHandler.js" defer></script>
+    <script src="/scripts/aboutus.js" defer></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/socket.io/socket.io.js"></script>
   </head>
   <body>
     <!--   Navbar  -->
@@ -17,7 +20,7 @@
       <a href="/">Home</a>
       <a href="/games">Games</a>
       <a href="/topics">Topics</a>
-      <a class="active" href="/contributors">Contributors</a>
+      <a class="active" href="/aboutus">About Us</a>
       <a href="/account">Account</a>
       <a href="javascript:void(0);" class="icon" onclick="toggleResponsiveNavbar()">
         <i class="fa fa-bars"></i>
@@ -30,6 +33,7 @@
       </a>
     </div>
     <!-- Navbar ends -->
+    <h1>Our Contributors</h1>
     <div id="contributorsContainer">
       <div class="contributorInfo contentTheme">
         <div class="contributorPicture"><img src="/assets/contributorPictures/kiteflyer.gif"></div>
@@ -66,13 +70,34 @@
         <div class="contributorName">Cosmic</div>
         Marketing.
       </div>
-      
-      <!--<div class="contributorInfo contentTheme">
-        <div class="contributorPicture"><img src="/assets/contributorPictures/kai.png"></div>
-        <div class="contributorName">Kai</div>
-        Beta user. (jk they're an alpha) 
-      </div>-->
+
+      <div class="contributorInfo contentTheme">
+        <div class="contributorPicture" id="youPic"><img src="/assets/contributorPictures/you.png"></div>
+        <div class="contributorName">You?</div>
+        This is an open-source project!
+        <br>
+        <button id="joinDiscord" class="secondaryContentTheme">Contribute</button>
+      </div>
     </div>
-    <h2>This is an open-source project and everyone is invited to contribute! DM sky#4793 or SpeedMath#5080 on Discord if you are interested. You will receive credit for any articles that you write or any code that you contribute on this page.</h2>
+    <br>
+    <h1>Suggestions/Contact</h1>
+  
+    <div id="suggestionFormContainer" class="contentTheme">
+      <h1>SUGGESTIONS</h1>
+      <form id="suggestionsForm" action="/">
+        Give us a way to contact you (such as your email, Discord username, etc.):
+        <br>
+        <input id="contact" class="secondaryContentTheme" maxlength="75" required>
+        <br>
+        <br>
+        Enter your suggestion (be detailed):
+        <br>
+        <textarea id="suggestion" maxlength="5000" class="secondaryContentTheme" required></textarea>
+        <br>
+        <button id="btnSuggest" class="secondaryContentTheme" type="submit">Suggest!</button>
+      </form>
+    </div>
+
+    <button id="tosLink" class="secondaryContentTheme">Terms of Service</button>
   </body>
 </html>

@@ -131,6 +131,7 @@ socket.on("ownProfileInfo", (info, topicsPracticeStats) => {
 
   document.getElementById("profileInfoUsername").textContent = ("@" + info.username);
   document.getElementById("profileInfoDisplayName").textContent = info.display_name;
+  document.getElementById("balance").textContent = info.balance;
 
   if (info.email == null) {
     document.getElementById("profileInfoEmail").textContent = "You didn't provide an email address.";
