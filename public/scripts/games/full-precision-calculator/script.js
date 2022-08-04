@@ -14,8 +14,57 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
+class BigDecimal {
+  constructor(string) {
+    if (string.includes(".")) {
+      this.decimalPlaces = string.length - string.indexOf(".") - 1;
+    } else {
+      this.decimalPlaces = 0;
+    }
+    this.bigintRepresentation = BigInt(string.replace('.', ''));
+    this.bigdecRepresentation = string;
+  }
+
+  add(bigdec) {
+    if (this.decimalPlaces > bigdec.decimalPlaces) {
+      let difference = this.decimalPlaces - bigdec.decimalPlaces;
+      return new BigDecimal(BigDecimal.bigIntRepToBigDec(this.bigintRepresentation + (bigdec.bigintRepresentation * (10n ** BigInt(difference))), this.decimalPlaces));
+    } else {
+      let difference = bigdec.decimalPlaces - this.decimalPlaces;
+      return new BigDecimal(BigDecimal.bigIntRepToBigDec(bigdec.bigintRepresentation + (this.bigintRepresentation * (10n ** BigInt(difference))), bigdec.decimalPlaces));
+    }
+  }
+
+  subtract(bigdec) {
+    let negativeOne = new BigDecimal("-1");
+    return this.add(negativeOne.multiply(bigdec));
+  }
+
+  multiply(bigdec) {
+    let totalDecimalPlaces = this.decimalPlaces + bigdec.decimalPlaces;
+    return new BigDecimal(BigDecimal.bigIntRepToBigDec((this.bigintRepresentation * bigdec.bigintRepresentation), totalDecimalPlaces));
+  }
+
+  divide(bigdec, precision) {
+    
+  }
+
+  //static function to convert a bigint representation of a bigdec object to a bigdec string. parameters are bigint representation and decimal places that should be in the bigdec string
+  static bigIntRepToBigDec(bigint, decPlaces) {
+    let bigIntString = bigint.toString();
+    let index = bigIntString.length - decPlaces;
+    let bigDecString = bigIntString.slice(0, index) + "." + bigIntString.slice(index);
+    return bigDecString;
+  }
+
+  toString() {
+    return this.bigdecRepresentation;
+  }
+}
+
 let inputX = document.getElementById("inputX");
 let inputY = document.getElementById("inputY");
+let precision = document.getElementById("precision");
 let result = document.getElementById("result");
 let add = document.getElementById("add");
 let subtract = document.getElementById("subtract");
@@ -28,24 +77,62 @@ let answerToX = document.getElementById("answerToX");
 let answerToY = document.getElementById("answerToY");
 
 add.addEventListener("click", function() {
-  let x = BigInt(inputX.value);
-  let y = BigInt(inputY.value);
-  result.textContent = x + y;
-  showResultsDivButtons();
+  if (inputValueExists(inputX) && inputValueExists(inputY)) {
+    if (inputsAreDecimal()) {
+      let x = new BigDecimal(inputX.value);
+      let y = new BigDecimal(inputY.value);
+      result.textContent = x.add(y);
+      showResultsDivButtons();
+    } else {
+      let x = BigInt(inputX.value);
+      let y = BigInt(inputY.value);
+      result.textContent = x + y;
+      showResultsDivButtons();
+    }
+  } else {
+    SwalError("Input(s) missing", "Two inputs (x and y) are needed for this operation, since you are trying to add two numbers.");
+  }
 });
 
 subtract.addEventListener("click", function() {
-  let x = BigInt(inputX.value);
-  let y = BigInt(inputY.value);
-  result.textContent = x - y;
-  showResultsDivButtons();
+  if (inputValueExists(inputX) && inputValueExists(inputY)) {
+    if (inputsAreDecimal()) {
+      let x = new BigDecimal(inputX.value);
+      let y = new BigDecimal(inputY.value);
+      result.textContent = x.subtract(y);
+      showResultsDivButtons();
+    } else {
+      let x = BigInt(inputX.value);
+      let y = BigInt(inputY.value);
+      result.textContent = x - y;
+      showResultsDivButtons();
+    }
+  } else {
+    SwalError("Input(s) missing", "Two inputs (x and y) are needed for this operation, since you are trying to subtract two numbers.");
+  }
 });
 
 multiply.addEventListener("click", function() {
-  let x = BigInt(inputX.value);
-  let y = BigInt(inputY.value);
-  result.textContent = x * y;
-  showResultsDivButtons();
+  if (inputValueExists(inputX) && inputValueExists(inputY)) {
+    if (inputsAreDecimal()) {
+      let x = new BigDecimal(inputX.value);
+      let y = new BigDecimal(inputY.value);
+      result.textContent = x.multiply(y);
+      showResultsDivButtons();
+    } else {
+      let x = BigInt(inputX.value);
+      let y = BigInt(inputY.value);
+      result.textContent = x * y;
+      showResultsDivButtons();
+    }
+  } else {
+    SwalError("Input(s) missing", "Two inputs (x and y) are needed for this operation, since you are trying to multiply two numbers.");
+  }
+});
+
+divide.addEventListener("click", function() {
+  let x = new BigDecimal(inputX.value);
+  let y = new BigDecimal(inputY.value);
 });
 
 exponentiate.addEventListener("click", function() {
@@ -68,6 +155,24 @@ answerToY.addEventListener("click", function() {
 });
 
 // helper functions:
+
+//parameter "input" is an Element object
+function inputValueExists(input) {
+  if (input.value) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+//check if at least one of the inputs is a decimal
+function inputsAreDecimal() {
+  if (inputX.value.includes(".") || inputY.value.includes(".")) {
+    return true;
+  } else {
+    return false;
+  }
+}
 
 function download(filename, text) {
   var element = document.createElement('a');

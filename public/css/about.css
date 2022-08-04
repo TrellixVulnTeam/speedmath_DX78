@@ -2,6 +2,12 @@
   text-align: center;
 }
 
+.flexContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
 :root {
   --contributorInfoWidth: 250px;
   scroll-behavior: smooth;
@@ -125,6 +131,12 @@ h2 {
   display: none;
 }
 
+#socialsContainer {
+  margin: 5vh auto;
+  padding: 10px;
+  border-radius: 22px;
+}
+
 #btnSuggest {
   cursor: pointer;
   padding: 15px 30px;
@@ -144,6 +156,10 @@ h2 {
   #suggestionFormContainer {
     width: 50%;
   }
+
+  #socialsContainer {
+    width: 60%;
+  }
 }
 
 
@@ -152,6 +168,22 @@ h2 {
   #suggestionFormContainer {
     width: 90%;
   }
+
+  #socialsContainer {
+    width: 90%;
+  }
+}
+
+#socialsContainer > div > a > img {
+  width: 100px;
+  height: auto;
+  margin: 25px;
+}
+
+#socialsContainer > div > a > img:hover {
+  transform: scale(105%);
+  filter: brightness(105%);
+  transition: 0.4s;
 }
 
 #tosLink {
