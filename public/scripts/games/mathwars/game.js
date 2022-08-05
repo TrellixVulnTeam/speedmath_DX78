@@ -1,8 +1,11 @@
 let socket = io();
 
+//actual game code starts at around line 250, the rest is about the lobby
+
+let lobbyContainer = document.getElementById("lobbyContainer");
+let gameContainer = document.getElementById("gameContainer");
 let gamePinDisplay = document.getElementById("gamePinDisplay");
 let gameTopicsContainer = document.getElementById("gameTopicsContainer");
-let chooseGameControlsContainer = document.getElementById("chooseGameControlsContainer");
 let lobbyMembersContainer = document.getElementById("lobbyMembersContainer");
 let lobbyChatForm = document.getElementById("lobbyChatForm");
 let lobbyChatInput = document.getElementById("lobbyChatInput");
@@ -29,6 +32,9 @@ let possibleMathWarsTopics = {
   },
   "sqrt": {
     "name": "Square Rooting"
+  },
+  "modular": {
+    "name": "Modular Arithmetic"
   }
 }
 
@@ -90,66 +96,11 @@ socket.on("mathwars_updateLobby", (roomInfo) => {
       option.value = roomInfo.possibleTopics[topic].name;
       document.getElementById("topicsList").appendChild(option);
     });
-
-    //game controls inputs:
-    chooseGameControlsContainer.style.display = "block";
-    let timeBased = document.getElementById("timeBased");
-    let timeLimitInput = document.getElementById("timeLimitInput");
-    let timeLimitDisplay = document.getElementById("timeLimitDisplay");
-    let questionsBased = document.getElementById("questionsBased");
-    let questionsLimitInput = document.getElementById("questionsLimitInput");
-    let questionsLimitDisplay = document.getElementById("questionsLimitDisplay");
-
-    if (timeBased.checked) {
-      timeLimitInput.style.display = "inline-block";
-      timeLimitDisplay.style.display = "inline-block";
-      questionsLimitInput.style.display = "none";
-      questionsLimitDisplay.style.display = "none";
-    } else if (questionsBased.checked) {
-      timeLimitInput.style.display = "none";
-      timeLimitDisplay.style.display = "none";
-      questionsLimitInput.style.display = "inline-block";
-      questionsLimitDisplay.style.display = "inline-block";
-    }
     
-    timeBased.addEventListener("change", function() {
-      if (timeBased.checked) {
-        timeLimitInput.style.display = "inline-block";
-        timeLimitDisplay.style.display = "inline-block";
-        questionsLimitInput.style.display = "none";
-        questionsLimitDisplay.style.display = "none";
-      }
-    });
-
-    questionsBased.addEventListener("change", function() {
-      if (questionsBased.checked) {
-        timeLimitInput.style.display = "none";
-        timeLimitDisplay.style.display = "none";
-        questionsLimitInput.style.display = "inline-block";
-        questionsLimitDisplay.style.display = "inline-block";
-      }
-    });
-
-    timeLimitInput.addEventListener("change", function() {
-      let timeLimit = timeLimitInput.value;
-      if (timeLimit != 1) {
-        timeLimitDisplay.textContent = `Time Limit: ${timeLimit} minutes`;
-      } else {
-        timeLimitDisplay.textContent = `Time Limit: ${timeLimit} minute`;
-      }
-    });
-
-    questionsLimitInput.addEventListener("change", function() {
-      questionsLimitDisplay.textContent = `Questions: ${questionsLimitInput.value}`;
-    });
-
     //start game:
     btnStartGame.style.display = "block"; //make button visible if they're the owner
-    btnStartGame.addEventListener("click", function() {
-      
-    });
   } else {
-    gameTopicsContainer.style.marginTop = "-25px"; //because i'm bad at CSS and would rather use JS
+    gameTopicsContainer.style.marginTop = "-25px"; //because i'm bad at CSS classes and would rather use JS
   }
                 
   //show room code at top of page:
@@ -216,6 +167,12 @@ gamePinDisplay.addEventListener("click", function() {
   alertify.notify('Copied to clipboard!', 'success', 5); 
 });
 
+btnStartGame.addEventListener("click", function() {
+  let url = window.location.href;
+  let roomCode = url.substring(url.lastIndexOf('/') + 1).toLowerCase();
+  socket.emit("mathwars_startGame", roomCode);
+});
+
 socket.on("mathwars_ownerLeftRoom", () => {
   Swal.fire({
     title: 'Room Host Left',
@@ -230,6 +187,7 @@ socket.on("mathwars_ownerLeftRoom", () => {
 });
 
 socket.on("mathwars_youGotKicked", () => {
+  sessionStorage.setItem('mathwars_kicked', 'true');
   window.location.href = '/mathwars';
 });
 
@@ -289,4 +247,45 @@ socket.on("error", (errorTitle, errorMessage) => {
     background: themeSettings.contentBackgroundColor[localStorage.getItem("theme")],
     color: themeSettings.contentTextColor[localStorage.getItem("theme")]
   });
+});
+
+
+//actual game:
+let canvas = document.getElementById("gameCanvas");
+let map = canvas.getContext("2d");
+let upgradesContainer = document.getElementById("upgradesContainer");
+let openUpgradesContainer = document.getElementById("openUpgradesContainer");
+let backToMapCategoryToggle = document.getElementById("backToMapCategoryToggle");
+let leaderboardCategoryToggle = document.getElementById("leaderboardCategoryToggle");
+let defenseCategoryToggle = document.getElementById("defenseCategoryToggle");
+let attackCategoryToggle = document.getElementById("attackCategoryToggle");
+let earnCategoryToggle = document.getElementById("earnCategoryToggle");
+
+openUpgradesContainer.addEventListener("click", function() {
+  upgradesContainer.style.display = "grid";
+});
+
+backToMapCategoryToggle.addEventListener("click", function() {
+  upgradesContainer.style.display = "none";
+});
+
+leaderboardCategoryToggle.addEventListener("click", function() {
+  
+});
+
+defenseCategoryToggle.addEventListener("click", function() {
+  
+});
+
+attackCategoryToggle.addEventListener("click", function() {
+  
+});
+
+earnCategoryToggle.addEventListener("click", function() {
+  
+});
+
+socket.on("mathwars_gameStarted", () => {
+  lobbyContainer.style.display = "none";
+  gameContainer.style.display = "block";
 });

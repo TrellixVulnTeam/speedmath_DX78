@@ -68,7 +68,7 @@ module.exports = function(socket, sqlite3, bcrypt, jwt) {
                         if (err) {
                           console.log(err);
                         } else {
-                          accountsDb.run(`INSERT INTO topicsPracticeStats(addition_level, subtraction_level, multiplication_level, division_level, squaring_level, square_root_level, modular_arithmetic_level) VALUES (?, ?, ?, ?, ?, ?)`, [1, 1, 1, 1, 1, 1, 1], function(err) {
+                          accountsDb.run(`INSERT INTO topicsPracticeStats(addition_level, subtraction_level, multiplication_level, division_level, squaring_level, square_root_level, modular_arithmetic_level) VALUES (?, ?, ?, ?, ?, ?, ?)`, [1, 1, 1, 1, 1, 1, 1], function(err) {
                             if (err) {
                               console.log(err);
                             } else {

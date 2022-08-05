@@ -53,18 +53,6 @@
         </div>
         <div id="gameTopicsContainer">
         </div>
-        <div id="chooseGameControlsContainer">
-          <h1>Game Type:</h1>
-          <input type="radio" id="timeBased" name="gameControl" checked>
-          <label for="timeBased">Time-based</label>
-          <input type="radio" id="questionsBased" name="gameControl">
-          <label for="questionsBased">Questions-based</label>
-          <br><br>
-          <input type="range" min="1" max="15" value="5" id="timeLimitInput" class="hidden">
-          <label id="timeLimitDisplay" for="timeLimitInput" class="hidden">Time Limit: 5 minutes</label>
-          <input type="range" min="0" max="100" value="25" id="questionsLimitInput" class="hidden">
-          <label id="questionsLimitDisplay" for="questionsLimitInput" class="hidden">Questions: 25</label>
-        </div>
       </div>
       <div id="lobbyMembersContainer">
       </div>
@@ -77,6 +65,37 @@
         </form>
       </div>
       <button id="btnStartGame" class="secondaryContentTheme hidden">Start Game</button>
+    </div>
+    <div id="gameContainer">
+      <canvas id="gameCanvas"></canvas>
+      <button id="openUpgradesContainer" class="contentTheme">Open Upgrades Container</button>
+      <div id="upgradesContainer">
+        <div id="upgradesCategoriesContainer" class="contentTheme">
+          <div id="leaderboardCategoryToggle" class="secondaryContentTheme selected">Leaderboard</div>
+          <div id="defenseCategoryToggle" class="secondaryContentTheme">Defend</div>
+          <div id="attackCategoryToggle" class="secondaryContentTheme">Attack</div>
+          <div id="earnCategoryToggle" class="secondaryContentTheme">Earn</div>
+          <div id="backToMapCategoryToggle" class="secondaryContentTheme">Back To Map</div>
+        </div>
+        <div id="leaderboardContainer" class="contentTheme mainAreaUpgradesContainer">
+          <table id="leaderboardTable">
+            <tr>
+              <th>Rank</th>
+              <th>Name</th>
+              <th>Points</th>
+            </tr>
+          </table>
+        </div>
+        <div id="earnContainer" class="contentTheme mainAreaUpgradesContainer">
+          
+        </div>
+        <div id="defenseContainer" class="contentTheme mainAreaUpgradesContainer">
+          
+        </div>
+        <div id="attackContainer" class="contentTheme mainAreaUpgradesContainer">
+          
+        </div>
+      </div>
     </div>
   </body>
 </html>

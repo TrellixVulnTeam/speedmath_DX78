@@ -131,7 +131,7 @@ socket.on("ownProfileInfo", (info, topicsPracticeStats) => {
 
   document.getElementById("profileInfoUsername").textContent = ("@" + info.username);
   document.getElementById("profileInfoDisplayName").textContent = info.display_name;
-  document.getElementById("balance").textContent = info.balance;
+  document.getElementById("balance").innerHTML = `${info.balance} <i id="piecoinIconInProfile" class="icon-piecoin"></i>`;
 
   if (info.email == null) {
     document.getElementById("profileInfoEmail").textContent = "You didn't provide an email address.";
@@ -239,7 +239,7 @@ socket.on("ownProfileInfo", (info, topicsPracticeStats) => {
       title: "Upload your new profile picture",
       input: "file",
       showCancelButton: true,
-      inputLabel: "By uploading an image, you are agreeing that you have the rights to publicly display that image. No NSFW profile pictures allowed (exceptions are made for Ling and KiteFlyer).",
+      inputLabel: "By uploading an image, you are agreeing that you have the rights to publicly display that image. No NSFW profile pictures allowed.",
       inputValidator: (pfp) => {
         if (!pfp) {
           return `You have to upload a picture!`

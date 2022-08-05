@@ -14,6 +14,10 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
+BigInt.prototype.mod = function(n) {
+  return ((this%n)+n)%n;
+}
+
 class BigDecimal {
   constructor(string) {
     if (string.includes(".")) {
@@ -49,12 +53,46 @@ class BigDecimal {
     
   }
 
+  exponentiate(bigdec) {
+    
+  }
+
+  //only supports positive whole numbers for now...
+  factorial(precision) {
+    let num = this.bigintRepresentation;
+    let ans = 1n;
+
+    while (num > 1n) {
+      ans *= num;
+      num--;
+    }
+    
+    return new BigDecimal(BigDecimal.bigIntRepToBigDec(ans, precision));
+  }
+
+  //static function to remove trailing zeros and/or the decimal point if there's nothing after it:
+  //ex. 4.58400 => 4.584
+  //ex. 10.0 => 10
+  static removeTrailingZeros(string) {
+    if (string.includes(".")) {
+      while (string.charAt(string.length - 1) === "0") {
+        string = string.slice(0, -1);
+      }
+
+      if (string.charAt(string.length - 1) === ".") {
+        string = string.slice(0, -1);
+      }
+    }
+    
+    return string;
+  }
+
   //static function to convert a bigint representation of a bigdec object to a bigdec string. parameters are bigint representation and decimal places that should be in the bigdec string
   static bigIntRepToBigDec(bigint, decPlaces) {
     let bigIntString = bigint.toString();
     let index = bigIntString.length - decPlaces;
     let bigDecString = bigIntString.slice(0, index) + "." + bigIntString.slice(index);
-    return bigDecString;
+    return BigDecimal.removeTrailingZeros(bigDecString);
   }
 
   toString() {
@@ -70,11 +108,13 @@ let add = document.getElementById("add");
 let subtract = document.getElementById("subtract");
 let multiply = document.getElementById("multiply");
 let divide = document.getElementById("divide");
+let mod = document.getElementById("mod");
 let exponentiate = document.getElementById("exponentiate");
 let factorial = document.getElementById("factorial");
 let btnDownload = document.getElementById("downloadResultAsTxt");
 let answerToX = document.getElementById("answerToX");
 let answerToY = document.getElementById("answerToY");
+let reset = document.getElementById("reset");
 
 add.addEventListener("click", function() {
   if (inputValueExists(inputX) && inputValueExists(inputY)) {
@@ -133,6 +173,21 @@ multiply.addEventListener("click", function() {
 divide.addEventListener("click", function() {
   let x = new BigDecimal(inputX.value);
   let y = new BigDecimal(inputY.value);
+
+  SwalError("Under Development", "Sorry");
+});
+
+mod.addEventListener("click", function() {
+  if (inputValueExists(inputX) && inputValueExists(inputY)) {
+    if (inputsAreDecimal()) {
+      SwalError("Inputs must be integers.")
+    } else {
+      let x = BigInt(inputX.value);
+      let y = BigInt(inputY.value);
+      result.textContent = x.mod(y);
+      showResultsDivButtons();
+    }
+  }
 });
 
 exponentiate.addEventListener("click", function() {
@@ -140,6 +195,20 @@ exponentiate.addEventListener("click", function() {
   let y = BigInt(inputY.value);
   result.textContent = x ** y;
   showResultsDivButtons();
+});
+
+factorial.addEventListener("click", function() {
+  if (inputValueExists(inputX)) {
+    if (inputX.value.includes(".") || inputX.value.charAt(0) === "-") {
+      SwalError("Positive whole numbers > 0 only please!", 'We will implement the <a href="https://en.wikipedia.org/wiki/Gamma_function">Gamma Function</a> to allow users to find factorials of decimal numbers and negative numbers in the future, but now please enter a positive whole number for x.');
+    } else {
+      let x = new BigDecimal(inputX.value);
+      result.textContent = x.factorial(0);
+      showResultsDivButtons();
+    }
+  } else {
+    SwalError("Input missing", "You need an input x for this operation.");
+  }
 });
 
 btnDownload.addEventListener("click", function() {
@@ -152,6 +221,14 @@ answerToX.addEventListener("click", function() {
 
 answerToY.addEventListener("click", function() {
   inputY.value = result.textContent;
+});
+
+reset.addEventListener("click", function() {
+  btnDownload.style.display = "none";
+  document.getElementById("moveResultToInput").style.display = "none";
+  inputX.value = "";
+  inputY.value = "";
+  result.textContent = "";
 });
 
 // helper functions:
@@ -190,14 +267,12 @@ function download(filename, text) {
 function showResultsDivButtons() {
   btnDownload.style.display = "block";
   document.getElementById("moveResultToInput").style.display = "block";
-  inputX.value = "";
-  inputY.value = "";
 }
 
 function SwalError(errorTitle, errorMessage) {
   Swal.fire({
     title: errorTitle,
-    text: errorMessage,
+    html: errorMessage,
     icon: "error",
     iconColor: themeSettings.contentTextColor[localStorage.getItem("theme")],
     background: themeSettings.contentBackgroundColor[localStorage.getItem("theme")],

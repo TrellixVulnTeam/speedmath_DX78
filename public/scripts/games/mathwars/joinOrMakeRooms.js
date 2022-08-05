@@ -18,6 +18,18 @@ window.onload = function() {
     username.focus();
   }
 
+  if (sessionStorage.getItem("mathwars_kicked") == "true") {
+    sessionStorage.removeItem("mathwars_kicked");
+    Swal.fire({
+      title: "You were kicked by the host!",
+      text: "If you think this is a mistake, please contact them.",
+      icon: "error",
+      iconColor: themeSettings.contentTextColor[localStorage.getItem("theme")],
+      background: themeSettings.contentBackgroundColor[localStorage.getItem("theme")],
+      color: themeSettings.contentTextColor[localStorage.getItem("theme")]
+    });
+  }
+
   socket.emit("mathwars_loadPublicRooms");
 }
 

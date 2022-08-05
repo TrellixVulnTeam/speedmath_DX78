@@ -94,13 +94,14 @@ button:hover {
 }
 
 #balance {
-  display: inline-block;
   font-weight: bold;
   font-size: 1.2em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #piecoinIconInProfile {
-  display: inline-block;
   margin-left: 5px;
   font-size: 1.8em;
   color: brown;

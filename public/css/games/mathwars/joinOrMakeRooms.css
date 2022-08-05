@@ -24,7 +24,7 @@ button {
 
 #genUsername {
   margin-top: 10px;
-  padding: 5px;
+  padding: 5px 20px;
   font-size: 0.8em;
   border-radius: 22px;
   cursor: pointer;

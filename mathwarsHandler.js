@@ -210,6 +210,22 @@ module.exports = function(io, socket, sqlite3, jwt, rooms, possibleMathWarsTopic
     let username = getUsernameFromSocketId(socket.id);
     socket.to(room).emit("mathwars_lobbyChatNewMessage", username, message);
   });
+
+  socket.on("mathwars_startGame", (roomId) => {
+    let roomIndex = getRoomIndex(roomId);
+
+    if (roomIndex !== null) {
+      //check to make sure the person sending the request is actually the owner of the room and not injecting a script
+      if (rooms[roomIndex].owner.user_id === socket.id) {
+        rooms[roomIndex].inProgress = true;
+        io.to("room" + roomId).emit("mathwars_gameStarted");
+      } else {
+        socket.emit("error", "Stop trying to hack!", "You shouldn't be getting this error unless you're trying to hack!");
+      }
+    } else {
+      socket.emit("error", "Stop trying to hack!", "You shouldn't be getting this error unless you're trying to hack!");
+    }
+  });
                
   socket.on("mathwars_logRooms", () => {
     console.log(rooms);
