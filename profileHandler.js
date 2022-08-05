@@ -30,11 +30,22 @@ module.exports = function(socket, sqlite3, jwt) {
                   if (err) {
                     console.log(err);
                   } else {
-                    let friend = {
-                      user_id: friendId,
-                      display_name: friendInfoRow.display_name,
-                      username: friendInfoRow.username,
-                      profile_picture: friendInfoRow.profile_picture
+                    let friend;
+                    
+                    if (friendInfoRow) {
+                      friend = {
+                        user_id: friendId,
+                        display_name: friendInfoRow.display_name,
+                        username: friendInfoRow.username,
+                        profile_picture: friendInfoRow.profile_picture
+                      }
+                    } else {
+                      friend = {
+                        user_id: friendId,
+                        display_name: "Deleted User",
+                        username: "deleted_user",
+                        profile_picture: "deletedUser"
+                      }
                     }
     
                     socket.emit("newFriend", friend); //to add friend to container on client side

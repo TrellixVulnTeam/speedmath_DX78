@@ -249,10 +249,10 @@ socket.on("error", (errorTitle, errorMessage) => {
   });
 });
 
-
 //actual game:
 let canvas = document.getElementById("gameCanvas");
 let map = canvas.getContext("2d");
+
 let upgradesContainer = document.getElementById("upgradesContainer");
 let openUpgradesContainer = document.getElementById("openUpgradesContainer");
 let backToMapCategoryToggle = document.getElementById("backToMapCategoryToggle");
@@ -260,6 +260,10 @@ let leaderboardCategoryToggle = document.getElementById("leaderboardCategoryTogg
 let defenseCategoryToggle = document.getElementById("defenseCategoryToggle");
 let attackCategoryToggle = document.getElementById("attackCategoryToggle");
 let earnCategoryToggle = document.getElementById("earnCategoryToggle");
+let leaderboardContainer = document.getElementById("leaderboardContainer");
+let defenseContainer = document.getElementById("defenseContainer");
+let attackContainer = document.getElementById("attackContainer");
+let earnContainer = document.getElementById("earnContainer");
 
 openUpgradesContainer.addEventListener("click", function() {
   upgradesContainer.style.display = "grid";
@@ -270,22 +274,86 @@ backToMapCategoryToggle.addEventListener("click", function() {
 });
 
 leaderboardCategoryToggle.addEventListener("click", function() {
-  
+  leaderboardCategoryToggle.classList.add("selected");
+  defenseCategoryToggle.classList.remove("selected");
+  attackCategoryToggle.classList.remove("selected");
+  earnCategoryToggle.classList.remove("selected");
+  leaderboardContainer.classList.add("selected");
+  defenseContainer.classList.remove("selected");
+  attackContainer.classList.remove("selected");
+  earnContainer.classList.remove("selected");
 });
 
 defenseCategoryToggle.addEventListener("click", function() {
-  
+  leaderboardCategoryToggle.classList.remove("selected");
+  defenseCategoryToggle.classList.add("selected");
+  attackCategoryToggle.classList.remove("selected");
+  earnCategoryToggle.classList.remove("selected");
+  leaderboardContainer.classList.remove("selected");
+  defenseContainer.classList.add("selected");
+  attackContainer.classList.remove("selected");
+  earnContainer.classList.remove("selected");
 });
 
 attackCategoryToggle.addEventListener("click", function() {
-  
+  leaderboardCategoryToggle.classList.remove("selected");
+  defenseCategoryToggle.classList.remove("selected");
+  attackCategoryToggle.classList.add("selected");
+  earnCategoryToggle.classList.remove("selected");
+  leaderboardContainer.classList.remove("selected");
+  defenseContainer.classList.remove("selected");
+  attackContainer.classList.add("selected");
+  earnContainer.classList.remove("selected");
 });
 
 earnCategoryToggle.addEventListener("click", function() {
-  
+  leaderboardCategoryToggle.classList.remove("selected");
+  defenseCategoryToggle.classList.remove("selected");
+  attackCategoryToggle.classList.remove("selected");
+  earnCategoryToggle.classList.add("selected");
+  leaderboardContainer.classList.remove("selected");
+  defenseContainer.classList.remove("selected");
+  attackContainer.classList.remove("selected");
+  earnContainer.classList.add("selected");
 });
 
-socket.on("mathwars_gameStarted", () => {
+function updateLeaderboard(data) {
+  let rank = 1;
+  
+  //first clear the current leaderboard:
+  let tableRows = document.querySelectorAll("#leaderboardTable tr");
+  //make sure to start at i = 1 to keep the table headings row
+  for (let i = 1; i < tableRows.length; i++) {
+    leaderboardTable.deleteRow(1);
+  }
+
+  //then, use the data to populate the leaderboard:
+  data.forEach(entry => {
+    let newRow = leaderboardTable.insertRow();
+    let rankCell = newRow.insertCell(0);
+    let nameCell = newRow.insertCell(1);
+    let landOwnedCell = newRow.insertCell(2);
+
+    rankCell.textContent = rank;
+    rank++;
+
+    nameCell.textContent = entry.username;
+    landOwnedCell.textContent = entry.landOwned;
+  });
+}
+
+socket.on("mathwars_gameStarted", (data) => {
+  //initial leaderboard table:
+  let leaderboardData = [];
+  data.memberInfo.forEach(member => {
+    leaderboardData.push({
+      username: member.username,
+      landOwned: member.land
+    });
+  });
+
+  updateLeaderboard(leaderboardData);
+  
   lobbyContainer.style.display = "none";
   gameContainer.style.display = "block";
 });

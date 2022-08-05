@@ -125,6 +125,8 @@ socket.on("ownProfileInfo", (info, topicsPracticeStats) => {
 
   if (info.profile_picture === "defaultAvatar") {
     document.getElementById("profilePicture").src = "/assets/defaultAvatar.png";
+  } else if (info.profile_picture === "deletedUser") {
+    document.getElementById("profilePicture").src = "/assets/deletedUserAvatar.png";
   } else {
     document.getElementById("profilePicture").src = info.profile_picture;
   }
@@ -375,6 +377,8 @@ socket.on("newIncomingFriendRequest", (incomingRequest) => {
   pfp.classList.add("friendPfp");
   if (incomingRequest.profile_picture === "defaultAvatar") {
     pfp.src = "/assets/defaultAvatar.png";
+  } else if (incomingRequest.profile_picture === "deletedUser") {
+    document.getElementById("profilePicture").src = "/assets/deletedUserAvatar.png";
   } else {
     pfp.src = incomingRequest.profile_picture; 
   }
@@ -423,6 +427,8 @@ socket.on("newOutgoingFriendRequest", (outgoingRequest) => {
   pfp.classList.add("friendPfp");
   if (outgoingRequest.profile_picture === "defaultAvatar") {
     pfp.src = "/assets/defaultAvatar.png";
+  } else if (outgoingRequest.profile_picture === "deletedUser") {
+    pfp.src = "/assets/deletedUserAvatar.png";
   } else {
     pfp.src = outgoingRequest.profile_picture; 
   }
@@ -477,6 +483,8 @@ socket.on("newFriend", (friendInfo) => {
   pfp.classList.add("friendPfp");
   if (friendInfo.profile_picture === "defaultAvatar") {
     pfp.src = "/assets/defaultAvatar.png";
+  } else if (friendInfo.profile_picture === "deletedUser") {
+    pfp.src = "/assets/deletedUserAvatar.png";
   } else {
     pfp.src = friendInfo.profile_picture; 
   }

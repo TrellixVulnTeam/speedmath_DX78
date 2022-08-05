@@ -217,8 +217,25 @@ module.exports = function(io, socket, sqlite3, jwt, rooms, possibleMathWarsTopic
     if (roomIndex !== null) {
       //check to make sure the person sending the request is actually the owner of the room and not injecting a script
       if (rooms[roomIndex].owner.user_id === socket.id) {
-        rooms[roomIndex].inProgress = true;
-        io.to("room" + roomId).emit("mathwars_gameStarted");
+        rooms[roomIndex].settings.inProgress = true;
+
+        rooms[roomIndex].settings.mapSize = {
+          height: Math.ceil(rooms[roomIndex].members.length*4.5),
+          width: Math.ceil(rooms[roomIndex].members.length*4.5)
+        };
+
+        for (let i = 0; i < rooms[roomIndex].members.length; i++) {
+          rooms[roomIndex].members[i].color = randomColor();
+          rooms[roomIndex].members[i].money = 0;
+          rooms[roomIndex].members[i].land = 3;
+          rooms[roomIndex].members[i].defenses = [];
+          rooms[roomIndex].members[i].attacks = [];
+        }
+        
+        io.to("room" + roomId).emit("mathwars_gameStarted", {
+          memberInfo: rooms[roomIndex].members,
+          mapSize: rooms[roomIndex].settings.mapSize
+        });
       } else {
         socket.emit("error", "Stop trying to hack!", "You shouldn't be getting this error unless you're trying to hack!");
       }
@@ -288,5 +305,11 @@ module.exports = function(io, socket, sqlite3, jwt, rooms, possibleMathWarsTopic
   //source: https://stackoverflow.com/a/21688894/
   function removeElementFromArray(arrOriginal, elementToRemove){
     return arrOriginal.filter(function(el){return el !== elementToRemove});
+  }
+
+  //function that returns a random hex code
+  //credit: https://stackoverflow.com/a/5092872
+  function randomColor() {
+    return "#000000".replace(/0/g,function(){return (~~(Math.random()*16)).toString(16);});
   }
 }
