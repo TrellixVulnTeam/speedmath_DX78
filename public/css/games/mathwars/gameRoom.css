@@ -1,3 +1,7 @@
+:root {
+  --attackAndDefenseInfoWidth: 250px;
+}
+
 * {
   text-align: center;
 }
@@ -258,7 +262,7 @@ input[type="range"]:focus::-moz-range-thumb {
   display: none; /* Hidden by default */
   width: 100%; /* Full width (cover the whole page) */
   height: 100%; /* Full height (cover the whole page) */
-  top: 40px;
+  top: 52px;
   left: 0;
   right: 0;
   bottom: 0;
@@ -364,4 +368,105 @@ td {
   text-align: center;
   padding: 10px;
   border-spacing: 0;
+}
+
+.flexContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: left;
+}
+
+.attackInfo, .defenseInfo {
+  margin: 10px;
+  padding: 15px;
+  width: var(--attackAndDefenseInfoWidth);
+  border: 3px solid;
+  border-radius: 22px; 
+  text-align: center;
+  transition: 0.3s;
+}
+
+.attackName, .defenseName {
+  font-size: 1.5em;
+  font-weight: bold;
+  text-align: center;
+}
+
+.attackCost, .defenseCost {
+  font-size: 1.2em;
+  font-weight: bold;
+  text-align: center;
+}
+
+.attackPicture, .defensePicture {
+  width: calc(var(--attackAndDefenseInfoWidth)*0.5);
+  height: calc(var(--attackAndDefenseInfoWidth)*0.5);
+  text-align: center;
+  overflow: hidden;
+  border: 4px solid rgba(0, 0, 0, 0.8);
+  border-radius: 100%;
+  margin-left: calc(var(--attackAndDefenseInfoWidth)*0.25);
+  filter: drop-shadow(0px 0px 7px #ffffff);
+}
+
+img {
+  display: inline;
+  height: 100%;
+  width: auto;
+  margin: 0 auto;
+}
+
+.attackBuyButton, .defenseBuyButton {
+  display: block;
+  cursor: pointer;
+  text-align: center;
+  margin: auto;
+  margin-top: 10px;
+  text-decoration: none;
+  padding: 10px 25px;
+  border: 2px solid;
+  border-radius: 22px;
+  font-weight: bold;
+  font-size: 16px;
+  box-shadow: 0 0 40px -10px rgba(0, 0, 0, 0.25);
+  transition: 0.3s ease-in-out;
+}
+
+.attackBuyButton:hover, .defenseBuyButton:hover {
+  filter: brightness(110%);
+  transform: scale(105%);
+}
+
+#question {
+  font-size: 2em;
+  margin: 15px;
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+}
+
+#answerField {
+  font-size: 1.5em;
+  border: 2px solid;
+  border-radius: 22px;
+  margin: 15px;
+  outline: none;
+  font-weight: bold;
+}
+
+#btnSubmit {
+  font-size: 1.5em;
+  border: 2px solid;
+  border-radius: 22px;
+  margin: 15px;
+  padding: 8px 25px;
+  transition: 0.3s;
+}
+
+#btnSubmit:hover {
+  border-width: 5px;
+}
+
+input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
 }

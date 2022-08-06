@@ -271,6 +271,7 @@ openUpgradesContainer.addEventListener("click", function() {
 
 backToMapCategoryToggle.addEventListener("click", function() {
   upgradesContainer.style.display = "none";
+  leaderboardCategoryToggle.click();
 });
 
 leaderboardCategoryToggle.addEventListener("click", function() {
@@ -357,3 +358,11 @@ socket.on("mathwars_gameStarted", (data) => {
   lobbyContainer.style.display = "none";
   gameContainer.style.display = "block";
 });
+
+function buyAttack(attack) {
+  socket.emit("mathwars_buyAttack", attack);
+}
+
+function buyDefense(defense) {
+  socket.emit("mathwars_buyDefense", defense);
+}

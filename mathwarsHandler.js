@@ -140,7 +140,7 @@ module.exports = function(io, socket, sqlite3, jwt, rooms, possibleMathWarsTopic
               roomInfo.members.push({
                 username: rooms[i].members[j].username,
                 user_id: rooms[i].members[j].user_id,
-                isOwner: rooms[i].members[j].user_id === rooms[roomIndex].owner.user_id
+                isOwner: rooms[i].members[j].user_id === rooms[i].owner.user_id
               });
             }
 
@@ -226,7 +226,7 @@ module.exports = function(io, socket, sqlite3, jwt, rooms, possibleMathWarsTopic
 
         for (let i = 0; i < rooms[roomIndex].members.length; i++) {
           rooms[roomIndex].members[i].color = randomColor();
-          rooms[roomIndex].members[i].money = 0;
+          rooms[roomIndex].members[i].coins = 0;
           rooms[roomIndex].members[i].land = 3;
           rooms[roomIndex].members[i].defenses = [];
           rooms[roomIndex].members[i].attacks = [];

@@ -87,14 +87,57 @@
           </table>
         </div>
         <div id="earnContainer" class="contentTheme mainAreaUpgradesContainer">
-          <h1>Earn some {insert currency here}</h1>
+          <h1>Earn some coins!</h1>
+          <div id="question">Question goes here?</div>
+          <input type="number" id="answerField" class="secondaryContentTheme" placeholder="Answer..." onpaste="return false;" autofocus/>
+          <br>
+          <button id="btnSubmit" class="secondaryContentTheme">Submit</button>
         </div>
+        
         <div id="defenseContainer" class="contentTheme mainAreaUpgradesContainer">
           <h1>Defend your kingdom against attacks!</h1>
+
+          <div class="flexContainer">
+            <div class="defenseInfo secondaryContentTheme">
+              <div class="defensePicture"><img src="/assets/contributorPictures/ling.png"></div>
+              <div class="defenseName">Ling Defense</div>
+              <div class="defenseCost">69 coins</div>
+              {insert defense stats and stuff}
+              <button class="defenseBuyButton contentTheme" onclick="buyDefense('ling')">Buy</button>
+            </div>
+
+            <div class="defenseInfo secondaryContentTheme">
+              <div class="defensePicture"><img src="/assets/contributorPictures/python9160.png"></div>
+              <div class="defenseName">Python Defense</div>
+              <div class="defenseCost">420 coins</div>
+              {insert defense stats and stuff}
+              <button class="defenseBuyButton contentTheme" onclick="buyDefense('python')">Buy</button>
+            </div>
+          </div>
         </div>
+        
         <div id="attackContainer" class="contentTheme mainAreaUpgradesContainer">
           <h1>Buy items to attack other kingdoms with!</h1>
+
+          <div class="flexContainer">
+            <div class="attackInfo secondaryContentTheme">
+              <div class="attackPicture"><img src="/assets/contributorPictures/airbag.png"></div>
+              <div class="attackName">Airbag Attack</div>
+              <div class="attackCost">69 coins</div>
+              {insert attack stats and stuff}
+              <button class="attackBuyButton contentTheme" onclick="buyAttack('airbag')">Buy</button>
+            </div>
+
+            <div class="attackInfo secondaryContentTheme">
+              <div class="attackPicture"><img src="/assets/contributorPictures/kiteflyer.gif"></div>
+              <div class="attackName">Kite Attack</div>
+              <div class="attackCost">420 coins</div>
+              {insert attack stats and stuff}
+              <button class="attackBuyButton contentTheme" onclick="buyAttack('kite')">Buy</button>
+            </div>
+          </div>
         </div>
+        
       </div>
     </div>
   </body>
