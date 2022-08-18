@@ -210,7 +210,11 @@ socket.on("ownProfileInfo", (info, topicsPracticeStats) => {
     let topicLevelCell = newRow.insertCell(1); //cell to hold level user is on for that topic
 
     topicCell.textContent = getTopicFromDatabaseColumnName(topic); //use helper function to get topic name from database column name
-    topicLevelCell.textContent = topicsPracticeStats[topic];
+    if (topicsPracticeStats[topic] != 11) {
+      topicLevelCell.textContent = topicsPracticeStats[topic];
+    } else {
+      topicLevelCell.textContent = "Mastered";
+    }
   });
 
   //Buttons to change account settings:

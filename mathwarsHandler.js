@@ -220,8 +220,8 @@ module.exports = function(io, socket, sqlite3, jwt, rooms, possibleMathWarsTopic
         rooms[roomIndex].settings.inProgress = true;
 
         rooms[roomIndex].settings.mapSize = {
-          height: Math.ceil(rooms[roomIndex].members.length*4.5),
-          width: Math.ceil(rooms[roomIndex].members.length*4.5)
+          height: 25,
+          width: 75
         };
 
         for (let i = 0; i < rooms[roomIndex].members.length; i++) {

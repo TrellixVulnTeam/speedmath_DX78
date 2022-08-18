@@ -9,8 +9,12 @@ const io = new Server(server);
 const sqlite3 = require("sqlite3").verbose();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const hcaptcha = require('hcaptcha');
 
-app.use(express.static("public"));
+const sendgridMailer = require('@sendgrid/mail');
+sendgridMailer.setApiKey(process.env['SENDGRID_API_KEY']);
+
+app.use(express.static("public")); //client-side css and js files
 
 process.env.TZ = 'America/New_York'; 
 
@@ -59,6 +63,10 @@ app.get('/account', (req, res) => {
   res.sendFile(__dirname + "/pages/account.html");
 });
 
+app.get('/forgot-password', (req, res) => {
+  res.sendFile(__dirname + "/pages/forgot-password.html");
+});
+
 app.get('/user/:username', (req, res) => {
   res.sendFile(__dirname + "/pages/user.html");
 });
@@ -74,7 +82,6 @@ app.get('/tos', (req, res) => {
 app.get('/katex-testing', (req, res) => {
   res.sendFile(__dirname + "/pages/katex-testing.html");
 });
-
 
 //THIS HAS TO BE KEPT AT THE END OF THE ROUTING SECTION OF THE CODE
 app.get('*', (req, res) => { //if user tries to go to a random subpage that doesn't exist,
@@ -130,7 +137,7 @@ accountsDb.serialize(() => {
   );
   
   //logging database, uncomment following code to log profiles in console at runtime:
-  /*accountsDb.all(`SELECT user_id, username, display_name, email, bio, friends, incoming_friend_requests, outgoing_friend_requests, publicly_displayed_achievements, achievements, public_account, topic_practice_stats_privacy, qotd_points, qotd_last_completed, balance FROM users`, [], (err, rows) => {
+  /*accountsDb.all(`SELECT user_id, password_hashed, username, display_name, email, bio, friends, incoming_friend_requests, outgoing_friend_requests, publicly_displayed_achievements, achievements, public_account, topic_practice_stats_privacy, qotd_points, qotd_last_completed, balance FROM users`, [], (err, rows) => {
   //accountsDb.all(`SELECT * FROM topicsPracticeStats`, [], (err, rows) => {
     if (err) {
       console.log(err);
@@ -149,7 +156,6 @@ accountsDb.close((err) => {
     console.log("Successfully initialized database!");
   }
 });
-
 
 let rawQOTDQuestions = fs.readFileSync('./database/qotdQuestions.json');
 let qotdQuestionsJSON = JSON.parse(rawQOTDQuestions);
@@ -183,7 +189,7 @@ let possibleMathWarsTopics = {
 
 
 io.on('connection', (socket) => {
-  require('./accountHandler.js')(socket, sqlite3, bcrypt, jwt); //logging in, signing up
+  require('./accountHandler.js')(socket, sqlite3, bcrypt, jwt, hcaptcha, sendgridMailer); //logging in, signing up
   require('./profileHandler.js')(socket, sqlite3, jwt); //public profile pages, getting own profile info, updating profile info, adding friends, getting incoming/outgoing friend requests
   require('./suggestionHandler.js')(socket); //suggestions 
   require('./qotdHandler.js')(socket, sqlite3, jwt, qotdQuestionsJSON, qotd_usersCurrentlyPlaying); //question of the day game handler

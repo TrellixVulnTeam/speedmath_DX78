@@ -49,13 +49,42 @@ socket.on("qotd_displayQuestion", (question) => {
   gameInfoContainer.style.display = "none";
   alreadyCompletedTodays.style.display = "none";
 
-  document.getElementById("question").innerHTML = katex.renderToString(question.question);
+  let q = document.getElementById("question");
+
+  q.innerHTML = question.question;
+
+  renderMathInElement(q, {
+    // customised options
+    // • auto-render specific keys, e.g.:
+    delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+    ],
+    // • rendering keys, e.g.:
+    throwOnError: false
+  });
 
   Object.keys(question.answerChoices).forEach(choice => {
     let answerBtn = document.createElement("button");
     answerBtn.classList.add("answerChoiceButton", "contentTheme");
     answerBtn.id = choice;
-    answerBtn.innerHTML = katex.renderToString(question.answerChoices[choice]); 
+    answerBtn.innerHTML = question.answerChoices[choice]; 
+
+    renderMathInElement(answerBtn, {
+      // customised options
+      // • auto-render specific keys, e.g.:
+      delimiters: [
+          {left: '$$', right: '$$', display: true},
+          {left: '$', right: '$', display: false},
+          {left: '\\(', right: '\\)', display: false},
+          {left: '\\[', right: '\\]', display: true}
+      ],
+      // • rendering keys, e.g.:
+      throwOnError: false
+    });
+    
     document.getElementById("answerChoicesContainer").appendChild(answerBtn);
 
     answerBtn.addEventListener("click", function() {
@@ -65,9 +94,6 @@ socket.on("qotd_displayQuestion", (question) => {
       }
     });
   });
-  //MathJax.typeset();
-
-  //alert(JSON.stringify(question));
 });
 
 socket.on("qotd_displayEndScreen", (points, timeTaken, secondsUntilTomorrows) => {

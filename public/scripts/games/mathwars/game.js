@@ -251,7 +251,38 @@ socket.on("error", (errorTitle, errorMessage) => {
 
 //actual game:
 let canvas = document.getElementById("gameCanvas");
-let map = canvas.getContext("2d");
+let ctx = canvas.getContext("2d");
+
+let tilemap = {
+  columns: null,
+  rows: null,
+  tileSize: null, //tile size in pixels
+  tiles: [],
+  getTile(col, row) {
+    return this.tiles[row * tilemap.columns + col]
+  }
+}
+
+class Tile {
+  constructor(type, color) {
+    this.type = type;
+    this.color = color;
+  }
+}
+
+function drawMap(tilemapObject) {
+  tilemapObject.tileSize = canvas.height/tilemapObject.rows;
+  
+  for (let c = 0; c < tilemapObject.columns; c++) {
+    for (let r = 0; r < tilemapObject.rows; r++) {
+      let tile = tilemapObject.getTile(c, r);
+      ctx.beginPath();
+      ctx.rect(c*tilemapObject.tileSize, r*tilemapObject.tileSize, tilemapObject.tileSize, tilemapObject.tileSize);
+      ctx.fillStyle = tile.color;
+      ctx.fill();
+    }
+  }
+}
 
 let upgradesContainer = document.getElementById("upgradesContainer");
 let openUpgradesContainer = document.getElementById("openUpgradesContainer");
@@ -353,11 +384,28 @@ socket.on("mathwars_gameStarted", (data) => {
     });
   });
 
+  tilemap.columns = data.mapSize.width;
+  tilemap.rows = data.mapSize.height;
+  tilemap.tiles = new Array(tilemap.columns * tilemap.rows);
+
+  for (let i = 0; i < tilemap.tiles.length; i++) {
+    tilemap.tiles[i] = new Tile("", randomColor());
+  }
+
+  tilemap = spawnPlayers(tilemap);
+
+  drawMap(tilemap);
+
   updateLeaderboard(leaderboardData);
   
   lobbyContainer.style.display = "none";
   gameContainer.style.display = "block";
 });
+
+//not coded yet
+function spawnPlayers(tilemapObject) {
+  return tilemapObject;
+}
 
 function buyAttack(attack) {
   socket.emit("mathwars_buyAttack", attack);
@@ -365,4 +413,10 @@ function buyAttack(attack) {
 
 function buyDefense(defense) {
   socket.emit("mathwars_buyDefense", defense);
+}
+
+//function that returns a random hex code
+//credit: https://stackoverflow.com/a/5092872
+function randomColor() {
+  return "#000000".replace(/0/g,function(){return (~~(Math.random()*16)).toString(16);});
 }

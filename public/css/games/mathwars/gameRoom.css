@@ -253,6 +253,7 @@ input[type="range"]:focus::-moz-range-thumb {
 #gameCanvas {
   margin: auto;
   width: 80vw;
+  height: 70vh;
   border: 2px solid;
 }
 

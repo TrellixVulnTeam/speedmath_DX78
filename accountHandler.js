@@ -1,4 +1,4 @@
-module.exports = function(socket, sqlite3, bcrypt, jwt) {
+module.exports = function(socket, sqlite3, bcrypt, jwt, hcaptcha, sendgridMailer) {
   socket.on("login", async (username, password, rememberMe) => {
     //open the database
     let accountsDb = new sqlite3.Database(__dirname + "/database/accounts.db", (err) => {
@@ -29,7 +29,7 @@ module.exports = function(socket, sqlite3, bcrypt, jwt) {
                   }
                 });
               } else {
-                socket.emit("error", "wrong password bitch.", "fix it rn");
+                socket.emit("error", "Wrong password.", "Please try again.");
               }
             }
 
@@ -140,6 +140,108 @@ module.exports = function(socket, sqlite3, bcrypt, jwt) {
                   socket.emit("error", "Wrong Password", "If you want to delete your account, you have to recall your password correctly.");
                   accountsDb.close();
                 }
+              }
+            });
+          }
+        });
+      }
+    });
+  });
+
+  socket.on("requestPasswordResetEmail", (email) => {
+    //open the database
+    let accountsDb = new sqlite3.Database(__dirname + "/database/accounts.db", (err) => {
+      if (err) {
+        console.log(err);
+      }
+    });
+
+    //check if there are any accounts with the email
+    accountsDb.all(`SELECT user_id, email, username FROM users WHERE email = ?`, [email], (err, rows) => {
+      if (err) {
+        console.log(err);
+        accountsDb.close();
+      } else {
+        accountsDb.close();
+        
+        if (rows.length === 0) {
+          socket.emit("error", "There is not an account associated with that email.");
+        } else {
+          let user = { id: rows[0].user_id };
+          jwt.sign(user, process.env['JWT_PRIVATE_KEY'], { expiresIn: '1h' }, function(err, token) {
+            if (err) {
+              console.log(err);
+            } else {
+              const msg = {
+                to: email, // recipient
+                from: 'reset@speedmath.ml', // sender email on SendGrid
+                subject: 'Reset Password',
+                text: 'Reset your SpeedMath account\'s password',
+                html: `<p>Dear<strong><span style="font-size:18px"> ${rows[0].username},</span></strong></p>
+              
+                <p><span style="font-size:18px">Please click the following link within the next 1 hour to reset your password!<br />
+                <strong><a href="https://speedmath.ml/forgot-password?token=${token}">Reset Password</a></strong><br />
+                <br />
+                If the hyperlink doesn&#39;t work in your browser, copy-paste this link and paste it in a new browser tab:</span></p>
+                
+                <p><strong><span style="font-size:18px"><a href="https://speedmath.ml/forgot-password?token=${token}">https://speedmath.ml/forgot-password?token=${token}</a></span></strong></p>
+                
+                <p><span style="font-size:18px">Thank you for using SpeedMath to practice math!</span></p>
+                
+                <p><strong><span style="font-size:18px">Sincerely,<br />
+                SpeedMath Development Team</span></strong></p>
+                
+                <p><span style="font-size:14px">If you did not request this email, you can safely ignore it.</span></p>`,
+              }
+    
+              sendgridMailer.send(msg).catch((error) => {
+                console.error(error);
+              });
+    
+              socket.emit("sentPasswordResetEmail");
+            }
+          });
+        }
+      }
+    });
+  });
+
+  //verify user's password reset token:
+  socket.on("requestPasswordResetForm", (token) => {
+    jwt.verify(token, process.env['JWT_PRIVATE_KEY'], function(err, user) {
+      if (err) {
+        socket.emit("invalidPasswordResetToken");
+      } else {
+        socket.emit("showNewPasswordForm");
+      }
+    });
+  });
+
+  socket.on("updatePassword", (password, token) => {
+    jwt.verify(token, process.env['JWT_PRIVATE_KEY'], function(err, user) {
+      if (err) {
+        socket.emit("invalidPasswordResetToken");
+      } else {
+        //open the database
+        let accountsDb = new sqlite3.Database(__dirname + "/database/accounts.db", (err) => {
+          if (err) {
+            console.log(err);
+          }
+        });
+
+        bcrypt.hash(password, 10, function(bcryptError, hashedPassword) { //hash password and insert information into database table
+          if (bcryptError) {
+            console.log(bcryptError);
+            socket.emit("error", "Sorry, there was an error.", "");
+            accountsDb.close();
+          } else {
+            accountsDb.run(`UPDATE users SET password_hashed = ? WHERE user_id = ?`, [hashedPassword, user.id], function(err) {
+              if (err) {
+                console.log(err);
+                accountsDb.close();
+              } else {
+                accountsDb.close();
+                socket.emit("successfullyChangedPassword");
               }
             });
           }

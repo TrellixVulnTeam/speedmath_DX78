@@ -39,6 +39,7 @@ class BigDecimal {
     }
   }
 
+  //using the fact that a - b = a + (-1 * b)
   subtract(bigdec) {
     let negativeOne = new BigDecimal("-1");
     return this.add(negativeOne.multiply(bigdec));
@@ -50,11 +51,8 @@ class BigDecimal {
   }
 
   divide(bigdec, precision) {
-    
-  }
-
-  exponentiate(bigdec) {
-    
+    let placesToGoBack = this.decimalPlaces - bigdec.decimalPlaces + precision;
+    return new BigDecimal(BigDecimal.bigIntRepToBigDec(((this.bigintRepresentation * (10n ** BigInt(precision))) / (bigdec.bigintRepresentation)), placesToGoBack));
   }
 
   //only supports positive whole numbers for now...
@@ -70,6 +68,14 @@ class BigDecimal {
     return new BigDecimal(BigDecimal.bigIntRepToBigDec(ans, precision));
   }
 
+  //static function to convert a bigint representation of a bigdec object to a bigdec string. parameters are bigint representation and decimal places that should be in the bigdec string
+  static bigIntRepToBigDec(bigint, decPlaces) {
+    let bigIntString = bigint.toString();
+    let index = bigIntString.length - Number(decPlaces);
+    let bigDecString = bigIntString.slice(0, index) + "." + bigIntString.slice(index);
+    return BigDecimal.removeTrailingZeros(bigDecString);
+  }
+
   //static function to remove trailing zeros and/or the decimal point if there's nothing after it:
   //ex. 4.58400 => 4.584
   //ex. 10.0 => 10
@@ -82,17 +88,13 @@ class BigDecimal {
       if (string.charAt(string.length - 1) === ".") {
         string = string.slice(0, -1);
       }
+
+      if (string.charAt(0) === ".") {
+        string = "0" + string;
+      }
     }
     
     return string;
-  }
-
-  //static function to convert a bigint representation of a bigdec object to a bigdec string. parameters are bigint representation and decimal places that should be in the bigdec string
-  static bigIntRepToBigDec(bigint, decPlaces) {
-    let bigIntString = bigint.toString();
-    let index = bigIntString.length - decPlaces;
-    let bigDecString = bigIntString.slice(0, index) + "." + bigIntString.slice(index);
-    return BigDecimal.removeTrailingZeros(bigDecString);
   }
 
   toString() {
@@ -171,10 +173,14 @@ multiply.addEventListener("click", function() {
 });
 
 divide.addEventListener("click", function() {
-  let x = new BigDecimal(inputX.value);
-  let y = new BigDecimal(inputY.value);
-
-  SwalError("Under Development", "Sorry");
+  if (inputValueExists(inputX) && inputValueExists(inputY) && inputValueExists(precision)) {
+    let x = new BigDecimal(inputX.value);
+    let y = new BigDecimal(inputY.value);
+    result.textContent = x.divide(y, precision.value);
+    showResultsDivButtons();
+  } else {
+    SwalError("Input(s) missing", "Three inputs (x, y, and precision) are needed for this operation, since you are trying to divide two numbers to a certain level of decimal precision.");
+  }
 });
 
 mod.addEventListener("click", function() {
@@ -187,6 +193,8 @@ mod.addEventListener("click", function() {
       result.textContent = x.mod(y);
       showResultsDivButtons();
     }
+  } else {
+    SwalError("Input(s) missing", "Two inputs (x and y) are needed for this operation, since you are trying to divide two numbers and then find the remainder.");
   }
 });
 
@@ -228,6 +236,7 @@ reset.addEventListener("click", function() {
   document.getElementById("moveResultToInput").style.display = "none";
   inputX.value = "";
   inputY.value = "";
+  precision.value = "";
   result.textContent = "";
 });
 

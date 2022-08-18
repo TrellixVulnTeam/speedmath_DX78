@@ -19,6 +19,10 @@
   border-radius: 22px;
 }
 
+#usernameNotFound > h1 > span {
+  text-decoration: underline;
+}
+
 #userInfoContainer {
   display: none;
   padding: 20px;

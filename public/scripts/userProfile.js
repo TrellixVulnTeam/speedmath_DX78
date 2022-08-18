@@ -17,8 +17,16 @@ window.onload = function() {
 }
 
 socket.on("profileUsernameNotFound", () => {
+  let url = window.location.href;
   document.title = "Dream Not Found";
   document.getElementById("usernameNotFound").style.display = "block";
+  let h1 = document.createElement("h1");
+  h1.innerHTML = `Sorry, an account with the username `;
+  let span = document.createElement("span");
+  span.textContent = url.substring(url.lastIndexOf('/') + 1).toLowerCase(); //username at the end of the URL
+  h1.appendChild(span);
+  h1.innerHTML += ` does not exist.`;
+  document.getElementById("usernameNotFound").appendChild(h1);
 });
 
 socket.on("userProfilePageInfo", info => {
@@ -94,10 +102,17 @@ socket.on("userProfilePageInfo", info => {
           title: "You are not logged in!",
           text: "You must be logged in to send friend requests.",
           icon: "error",
+          showCancelButton: true,
+          cancelButtonText: "Ok",
+          confirmButtonText: "Log In",
           iconColor: themeSettings.contentTextColor[localStorage.getItem("theme")],
           background: themeSettings.contentBackgroundColor[localStorage.getItem("theme")],
           color: themeSettings.contentTextColor[localStorage.getItem("theme")],
-        });
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.href = `/account?redirect=` + window.location.pathname.replaceAll('/', '%2F');
+          }
+        })
       } else {
         socket.emit("sendFriendRequest", token, info.user_id);
       }
