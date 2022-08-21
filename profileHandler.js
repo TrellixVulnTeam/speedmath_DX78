@@ -3,7 +3,7 @@ module.exports = function(socket, sqlite3, jwt) {
     jwt.verify(token, process.env['JWT_PRIVATE_KEY'], function(err, user) {
       if (err) {
         console.log(err);
-        socket.emit("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the home page. We'll look into it as soon as possible.");
+        socket.emit("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the About Us page. We'll look into it as soon as possible.");
       } else {
         let accountsDb = new sqlite3.Database(__dirname + "/database/accounts.db", (err) => {
           if (err) {
@@ -11,7 +11,7 @@ module.exports = function(socket, sqlite3, jwt) {
           }
         }); 
 
-        accountsDb.get(`SELECT username, display_name, email, profile_picture, bio, friends, incoming_friend_requests, outgoing_friend_requests, achievements, publicly_displayed_achievements, public_account, topic_practice_stats_privacy, balance FROM users WHERE user_id = ?`, [user.id], function(err, row) {
+        accountsDb.get(`SELECT username, display_name, email, profile_picture, bio, friends, incoming_friend_requests, outgoing_friend_requests, achievements, publicly_displayed_achievements, public_account, topic_practice_stats_privacy, balance, direct_messages FROM users WHERE user_id = ?`, [user.id], function(err, row) {
           if (err) {
             console.log(err);
           } else {
@@ -257,7 +257,7 @@ module.exports = function(socket, sqlite3, jwt) {
     jwt.verify(token, process.env['JWT_PRIVATE_KEY'], function(err, user) {
       if (err) {
         console.log(err);
-        socket.emit("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the home page. We'll look into it as soon as possible.");
+        socket.emit("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the About Us page. We'll look into it as soon as possible.");
       } else {
         let accountsDb = new sqlite3.Database(__dirname + "/database/accounts.db", (err) => {
           if (err) {
@@ -278,34 +278,42 @@ module.exports = function(socket, sqlite3, jwt) {
   });
 
   socket.on("updatePfp", (token, newPfp) => {
-    jwt.verify(token, process.env['JWT_PRIVATE_KEY'], function(err, user) {
-      if (err) {
-        console.log(err);
-        socket.emit("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the home page. We'll look into it as soon as possible.");
-      } else {
-        let accountsDb = new sqlite3.Database(__dirname + "/database/accounts.db", (err) => {
-          if (err) {
-            console.log(err);
-          }
-        }); 
+    //stolen from StackOverflow: https://stackoverflow.com/a/49750491
+    let stringLength = newPfp.length - 'data:image/png;base64,'.length;
+    let sizeInKb = (4 * Math.ceil((stringLength / 3))*0.5624896334383812)/1024;
 
-        accountsDb.run(`UPDATE users SET profile_picture = ? WHERE user_id = ?`, [newPfp, user.id], function(err) {
-          if (err) {
-            console.log(err);
-          } else {
-            accountsDb.close();
-            socket.emit("successfullyUpdatedPfp", newPfp);
-          }
-        });
-      }
-    });
+    if (sizeInKb <= 1024) {
+      jwt.verify(token, process.env['JWT_PRIVATE_KEY'], function(err, user) {
+        if (err) {
+          console.log(err);
+          socket.emit("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the About Us page. We'll look into it as soon as possible.");
+        } else {
+          let accountsDb = new sqlite3.Database(__dirname + "/database/accounts.db", (err) => {
+            if (err) {
+              console.log(err);
+            }
+          }); 
+    
+          accountsDb.run(`UPDATE users SET profile_picture = ? WHERE user_id = ?`, [newPfp, user.id], function(err) {
+            if (err) {
+              console.log(err);
+            } else {
+              accountsDb.close();
+              socket.emit("successfullyUpdatedPfp", newPfp);
+            }
+          });
+        }
+      }); 
+    } else {
+      socket.emit("error", "Please upload a smaller profile picture!", "The profile picture image size limit is 1024 KB (or about 1 MB).");
+    }
   });
 
   socket.on("updateDisplayName", (token, newDisplayName) => {
     jwt.verify(token, process.env['JWT_PRIVATE_KEY'], function(err, user) {
       if (err) {
         console.log(err);
-        socket.emit("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the home page. We'll look into it as soon as possible.");
+        socket.emit("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the About Us page. We'll look into it as soon as possible.");
       } else {
         let accountsDb = new sqlite3.Database(__dirname + "/database/accounts.db", (err) => {
           if (err) {
@@ -329,7 +337,7 @@ module.exports = function(socket, sqlite3, jwt) {
     jwt.verify(token, process.env['JWT_PRIVATE_KEY'], function(err, user) {
       if (err) {
         console.log(err);
-        socket.emit("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the home page. We'll look into it as soon as possible.");
+        socket.emit("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the About Us page. We'll look into it as soon as possible.");
       } else {
         let accountsDb = new sqlite3.Database(__dirname + "/database/accounts.db", (err) => {
           if (err) {
@@ -353,7 +361,7 @@ module.exports = function(socket, sqlite3, jwt) {
     jwt.verify(token, process.env['JWT_PRIVATE_KEY'], function(err, user) {
       if (err) {
         console.log(err);
-        socket.emit("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the home page. We'll look into it as soon as possible.");
+        socket.emit("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the About Us page. We'll look into it as soon as possible.");
       } else {
         let accountsDb = new sqlite3.Database(__dirname + "/database/accounts.db", (err) => {
           if (err) {
@@ -377,7 +385,7 @@ module.exports = function(socket, sqlite3, jwt) {
     jwt.verify(token, process.env['JWT_PRIVATE_KEY'], function(err, user) {
       if (err) {
         console.log(err);
-        socket.emit("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the home page. We'll look into it as soon as possible.");
+        socket.emit("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the About Us page. We'll look into it as soon as possible.");
       } else {
         let accountsDb = new sqlite3.Database(__dirname + "/database/accounts.db", (err) => {
           if (err) {
@@ -401,7 +409,7 @@ module.exports = function(socket, sqlite3, jwt) {
     jwt.verify(token, process.env['JWT_PRIVATE_KEY'], function(err, user) {
       if (err) {
         console.log(err);
-        socket.emit("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the home page. We'll look into it as soon as possible.");
+        socket.emit("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the About Us page. We'll look into it as soon as possible.");
       } else {
         let accountsDb = new sqlite3.Database(__dirname + "/database/accounts.db", (err) => {
           if (err) {
@@ -475,7 +483,7 @@ module.exports = function(socket, sqlite3, jwt) {
     jwt.verify(token, process.env['JWT_PRIVATE_KEY'], function(err, user) {
       if (err) {
         console.log(err);
-        socket.emit("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the home page. We'll look into it as soon as possible.");
+        socket.emit("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the About Us page. We'll look into it as soon as possible.");
       } else {
         let accountsDb = new sqlite3.Database(__dirname + "/database/accounts.db", (err) => {
           if (err) {
@@ -542,7 +550,7 @@ module.exports = function(socket, sqlite3, jwt) {
     jwt.verify(token, process.env['JWT_PRIVATE_KEY'], function(err, user) {
       if (err) {
         console.log(err);
-        socket.emit("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the home page. We'll look into it as soon as possible.");
+        socket.emit("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the About Us page. We'll look into it as soon as possible.");
       } else {
         let accountsDb = new sqlite3.Database(__dirname + "/database/accounts.db", (err) => {
           if (err) {
@@ -591,7 +599,7 @@ module.exports = function(socket, sqlite3, jwt) {
     jwt.verify(token, process.env['JWT_PRIVATE_KEY'], function(err, user) {
       if (err) {
         console.log(err);
-        socket.emit("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the home page. We'll look into it as soon as possible.");
+        socket.emit("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the About Us page. We'll look into it as soon as possible.");
       } else {
         let accountsDb = new sqlite3.Database(__dirname + "/database/accounts.db", (err) => {
           if (err) {
@@ -641,7 +649,7 @@ module.exports = function(socket, sqlite3, jwt) {
     jwt.verify(token, process.env['JWT_PRIVATE_KEY'], function(err, user) {
       if (err) {
         console.log(err);
-        socket.emit("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the home page. We'll look into it as soon as possible.");
+        socket.emit("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the About Us page. We'll look into it as soon as possible.");
       } else {
         let accountsDb = new sqlite3.Database(__dirname + "/database/accounts.db", (err) => {
           if (err) {
@@ -691,7 +699,7 @@ module.exports = function(socket, sqlite3, jwt) {
     jwt.verify(token, process.env['JWT_PRIVATE_KEY'], function(err, user) {
       if (err) {
         console.log(err);
-        socket.emit("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the home page. We'll look into it as soon as possible.");
+        socket.emit("error", "This should not happen.", "Sorry. Please describe what you did to get this error and submit a suggestion on the About Us page. We'll look into it as soon as possible.");
       } else if (user.id === friendId) { //check if user is trying to friend themselves
         socket.emit("youAreTryingToFriendYourself"); 
       } else {

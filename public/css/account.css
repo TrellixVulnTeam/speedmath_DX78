@@ -49,8 +49,8 @@ button {
 }
 
 button:hover {
+  filter: brightness(1.1);
   cursor: pointer;
-  background-color: inherit;
   transform: scale(1.05);
 }
 
@@ -210,6 +210,16 @@ table {
 }
 
 th {
+  font-size: 1.2em;
+}
+
+#dmFriend {
+  font-size: 1.2em;
+  padding: 5px 25px;
+}
+
+#friendToDm {
+  border-radius: 22px;
   font-size: 1.2em;
 }
 

@@ -4,7 +4,9 @@ const http = require("http");
 const server = http.createServer(app);
 const fs = require("fs");
 const { Server } = require("socket.io");
-const io = new Server(server);
+const io = new Server(server, {
+  maxHttpBufferSize: 1e8
+});
 
 const sqlite3 = require("sqlite3").verbose();
 const bcrypt = require('bcrypt');
@@ -119,7 +121,8 @@ accountsDb.serialize(() => {
       topic_practice_stats_privacy TEXT,
       qotd_points INTEGER,
       qotd_last_completed INTEGER,
-      balance INTEGER
+      balance INTEGER,
+      direct_messages TEXT
     )`
   );
   
@@ -137,7 +140,7 @@ accountsDb.serialize(() => {
   );
   
   //logging database, uncomment following code to log profiles in console at runtime:
-  /*accountsDb.all(`SELECT user_id, password_hashed, username, display_name, email, bio, friends, incoming_friend_requests, outgoing_friend_requests, publicly_displayed_achievements, achievements, public_account, topic_practice_stats_privacy, qotd_points, qotd_last_completed, balance FROM users`, [], (err, rows) => {
+  /*accountsDb.all(`SELECT user_id, password_hashed, username, display_name, email, bio, friends, incoming_friend_requests, outgoing_friend_requests, publicly_displayed_achievements, achievements, public_account, topic_practice_stats_privacy, qotd_points, qotd_last_completed, balance, direct_messages FROM users`, [], (err, rows) => {
   //accountsDb.all(`SELECT * FROM topicsPracticeStats`, [], (err, rows) => {
     if (err) {
       console.log(err);

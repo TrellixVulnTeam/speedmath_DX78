@@ -64,7 +64,7 @@ module.exports = function(socket, sqlite3, bcrypt, jwt, hcaptcha, sendgridMailer
                     if (bcryptError) {
                       console.log(bcryptError)
                     } else {
-                      accountsDb.run(`INSERT INTO users(username, password_hashed, display_name, email, profile_picture, bio, friends, incoming_friend_requests, outgoing_friend_requests, achievements, publicly_displayed_achievements, public_account, topic_practice_stats_privacy, qotd_points, balance) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [username, hashedPassword, displayName, email, "defaultAvatar", "No bio yet.", "[]", "[]", "[]", "[]", "[]", "true", "friends", 0, 0], function(err) {
+                      accountsDb.run(`INSERT INTO users(username, password_hashed, display_name, email, profile_picture, bio, friends, incoming_friend_requests, outgoing_friend_requests, achievements, publicly_displayed_achievements, public_account, topic_practice_stats_privacy, qotd_points, balance, direct_messages) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [username, hashedPassword, displayName, email, "defaultAvatar", "No bio yet.", "[]", "[]", "[]", "[]", "[]", "true", "friends", 0, 0, "{}"], function(err) {
                         if (err) {
                           console.log(err);
                         } else {
@@ -168,7 +168,7 @@ module.exports = function(socket, sqlite3, bcrypt, jwt, hcaptcha, sendgridMailer
           socket.emit("error", "There is not an account associated with that email.");
         } else {
           let user = { id: rows[0].user_id };
-          jwt.sign(user, process.env['JWT_PRIVATE_KEY'], { expiresIn: '1h' }, function(err, token) {
+          jwt.sign(user, process.env['JWT_PRIVATE_KEY'], { expiresIn: '30m' }, function(err, token) {
             if (err) {
               console.log(err);
             } else {
@@ -179,7 +179,7 @@ module.exports = function(socket, sqlite3, bcrypt, jwt, hcaptcha, sendgridMailer
                 text: 'Reset your SpeedMath account\'s password',
                 html: `<p>Dear<strong><span style="font-size:18px"> ${rows[0].username},</span></strong></p>
               
-                <p><span style="font-size:18px">Please click the following link within the next 1 hour to reset your password!<br />
+                <p><span style="font-size:18px">Please click the following link within the next 30 minutes to reset your password!<br />
                 <strong><a href="https://speedmath.ml/forgot-password?token=${token}">Reset Password</a></strong><br />
                 <br />
                 If the hyperlink doesn&#39;t work in your browser, copy-paste this link and paste it in a new browser tab:</span></p>

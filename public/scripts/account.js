@@ -17,6 +17,9 @@ let btnSignUp = document.getElementById("signUp");
 let btnSwitchToLoginForm = document.getElementById("btnSwitchToLoginForm");
 let email = document.getElementById("email");
 
+let friendsList = document.getElementById("friendsList");
+let friendToDm = document.getElementById("friendToDm");
+
 //check if user is logged in when the page loads, if they are, show them the account settings div, if not, show them the login/signup div
 window.onload = function() {
   let token = localStorage.getItem("token") || sessionStorage.getItem("token");
@@ -263,7 +266,22 @@ socket.on("ownProfileInfo", (info, topicsPracticeStats) => {
       reader.readAsDataURL(pfp);
       reader.onload = function() {
         let token = localStorage.getItem("token") || sessionStorage.getItem("token");
-        socket.emit("updatePfp", token, reader.result);
+        //stolen from StackOverflow: https://stackoverflow.com/a/49750491
+        let stringLength = reader.result.length - 'data:image/png;base64,'.length;
+        let sizeInKb = (4 * Math.ceil((stringLength / 3))*0.5624896334383812)/1024;
+
+        if (sizeInKb <= 1024) {
+          socket.emit("updatePfp", token, reader.result);
+        } else {
+          Swal.fire({
+            title: 'Please upload a smaller profile picture!',
+            text: 'The profile picture image size limit is 1024 KB (or about 1 MB).',
+            icon: "error",
+            iconColor: themeSettings.contentTextColor[localStorage.getItem("theme")],
+            background: themeSettings.contentBackgroundColor[localStorage.getItem("theme")],
+            color: themeSettings.contentTextColor[localStorage.getItem("theme")]
+          });
+        }
       }
     }
   });
@@ -503,6 +521,11 @@ socket.on("newFriend", (friendInfo) => {
   username.textContent = "@" + friendInfo.username;
   username.href = "/user/" + friendInfo.username;
   usernameContainer.appendChild(username);
+
+  let option = document.createElement("option");
+  option.textContent = "@" + friendInfo.username;
+  friendsList.appendChild(option);
+  
 
   let unfriendButton = document.createElement("button");
   unfriendButton.classList.add("btnCancelFriendRequest", "contentTheme");
