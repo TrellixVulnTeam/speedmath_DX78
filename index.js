@@ -73,6 +73,7 @@ app.get('/user/:username', (req, res) => {
   res.sendFile(__dirname + "/pages/user.html");
 });
 
+//joke page, rick roll, not actually NSFW/18+
 app.get('/nsfw', (req, res) => {
   res.redirect("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
 });

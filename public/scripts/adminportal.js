@@ -127,7 +127,7 @@ socket.on("adminPortal_tableData", function(data) {
     th.addEventListener("contextmenu", function(e) {
       e.preventDefault();
       
-      if (selectedColumns.length > 1) {
+      if (columnName != "user_id") {
         selectedColumns = removeElementFromArray(selectedColumns, columnName);
         if (orderBy.column === columnName) {
           orderBy = {
@@ -138,7 +138,7 @@ socket.on("adminPortal_tableData", function(data) {
 
         socket.emit("adminPortal_requestColumns", adminPortalToken, selectedTable, selectedColumns.join(", "), orderBy);
       } else {
-        swalError("Please keep at least one column in view.", "");
+        swalError("Please keep the user_id column in view.", "");
       }
     });
   }); 
@@ -148,8 +148,28 @@ socket.on("adminPortal_tableData", function(data) {
     Object.keys(row).forEach(key => {
       let cell = newRow.insertCell();
       cell.textContent = row[key];
+      cell.dataset.userId = row["user_id"];
     });
   });
+});
+
+table.addEventListener("dblclick", async function(e) {
+  let cell = e.target.closest('td');
+
+  if (cell.cellIndex !== 0) {
+    let { value: newValue } = await Swal.fire({
+      title: `Update ${selectedColumns[cell.cellIndex]} for User #${cell.dataset.userId}`,
+      input: "text",
+      inputLabel: "New value:",
+      showCancelButton: true,
+      background: themeSettings.contentBackgroundColor[localStorage.getItem("theme")],
+      color: themeSettings.contentTextColor[localStorage.getItem("theme")]
+    });
+
+    if (newValue) {
+      socket.emit("adminPortal_changeData", adminPortalToken, selectedTable, selectedColumns[cell.cellIndex], cell.dataset.userId, newValue);
+    }
+  }
 });
 
 socket.on("error", (errorTitle, errorMessage) => {
