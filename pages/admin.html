@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta property="og:title" content="Admin Portal"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="https://speedmath.ml/admin"/>
+    <meta property="og:description" content="For website moderators who don't know SQL."/>
+    <meta property="og:image" content="https://speedmath.ml/assets/favicon.ico"/>
+    <meta name="theme-color" content="#ff928b"/>
+    <title>Admin Portal</title>
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/css/navbar.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/adminportal.css"/>
+    <script src="scripts/themeHandler.js" defer></script>
+    <script src="scripts/adminportal.js" defer></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+  </head>
+  <body>
+    <!--   Navbar  -->
+    <div class="topnav">
+      <a href="/" class="active">Home</a>
+      <a href="/games">Games</a>
+      <a href="/topics">Topics</a>
+      <a href="/aboutus">About Us</a>
+      <a href="/account">Account</a>
+      <a href="javascript:void(0);" class="icon" onclick="toggleResponsiveNavbar()">
+        <i class="fa fa-bars"></i>
+      </a>
+      <a id="themeToggler">
+        <label class="switch">
+          <input type="checkbox" id="darkModeToggle">
+          <span class="slider round"></span>
+        </label>
+      </a>
+    </div>
+    <!-- Navbar ends -->
+    <form id="loginForm">
+      <h1>Log In</h1>
+      <label for="password">Password:</label>
+      <input class="contentTheme" id="password" type="password" required></input>
+      <div class="h-captcha" data-sitekey="6a500d3a-6b98-4e82-8d20-ad091e864f23" data-theme="dark"></div>
+      <button class="contentTheme" type="submit">Submit</button>
+    </form>
+
+    <div id="chooseDatabaseTableContainer">
+      <h1>Which table do you want to view/manipulate?</h1>
+      <button class="contentTheme" id="viewAccountsDb">Users' Accounts</button>
+      <button class="contentTheme" id="viewTopicPracticeDb">Users' Topic Practice Stats</button>
+    </div>
+
+    <div id="interfaceContainer">
+      <div id="selectColumnsContainer">
+        <input list="columnsList" id="columnInput" class="contentTheme">
+        <datalist id="columnsList"></datalist>
+        <button id="addColumn" class="contentTheme">Add Column</button>
+      </div>
+      <div id="tableContainer">
+        <table id="dataTable">
+          
+        </table>
+      </div>
+    </div>
+  </body>
+</html>

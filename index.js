@@ -85,6 +85,10 @@ app.get('/katex-testing', (req, res) => {
   res.sendFile(__dirname + "/pages/katex-testing.html");
 });
 
+app.get('/admin', (req, res) => {
+  res.sendFile(__dirname + "/pages/admin.html");
+});
+
 //THIS HAS TO BE KEPT AT THE END OF THE ROUTING SECTION OF THE CODE
 app.get('*', (req, res) => { //if user tries to go to a random subpage that doesn't exist,
   res.redirect('/'); //redirect them to the home page
@@ -193,6 +197,7 @@ let possibleMathWarsTopics = {
 
 io.on('connection', (socket) => {
   require('./accountHandler.js')(socket, sqlite3, bcrypt, jwt, hcaptcha, sendgridMailer); //logging in, signing up
+  require('./adminPortalHandler.js')(socket, sqlite3, jwt);
   require('./profileHandler.js')(socket, sqlite3, jwt); //public profile pages, getting own profile info, updating profile info, adding friends, getting incoming/outgoing friend requests
   require('./suggestionHandler.js')(socket); //suggestions 
   require('./qotdHandler.js')(socket, sqlite3, jwt, qotdQuestionsJSON, qotd_usersCurrentlyPlaying); //question of the day game handler

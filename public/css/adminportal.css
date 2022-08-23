@@ -1,0 +1,129 @@
+* {
+  text-align: center;
+}
+
+form {
+  border-radius: 22px;
+  padding: 25px;
+  margin: auto;
+  margin-top: 25px;
+}
+
+form > label {
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+form > input {
+  font-size: 1.2em;
+  border-radius: 10px;
+  border: 2px solid;
+  outline: none;
+  margin: auto;
+  padding: 5px;
+}
+
+button {
+  font-size: 1.5em;
+  border-radius: 22px;
+  border: solid 3px;
+  padding: 10px;
+  margin: 15px;
+  transition: 0.2s;
+}
+
+button:hover {
+  cursor: pointer;
+  transform: scale(1.05);
+}
+
+#password {
+  margin: 10px;
+}
+
+.h-captcha {
+  margin: 10px;
+}
+
+table, th, td {
+  border: 1.5px solid;
+  border-collapse: collapse;
+}
+
+table {
+  font-size: 1.2em;
+  margin: auto;
+}
+
+th {
+  font-size: 1.3em;
+  padding: 10px 15px;
+  font-weight: bold;
+  border-spacing: 0;
+  cursor: pointer;
+}
+
+td {
+  text-align: center;
+  padding: 10px;
+  border-spacing: 0;
+}
+
+td > a {
+  text-decoration: none;
+  color: inherit;
+}
+
+td > a:hover {
+  text-decoration: underline;
+}
+
+#chooseDatabaseTableContainer {
+  display: none;
+}
+
+#interfaceContainer {
+  display: none;
+  padding: 20px;
+}
+
+#columnInput {
+  border: 2px solid;
+  font-size: 1.2em;
+  width: 70%;
+  margin: 10px auto;
+  border-radius: 22px;
+}
+
+#addColumn {
+  font-size: 1.3em;
+  border-radius: 22px;
+  padding: 2px 10px;
+  cursor: pointer;
+}
+
+#addColumn:hover {
+  filter: brightness(1.15);
+}
+
+/* For mobile: */
+@media only screen and (max-width: 550px) {
+  form {
+    width: 90vw;
+  }
+
+  form > input {
+    width: 90vw;
+  }
+}
+
+/* For laptop/PC/wide screens */
+@media only screen and (min-width: 550px) {
+  form {
+    width: 60vw;
+  }
+
+  form > input {
+    width: 60vw;
+  }
+}
