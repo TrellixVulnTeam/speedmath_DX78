@@ -147,6 +147,13 @@ socket.on("adminPortal_tableData", function(data) {
     let newRow = table.insertRow();
     Object.keys(row).forEach(key => {
       let cell = newRow.insertCell();
+
+      if (key !== "user_id") {
+        cell.title = "Double-click to edit...";
+      } else {
+        cell.title = "Double-click to ban user...";
+      }
+      
       cell.textContent = row[key];
       cell.dataset.userId = row["user_id"];
     });
@@ -169,7 +176,50 @@ table.addEventListener("dblclick", async function(e) {
     if (newValue) {
       socket.emit("adminPortal_changeData", adminPortalToken, selectedTable, selectedColumns[cell.cellIndex], cell.dataset.userId, newValue);
     }
+  } else {
+    let { value: banReason } = await Swal.fire({
+      title: `Ban User #${cell.dataset.userId}`,
+      html: `Are you <strong>ABSOLUTELY SURE</strong> that you want to ban this user? This is irreversible.`,
+      input: "text",
+      inputLabel: "Ban reason:",
+      inputValidator: (value) => {
+        if (!value) {
+          return "You must submit a reason for banning them."
+        }
+      },
+      showCancelButton: true,
+      background: themeSettings.contentBackgroundColor[localStorage.getItem("theme")],
+      color: themeSettings.contentTextColor[localStorage.getItem("theme")]
+    });
+
+    if (banReason) {
+      socket.emit("adminPortal_deleteAccount", adminPortalToken, cell.dataset.userId, banReason);
+    }
   }
+});
+
+socket.on("adminPortal_successfullyUpdatedData", function() {
+  Swal.fire({
+    title: "Successfully Updated Database!",
+    icon: "success",
+    iconColor: themeSettings.contentTextColor[localStorage.getItem("theme")],
+    background: themeSettings.contentBackgroundColor[localStorage.getItem("theme")],
+    color: themeSettings.contentTextColor[localStorage.getItem("theme")]
+  });
+
+  socket.emit("adminPortal_requestColumns", adminPortalToken, selectedTable, selectedColumns.join(", "), orderBy);
+});
+
+socket.on("adminPortal_successfullyDeletedUserAccount", function() {
+  Swal.fire({
+    title: "Successfully Deleted User's Account!",
+    icon: "success",
+    iconColor: themeSettings.contentTextColor[localStorage.getItem("theme")],
+    background: themeSettings.contentBackgroundColor[localStorage.getItem("theme")],
+    color: themeSettings.contentTextColor[localStorage.getItem("theme")]
+  });
+
+  socket.emit("adminPortal_requestColumns", adminPortalToken, selectedTable, selectedColumns.join(", "), orderBy);
 });
 
 socket.on("error", (errorTitle, errorMessage) => {

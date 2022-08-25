@@ -198,7 +198,7 @@ let possibleMathWarsTopics = {
 
 io.on('connection', (socket) => {
   require('./accountHandler.js')(socket, sqlite3, bcrypt, jwt, hcaptcha, sendgridMailer); //logging in, signing up
-  require('./adminPortalHandler.js')(socket, sqlite3, jwt);
+  require('./adminPortalHandler.js')(socket, sqlite3, jwt, sendgridMailer); //admin portal
   require('./profileHandler.js')(socket, sqlite3, jwt); //public profile pages, getting own profile info, updating profile info, adding friends, getting incoming/outgoing friend requests
   require('./suggestionHandler.js')(socket); //suggestions 
   require('./qotdHandler.js')(socket, sqlite3, jwt, qotdQuestionsJSON, qotd_usersCurrentlyPlaying); //question of the day game handler
