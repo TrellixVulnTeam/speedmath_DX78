@@ -158,8 +158,6 @@ module.exports = function(socket, sqlite3, jwt, sendgridMailer) {
               console.log(err);
               socket.emit("error", "This should not happen.", "Error Code #10. Sorry. Please describe what you did to get this error and submit a suggestion on the About Us page. We'll look into it as soon as possible.");
             } else {
-              console.log(row);
-
               //log the ban in the discord channel:
               const webhook = require("webhook-discord");
               const Hook = new webhook.Webhook(process.env['WEBHOOK_LINK_BAN_LOG']);  
@@ -168,7 +166,7 @@ module.exports = function(socket, sqlite3, jwt, sendgridMailer) {
 
               //email the user that's about to get banned if they have an email address attached to the account
               if (row.email != null) {
-                let message = {
+                let msg = {
                   to: row.email, //recipient,
                   from: 'moderation@speedmath.ml',
                   subject: 'Account Banned',
